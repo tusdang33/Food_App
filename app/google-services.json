@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "15952898249",
+    "project_id": "food-app-f559d",
+    "storage_bucket": "food-app-f559d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15952898249:android:1884ba04096c4814a20518",
+        "android_client_info": {
+          "package_name": "com.kaizm.food_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15952898249-unegdddt60sood8u53htllqurqg303ns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7gMOwIGPwFpNV1t9qODKUC1ZZHEoq-YA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15952898249-unegdddt60sood8u53htllqurqg303ns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
