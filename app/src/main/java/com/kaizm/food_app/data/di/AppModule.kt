@@ -1,7 +1,9 @@
 package com.kaizm.food_app.data.di
 
 import com.kaizm.food_app.data.repository.AuthRepositoryImp
+import com.kaizm.food_app.data.repository.ProfileRepositoryImpl
 import com.kaizm.food_app.domain.AuthRepository
+import com.kaizm.food_app.domain.ProfileRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +19,12 @@ object AppModule {
     @Provides
     fun provideAuthRepository(): AuthRepository {
         return AuthRepositoryImp()
+    }
+
+    @Singleton
+    @Provides
+    fun provideProfileRepository(): ProfileRepository {
+        return ProfileRepositoryImpl()
     }
 
 }

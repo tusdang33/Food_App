@@ -10,7 +10,6 @@ import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryImp : AuthRepository {
     private val firebaseAuth = FirebaseAuth.getInstance()
-    private val accountCollectionRef = Firebase.firestore.collection("account")
 
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> checkCurrentUser(): T? {
