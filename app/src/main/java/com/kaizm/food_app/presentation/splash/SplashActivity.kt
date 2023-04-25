@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.databinding.ActivitySplashBinding
+import com.kaizm.food_app.presentation.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
             viewModel.event.collect { event ->
                 when(event) {
                     is SplashViewModel.Event.LoginSuccess -> navigateTo(MainActivity::class.java)
-                    is SplashViewModel.Event.LoginFail -> navigateTo(MainActivity::class.java)
+                    is SplashViewModel.Event.LoginFail -> navigateTo(LoginActivity::class.java)
                 }
             }
         }

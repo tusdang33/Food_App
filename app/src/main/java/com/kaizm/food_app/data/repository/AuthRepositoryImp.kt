@@ -1,25 +1,41 @@
 package com.kaizm.food_app.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.kaizm.food_app.data.model.User
 import com.kaizm.food_app.domain.AuthRepository
+import kotlinx.coroutines.tasks.await
 
 
-class AuthRepositoryImp : AuthRepository{
+class AuthRepositoryImp : AuthRepository {
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val accountCollectionRef = Firebase.firestore.collection("account")
+
     @Suppress("UNCHECKED_CAST")
     override suspend fun <T> checkCurrentUser(): T? {
-        return FirebaseAuth.getInstance().currentUser as T
+        return firebaseAuth.currentUser as T
     }
 
-    override suspend fun login(): Result<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun login(email: String, pass: String): Result<Unit> {
+        return try {
+            firebaseAuth.signInWithEmailAndPassword(email, pass).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun logout() {
-        TODO("Not yet implemented")
+        firebaseAuth.signOut()
     }
 
-    override suspend fun register(): Result<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun register(email: String, pass: String): Result<User> {
+        return try {
+            val fireUser = firebaseAuth.createUserWithEmailAndPassword(email, pass).await().user!!
+            Result.success(User(fireUser.uid, null, email, 0, null))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }
