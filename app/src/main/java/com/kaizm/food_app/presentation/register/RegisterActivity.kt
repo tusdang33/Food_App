@@ -42,7 +42,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-//        startActivity(Intent(this, MainActivity::class.java))
-//        finishAffinity()
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
     }
 }
