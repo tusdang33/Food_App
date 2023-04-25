@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:paddingTop="15dp"
-        app:itemIconTint="@color/main_color"
+        app:itemIconTint="@drawable/selected_color"
         app:itemRippleColor="@color/rip_item_color"
         app:itemTextColor="@color/main_color"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,3 +1,5 @@
 package com.kaizm.food_app.common
 
-object Const
+object Const {
+    const val TAG = "AAA"
+}
