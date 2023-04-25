@@ -34,7 +34,7 @@ class SplashViewModel @Inject constructor(
                 _event.send(Event.LoginSuccess)
                 Log.e(TAG, "checkCurrentUser: Success")
             } else {
-                _event.send(Event.LoginSuccess)
+                _event.send(Event.LoginFail)
                 Log.e(TAG, "checkCurrentUser: Fail")
 
             }
