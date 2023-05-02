@@ -2,4 +2,30 @@
     <string name="app_name">Food_App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //Activity Login
+    <string name="activity_login_tvSignIn">Sign In</string>
+    <string name="activity_login_tvWelcome">Welcome to Fud Service</string>
+    <string name="activity_login_tvSubWelcome">Enter your Phone number or Email address for sign in. Enjoy your food :)</string>
+    <string name="activity_login_tvEmail">EMAIL ADDRESS</string>
+    <string name="activity_login_tvPass">PASSWORD</string>
+    <string name="activity_login_btnLogin">LOGIN</string>
+    <string name="activity_login_tvQuestion">Don\'t have Account ?</string>
+    <string name="activity_login_tvCreate">Create new Account</string>
+
+    //Activity Register
+    <string name="activity_register_tvRegister">Register</string>
+    <string name="activity_register_tvWelcome">Create Account</string>
+    <string name="activity_register_tvSubWelcome">Enter your Name, Email and Password for sign up.</string>
+    <string name="activity_register_tvEmail">EMAIL ADDRESS</string>
+    <string name="activity_register_tvPass">PASSWORD</string>
+    <string name="activity_register_tvPassConfirm">CONFIRM YOUR PASSWORD</string>
+    <string name="activity_register_btnReg">SIGN UP</string>
+    <string name="activity_register_tvCondition">By Signing up you agree to our Terms Conditions and Privacy Policy.</string>
+
+    //Splash Screen
+    <string name="splash_tvName">FUD SERVICE</string>
+    <string name="splash_tvWelcome">Welcome</string>
+    <string name="splash_tvWelcomeDetail">It’s a pleasure to meet you. We are excited that you’re here so let’s get started!</string>
+
 </resources>
