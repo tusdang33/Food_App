@@ -11,7 +11,7 @@ class ImageRepositoryImpl : ImageRepository {
     override suspend fun postImageRestaurant(uriImage: Uri): Result<String> {
         return try {
             val childRef = storageRef.child(System.currentTimeMillis().toString())
-            var downloadUrl: String = ""
+            var downloadUrl = ""
             childRef.putFile(uriImage).await()
             childRef.downloadUrl.addOnSuccessListener {
                 downloadUrl = it.toString()

@@ -1,4 +1,4 @@
-package com.kaizm.food_app.presentation.add
+package com.kaizm.food_app.presentation.add_restaurant
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

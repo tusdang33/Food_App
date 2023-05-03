@@ -1,4 +1,4 @@
-package com.kaizm.food_app.presentation.add
+package com.kaizm.food_app.presentation.add_restaurant
 
 import android.net.Uri
 import android.util.Log
@@ -25,7 +25,7 @@ class AddRestaurantViewModel @Inject constructor(
 
     sealed class Event {
         object AddSuccess : Event()
-        object AddFail : Event()
+        data class AddFail(val message: String) : Event()
     }
 
     private val _event = Channel<Event>(Channel.UNLIMITED)
@@ -38,29 +38,28 @@ class AddRestaurantViewModel @Inject constructor(
         categoryRestaurant()
     }
 
-    private suspend fun addRestaurantAndImage(name: String, uri: String, list: List<String>) {
-        restaurantRepository.postRestaurant(
-            Restaurant("id", name, listOf(), list, uri, 0.0)
-        ).fold(onSuccess = {
+    private suspend fun addRestaurantAndImage(restaurant: Restaurant) {
+        restaurantRepository.postRestaurant(restaurant).fold(onSuccess = {
             _event.trySend(Event.AddSuccess)
         }, onFailure = {
             Log.e(TAG, "addRestaurant: ${it.localizedMessage}")
-            _event.trySend(Event.AddFail)
+            _event.trySend(Event.AddFail(it.toString()))
         })
     }
 
-    fun addRestaurantAndImage(name: String, uri: Uri?, list: List<String>) {
-        uri?.let {
-            viewModelScope.launch {
-                imageRepository.postImageRestaurant(uri).fold(onSuccess = {
-                    addRestaurantAndImage(name, it, list)
-                }, onFailure = {
-                    Log.e(TAG, "addRestaurant: ${it.localizedMessage}")
-                    _event.trySend(Event.AddFail)
-                })
-            }
+    fun addRestaurant(name: String, uri: Uri?, list: List<String>) {
+        if (name.isBlank() || uri == null || list.isEmpty()) {
+            _event.trySend(Event.AddFail("Information Missing"))
+        } else viewModelScope.launch {
+            imageRepository.postImageRestaurant(uri).fold(onSuccess = {
+                addRestaurantAndImage(Restaurant("id", name, listOf(), list, it, 0.0))
+            }, onFailure = {
+                Log.e(TAG, "addRestaurant: ${it.localizedMessage}")
+                _event.trySend(Event.AddFail(it.toString()))
+            })
         }
     }
+
 
     private fun categoryRestaurant() {
         viewModelScope.launch {

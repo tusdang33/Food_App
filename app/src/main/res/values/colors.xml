@@ -13,4 +13,5 @@
     <color name="main_color">#EEA734</color>
     <color name="rip_item_color">#FFFFFF</color>
     <color name="unchecked_color">#DDDDDD</color>
+    <color name="holo_red">#cc0000</color>
 </resources>
