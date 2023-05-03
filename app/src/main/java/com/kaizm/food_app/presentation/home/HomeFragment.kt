@@ -5,56 +5,77 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.kaizm.food_app.R
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.home_data.Banner
+import com.kaizm.food_app.data.model.home_data.HomeDataItem
+import com.kaizm.food_app.data.model.home_data.Title
+import com.kaizm.food_app.databinding.FragmentHomeBinding
+import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_BANNER
+import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_BEST
+import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_NEWEST
+import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_TITLE
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentHomeBinding
+    private val viewModel : HomeViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.rvHome.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = HomeAdapter().apply {
+                updateList(loadList())
+            }
+
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun loadList(): List<HomeDataItem> {
+        val list = mutableListOf<HomeDataItem>()
+        list.add(HomeDataItem(TYPE_BANNER).apply { banner = Banner(1, "Banner 1") })
+        list.add(HomeDataItem(TYPE_TITLE).apply {
+            title = Title(1, "Title 1")
+        })
+        list.add(HomeDataItem(TYPE_BEST).apply {
+            val tempList = mutableListOf<Restaurant>()
+            for (i in 1..6) {
+                tempList.add(
+                    Restaurant(
+                        "$i", "Res $i", i.toDouble(), listOf(), listOf("Cate $i"), "Image"
+                    )
+                )
             }
+            listRestaurant = tempList
+        })
+
+        list.add(HomeDataItem(TYPE_BANNER).apply { banner = Banner(1, "Banner 2") })
+        list.add(HomeDataItem(TYPE_TITLE).apply {
+            title = Title(1, "Title 2")
+        })
+        list.add(HomeDataItem(TYPE_NEWEST).apply {
+            val tempList = mutableListOf<Restaurant>()
+            for (i in 7..12) {
+                tempList.add(
+                    Restaurant(
+                        "$i", "Res $i", i.toDouble(), listOf(), listOf("Cate $i"), "Image"
+                    )
+                )
+            }
+            listRestaurant = tempList
+        })
+        return list
     }
 }
