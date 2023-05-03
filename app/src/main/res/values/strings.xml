@@ -35,4 +35,13 @@
     <string name="fragment_addFood_btnCategory">Category</string>
     <string name="fragment_addFood_tvPrice">Price</string>
 
+
+    //Edit Restaurant
+    <string name="edit_restaurant">Edit Restaurant</string>
+    <string name="register_tv_restaurant_name">Restaurant Name</string>
+    <string name="register_btn_list_food">Add Foods</string>
+    <string name="register_btn_list_categories">Add Categories</string>
+    <string name="register_btn_confirm_update">Confirm Update</string>
+    <string name="register_tv_restaurant_category">Restaurant Category</string>
+
 </resources>

@@ -1,12 +1,10 @@
 package com.kaizm.food_app.presentation.add_food
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -74,11 +72,15 @@ class AddFoodFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launchWhenStarted {
             viewModel.event.collect { event ->
                 when(event) {
-                    is AddFoodViewModel.Event.AddSuccess -> showToast("Add Success")
-                    is AddFoodViewModel.Event.AddFail -> showToast("Add Fail")
+                    is AddFoodViewModel.Event.AddSuccess -> {
+                        showToast("Add Success")
+                    }
+                    is AddFoodViewModel.Event.AddFail -> {
+                        showToast(event.message)
+                    }
                 }
             }
         }
@@ -117,8 +119,9 @@ class AddFoodFragment : Fragment() {
             viewModel.addFood(
                 binding.edtName.text.toString(),
                 binding.edtDescription.text.toString(),
-                binding.edtPrice.text.toString().toLong(),
-                listCategory.toList()
+                binding.edtPrice.text.toString(),
+                listCategory.toList(),
+                imgUri
             )
         }
 
@@ -137,8 +140,8 @@ class AddFoodFragment : Fragment() {
         (activity as MainActivity).visibleBottomNav()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         (activity as MainActivity).invisibleBottomNav()
     }
 }
