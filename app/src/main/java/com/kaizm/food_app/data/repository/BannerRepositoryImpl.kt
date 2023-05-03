@@ -11,20 +11,29 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-@Suppress("UNCHECKED_CAST")
+
 class BannerRepositoryImpl : BannerRepository {
     private val bannerCollectionRef = Firebase.firestore.collection("banner")
+
+    @Suppress("UNCHECKED_CAST")
     override suspend fun getBanner(): Flow<Result<List<Banner>>> = callbackFlow {
         try {
             bannerCollectionRef.document("vTuHUjfCEDsJtNJ4dDEv").get().addOnSuccessListener {
-//                trySend(Result.success())
-                val map = it.get("banners") as List<Banner>
-
-                Log.e(TAG, "getBanner: ${map.toList()} ")
+                val banners = it.get("banners") as ArrayList<HashMap<String, Any>>
+                val bannerList = banners.map { map ->
+                    mapToObject(map)
+                }
+                trySend(Result.success(bannerList))
             }.await()
         } catch (e: Exception) {
             send(Result.failure(e))
         }
         awaitClose()
+    }
+
+    private fun mapToObject(hashMap: HashMap<String, Any>): Banner {
+        val id = hashMap["id"] as Long
+        val name = hashMap["img"] as String
+        return Banner(id.toInt(), name)
     }
 }

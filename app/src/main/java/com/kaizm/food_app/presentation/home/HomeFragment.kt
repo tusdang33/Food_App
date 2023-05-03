@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel : HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -60,43 +60,44 @@ class HomeFragment : Fragment() {
                     adapter = HomeAdapter().apply {
                         updateList(list)
                     }
-
+                }
+            }
         }
     }
 
-    private fun loadList(): List<HomeDataItem> {
-        val list = mutableListOf<HomeDataItem>()
-        list.add(HomeDataItem(TYPE_BANNER).apply { banner = Banner(1, "Banner 1") })
-        list.add(HomeDataItem(TYPE_TITLE).apply {
-            title = Title(1, "Title 1")
-        })
-        list.add(HomeDataItem(TYPE_BEST).apply {
-            val tempList = mutableListOf<Restaurant>()
-            for (i in 1..6) {
-                tempList.add(
-                    Restaurant(
-                        "$i", "Res $i", i.toDouble(), listOf(), listOf("Cate $i"), "Image"
-                    )
-                )
-            }
-            listRestaurant = tempList
-        })
-
-        list.add(HomeDataItem(TYPE_BANNER).apply { banner = Banner(1, "Banner 2") })
-        list.add(HomeDataItem(TYPE_TITLE).apply {
-            title = Title(1, "Title 2")
-        })
-        list.add(HomeDataItem(TYPE_NEWEST).apply {
-            val tempList = mutableListOf<Restaurant>()
-            for (i in 7..12) {
-                tempList.add(
-                    Restaurant(
-                        "$i", "Res $i", i.toDouble(), listOf(), listOf("Cate $i"), "Image"
-                    )
-                )
-            }
-            listRestaurant = tempList
-        })
-        return list
-    }
+//    private fun loadList(): List<HomeDataItem> {
+//        val list = mutableListOf<HomeDataItem>()
+//        list.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = Banner(1, "Banner 1") })
+//        list.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply {
+//            title = Title(1, "Title 1")
+//        })
+//        list.add(HomeDataItem(HomeAdapter.TYPE_BEST).apply {
+//            val tempList = mutableListOf<Restaurant>()
+//            for (i in 1..6) {
+//                tempList.add(
+//                    Restaurant(
+//                        "$i", "Res $i", i.toDouble(), listOf(), listOf("Cate $i"), "Image"
+//                    )
+//                )
+//            }
+//            listRestaurant = tempList
+//        })
+//
+//        list.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = Banner(1, "Banner 2") })
+//        list.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply {
+//            title = Title(1, "Title 2")
+//        })
+//        list.add(HomeDataItem(HomeAdapter.TYPE_NEWEST).apply {
+//            val tempList = mutableListOf<Restaurant>()
+//            for (i in 7..12) {
+//                tempList.add(
+//                    Restaurant(
+//                        "$i", "Res $i", i.toDouble(), listOf(), listOf("Cate $i"), "Image"
+//                    )
+//                )
+//            }
+//            listRestaurant = tempList
+//        })
+//        return list
+//    }
 }

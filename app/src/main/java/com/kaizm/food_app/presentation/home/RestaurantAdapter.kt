@@ -33,7 +33,7 @@ class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewH
         fun bind(restaurant: Restaurant) {
             binding.tvName.text = restaurant.name
             binding.tvRating.text = restaurant.rating.toString()
-            binding.tvCategory.text = restaurant.listCategories[0]
+            binding.tvCategory.text = "test"
         }
     }
 

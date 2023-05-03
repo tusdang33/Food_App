@@ -11,9 +11,7 @@ import com.kaizm.food_app.data.model.home_data.Title
 import com.kaizm.food_app.domain.BannerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,19 +43,23 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchData() {
-        _event.trySend(Event.Loading)
-        bannerRepository.getBanner().collect { result ->
-            result.fold(onSuccess = {
-                listBanner.addAll(it)
-            }, onFailure = {
-                Log.e(TAG, "fetchHomeUI: ${it.localizedMessage}")
-            })
-            listTitle.add(Title(1, "Best"))
-            listTitle.add(Title(2, "New"))
-            listRestaurant.addAll(dummyRes())
-            _event.send(Event.LoadDone)
-        }
-        Log.e(TAG, "fetchData: Run ?", )
+        bannerRepository.getBanner()
+            .onStart {
+                _event.trySend(Event.Loading)
+            }
+            .collect { result ->
+                Log.e(TAG, "fetchData: Run ?")
+
+                result.fold(onSuccess = {
+                    listBanner.addAll(it)
+                }, onFailure = {
+                    Log.e(TAG, "fetchHomeUI: ${it.localizedMessage}")
+                })
+                listTitle.add(Title(1, "Best"))
+                listTitle.add(Title(2, "New"))
+                listRestaurant.addAll(dummyRes())
+                _event.send(Event.LoadDone)
+            }
     }
 
     fun fetchHomeUI() {
@@ -69,8 +71,8 @@ class HomeViewModel @Inject constructor(
         })
         tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[1] })
         tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[1] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_BEST).apply {
-            listRestaurant = this@HomeViewModel.listRestaurant.subList(6, 8)
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_NEWEST).apply {
+            listRestaurant = this@HomeViewModel.listRestaurant.subList(6, 12)
         })
         _stateUI.value = tempList
     }
@@ -80,7 +82,7 @@ class HomeViewModel @Inject constructor(
         for (i in 1..12) {
             tempList.add(
                 Restaurant(
-                    "$i", "Res $i", i.toDouble(), listOf(), listOf("Cate $i"), "Image"
+                    "$i", "Name $i", listOf(), listOf(), "Image", 0.0
                 )
             )
         }
