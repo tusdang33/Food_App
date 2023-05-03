@@ -2,7 +2,7 @@ package com.kaizm.food_app.data.repository
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.data.model.Restaurants
+import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.RestaurantRepository
 import kotlinx.coroutines.tasks.await
 
@@ -11,11 +11,11 @@ class RestaurantRepositoryImpl : RestaurantRepository {
     private val categoryCollectionRef = Firebase.firestore.collection("category").document("food")
 
 
-    override suspend fun postRestaurant(restaurants: Restaurants): Result<Unit> {
+    override suspend fun postRestaurant(restaurant: Restaurant): Result<Unit> {
         val fireId = restaurantCollectionRef.document().id
-        restaurants.id = fireId
+        restaurant.id = fireId
         return try {
-            restaurantCollectionRef.document(fireId).set(restaurants).await()
+            restaurantCollectionRef.document(fireId).set(restaurant).await()
             Result.success(Unit)
 
         } catch (e: Exception) {
@@ -31,7 +31,7 @@ class RestaurantRepositoryImpl : RestaurantRepository {
                 list.addAll(it.get("category") as List<String>)
             }.await()
             Result.success(list)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }

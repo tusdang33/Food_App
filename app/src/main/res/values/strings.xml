@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Food_App</string>
     <!-- TODO: Remove or change this placeholder text -->
-
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     //Activity Login
@@ -30,11 +28,18 @@
     <string name="splash_tvWelcome">Welcome</string>
     <string name="splash_tvWelcomeDetail">It’s a pleasure to meet you. We are excited that you’re here so let’s get started!</string>
 
+    //Add Food Fragment
+    <string name="fragment_addFood_tvName">Name</string>
+    <string name="fragment_addFood_tvDescription">Description</string>
+    <string name="fragment_addFood_btnConfirm">CONFIRM</string>
+    <string name="fragment_addFood_btnCategory">Category</string>
+    <string name="fragment_addFood_tvPrice">Price</string>
 
+    <string name="edit_restaurant">Edit Restaurant</string>
     <string name="register_tv_restaurant_name">Restaurant Name</string>
     <string name="register_btn_list_food">Add Foods</string>
     <string name="register_btn_list_categories">Add Categories</string>
-    <string name="register_btn_confirm_update">Confirm Update</string
+    <string name="register_btn_confirm_update">Confirm Update</string>
     <string name="register_tv_restaurant_category">Restaurant Category</string>
-    
+
 </resources>
