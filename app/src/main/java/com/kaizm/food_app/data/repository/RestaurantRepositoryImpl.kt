@@ -8,6 +8,7 @@ import kotlinx.coroutines.tasks.await
 
 class RestaurantRepositoryImpl : RestaurantRepository {
     private val restaurantCollectionRef = Firebase.firestore.collection("restaurant")
+    private val categoryCollectionRef = Firebase.firestore.collection("category").document("food")
 
 
     override suspend fun postRestaurant(restaurants: Restaurants): Result<Unit> {
@@ -19,6 +20,19 @@ class RestaurantRepositoryImpl : RestaurantRepository {
 
         } catch (e: Exception) {
             Result.failure<Unit>(e)
+        }
+    }
+
+    override suspend fun getCategory(): Result<List<String>> {
+        val list = mutableListOf<String>()
+
+        return try {
+            categoryCollectionRef.get().addOnSuccessListener {
+                list.addAll(it.get("category") as List<String>)
+            }.await()
+            Result.success(list)
+        } catch (e: Exception){
+            Result.failure(e)
         }
     }
 

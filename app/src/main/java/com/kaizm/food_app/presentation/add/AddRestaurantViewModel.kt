@@ -10,6 +10,8 @@ import com.kaizm.food_app.domain.ImageRepository
 import com.kaizm.food_app.domain.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,10 +30,17 @@ class AddRestaurantViewModel @Inject constructor(
 
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
+    private val _listCategory = MutableStateFlow<List<String>>(listOf())
+    val listCategory: StateFlow<List<String>>
+        get() = _listCategory
 
-    private suspend fun addRestaurantAndImage(name: String, uri: String) {
+    init {
+        categoryRestaurant()
+    }
+
+    private suspend fun addRestaurantAndImage(name: String, uri: String, list: List<String>) {
         restaurantRepository.postRestaurant(
-            Restaurants("id", name, listOf(), listOf(), uri, 0.0)
+            Restaurants("id", name, listOf(), list, uri, 0.0)
         ).fold(
             onSuccess = {
                 _event.trySend(Event.AddSuccess)
@@ -42,18 +51,30 @@ class AddRestaurantViewModel @Inject constructor(
         )
     }
 
-    fun addRestaurantAndImage(name: String, uri: Uri?) {
+    fun addRestaurantAndImage(name: String, uri: Uri?, list: List<String>) {
         uri?.let {
             viewModelScope.launch {
                 imageRepository.postImageRestaurant(uri).fold(
                     onSuccess = {
-                        addRestaurantAndImage(name, it)
+                        addRestaurantAndImage(name, it, list)
                     }, onFailure = {
                         Log.e(TAG, "addRestaurant: ${it.localizedMessage}")
                         _event.trySend(Event.AddFail)
                     }
                 )
             }
+        }
+    }
+
+    private fun categoryRestaurant() {
+        viewModelScope.launch {
+            restaurantRepository.getCategory().fold(
+                onSuccess = {
+                    _listCategory.value = it
+                }, onFailure = {
+                    Log.e(TAG, "categoryRestaurant: ${it.localizedMessage}")
+                }
+            )
         }
     }
 }

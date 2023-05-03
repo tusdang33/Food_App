@@ -10,10 +10,10 @@
     <string name="register_btn_list_categories">Add Categories</string>
     <string name="register_btn_confirm_update">Confirm Update</string>
 
-
     <!--
     //
-
     -->
+
+    <string name="register_tv_restaurant_category">Restaurant Category</string>
 
 </resources>
