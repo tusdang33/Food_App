@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp"
+    android:layout_height="wrap_content">
+
+    <ToggleButton
+        android:id="@+id/btn"
+        android:stateListAnimator="@null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_button"
+        android:backgroundTint="@drawable/selected_color"
+        android:paddingHorizontal="25dp"
+        android:textSize="12sp"
+        android:checked="false" />
+</FrameLayout>

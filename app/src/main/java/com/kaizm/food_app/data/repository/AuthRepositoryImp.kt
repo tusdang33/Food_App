@@ -1,8 +1,6 @@
 package com.kaizm.food_app.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.kaizm.food_app.data.model.User
 import com.kaizm.food_app.domain.AuthRepository
 import kotlinx.coroutines.tasks.await

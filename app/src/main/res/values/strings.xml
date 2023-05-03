@@ -28,4 +28,11 @@
     <string name="splash_tvWelcome">Welcome</string>
     <string name="splash_tvWelcomeDetail">It’s a pleasure to meet you. We are excited that you’re here so let’s get started!</string>
 
+    //Add Food Fragment
+    <string name="fragment_addFood_tvName">Name</string>
+    <string name="fragment_addFood_tvDescription">Description</string>
+    <string name="fragment_addFood_btnConfirm">CONFIRM</string>
+    <string name="fragment_addFood_btnCategory">Category</string>
+    <string name="fragment_addFood_tvPrice">Price</string>
+
 </resources>

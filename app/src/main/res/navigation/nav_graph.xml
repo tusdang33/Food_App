@@ -19,10 +19,19 @@
         android:id="@+id/profileFragment"
         android:name="com.kaizm.food_app.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_addFoodFragment"
+            app:destination="@id/addFoodFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.kaizm.food_app.presentation.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/addFoodFragment"
+        android:name="com.kaizm.food_app.presentation.add_food.AddFoodFragment"
+        android:label="fragment_add_food"
+        tools:layout="@layout/fragment_add_food" />
 </navigation>
