@@ -14,9 +14,9 @@
         <!-- Customize your theme here. -->
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <style name="roundedImageView" parent="">
-        <item name="cornerFamily" >rounded</item>
+        <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10%</item>
     </style>
-
 </resources>

@@ -7,7 +7,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.kaizm.food_app.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
