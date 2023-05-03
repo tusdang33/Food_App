@@ -44,15 +44,59 @@
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgRestaurant"
+        app:shapeAppearanceOverlay="@style/roundedImageView"
         android:layout_width="144dp"
         android:layout_height="144dp"
         app:layout_constraintTop_toBottomOf="@id/toolBarContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/main_color"
+        android:src="@color/main_color"
         android:layout_marginTop="15dp"
-
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgRestaurant"
+        android:orientation="vertical"
+        android:padding="15dp">
+        <TextView
+            android:id="@+id/tvRestaurantName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_tv_restaurant_name"
+            android:textSize="12sp"
+            android:fontFamily="@font/utm_avo"
+            android:textColor="@color/main_text_color"
+
+            />
+        <EditText
+            android:id="@+id/editRestaurantName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+        <Button
+            android:id="@+id/btnListCategories"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/main_color"
+            android:text="@string/register_btn_list_categories"
+            />
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnConfirmUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="15dp"
+        android:backgroundTint="@color/main_color"
+        android:text="@string/register_btn_confirm_update"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

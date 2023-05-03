@@ -9,10 +9,12 @@
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/drawable/ic_order.xml" value="0.138" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/drawable/ic_profile.xml" value="0.138" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/drawable/ic_search.xml" value="0.138" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/activity_login.xml" value="0.2115036231884058" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/activity_main.xml" value="0.18857142857142858" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/activity_register.xml" value="0.23333333333333334" />
-        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_add_restaurant.xml" value="0.2857142857142857" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_add_restaurant.xml" value="0.18857142857142858" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_home.xml" value="0.245018115942029" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_manage_restaurant.xml" value="0.2115036231884058" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_order.xml" value="0.245018115942029" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_profile.xml" value="0.245018115942029" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_search.xml" value="0.245018115942029" />
