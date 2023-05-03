@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel : HomeViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -38,20 +38,20 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-//        lifecycleScope.launchWhenCreated {
-//            viewModel.event.collect { event ->
-//                when(event) {
-//                    is HomeViewModel.Event.Loading -> {
-//                        Log.e(TAG, "Loading", )
-//                    }
-//                    is HomeViewModel.Event.LoadDone -> {
-//                        viewModel.fetchHomeUI()
-//                        Log.e(TAG, "Load Done", )
-//                    }
-//                }
-//
-//            }
-//        }
+        lifecycleScope.launchWhenCreated {
+            viewModel.event.collect { event ->
+                when(event) {
+                    is HomeViewModel.Event.Loading -> {
+                        Log.e(TAG, "Loading", )
+                    }
+                    is HomeViewModel.Event.LoadDone -> {
+                        viewModel.fetchHomeUI()
+                        Log.e(TAG, "Load Done", )
+                    }
+                }
+
+            }
+        }
 
         lifecycleScope.launchWhenCreated {
             viewModel.stateUI.collect { list ->
@@ -61,11 +61,7 @@ class HomeFragment : Fragment() {
                         updateList(list)
                     }
 
-                }
-            }
         }
-
-
     }
 
     private fun loadList(): List<HomeDataItem> {

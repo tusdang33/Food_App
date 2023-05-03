@@ -15,11 +15,25 @@
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_profile.xml" value="0.245018115942029" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_search.xml" value="0.245018115942029" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/menu/nav_menu.xml" value="0.2760416666666667" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/drawable/border_button.xml" value="0.25" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/drawable/selected_color.xml" value="0.2935" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/activity_register.xml" value="0.34479166666666666" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/activity_splash.xml" value="0.34479166666666666" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/fragment_add_food.xml" value="0.3489583333333333" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/fragment_add_restaurant.xml" value="0.3489583333333333" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/fragment_home.xml" value="0.3489583333333333" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/fragment_profile.xml" value="0.3489583333333333" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/item_banner.xml" value="0.3489583333333333" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/item_category.xml" value="1.0" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/item_food.xml" value="0.34791666666666665" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/item_restaurant.xml" value="0.5" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/item_title.xml" value="0.34791666666666665" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/layout_expand_child.xml" value="0.34791666666666665" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/layout_expand_parent.xml" value="0.3489583333333333" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/layout_list_food.xml" value="0.34791666666666665" />
+        <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/layout_list_restaurant.xml" value="0.3489583333333333" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/layout/selected_color.xml" value="0.34479166666666666" />
       </map>
     </option>
