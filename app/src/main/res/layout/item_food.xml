@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvName" />
 
     <TextView
-        android:id="@+id/ttvCategory"
+        android:id="@+id/tvFoodCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"

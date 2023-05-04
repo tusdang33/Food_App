@@ -41,7 +41,7 @@ class FoodAdapter(private val onFoodClick: OnFoodClick) :
             Glide.with(binding.root).load(food.image).into(binding.ivFoodImg)
             binding.tvName.text = food.name
             binding.tvDescription.text = food.description
-            binding.ttvCategory.text = food.category[0]
+            binding.tvFoodCategory.text = food.category[0]
             binding.tvPrice.text = currencyFormat(food.price.toString())
             binding.root.setOnClickListener {
                 onFoodClick.onClick(food)
