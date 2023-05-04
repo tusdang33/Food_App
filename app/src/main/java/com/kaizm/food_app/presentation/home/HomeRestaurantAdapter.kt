@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.databinding.ItemRestaurantBinding
 
-class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
+class HomeRestaurantAdapter : RecyclerView.Adapter<HomeRestaurantAdapter.RestaurantViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Restaurant>() {
         override fun areItemsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {

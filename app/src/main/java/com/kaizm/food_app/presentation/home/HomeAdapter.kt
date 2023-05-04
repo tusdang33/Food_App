@@ -117,7 +117,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         )
                     }
                 }
-                adapter = RestaurantAdapter().apply {
+                adapter = HomeRestaurantAdapter().apply {
                     list = lisRestaurant
                 }
             }
