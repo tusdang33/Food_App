@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
             viewModel.event.collect { event ->
                 when(event) {
                     is HomeViewModel.Event.Loading -> {
+                        binding.pbLoad.visibility =  View.VISIBLE
                         Log.e(TAG, "Loading", )
                     }
                     is HomeViewModel.Event.LoadDone -> {

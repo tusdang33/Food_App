@@ -42,7 +42,7 @@ class HomeViewModel @Inject constructor(
         get() = _stateUI
 
     init {
-
+        _event.trySend(Event.Loading)
         fetchData()
     }
 
