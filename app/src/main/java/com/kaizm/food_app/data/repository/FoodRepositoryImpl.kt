@@ -1,10 +1,8 @@
 package com.kaizm.food_app.data.repository
 
-import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.domain.FoodRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -43,8 +41,11 @@ class FoodRepositoryImpl : FoodRepository {
                     throw it
                 }
                 value?.let {
-                    trySend(Result.success(it.get("listFoods") as List<Food>))
-                    Log.e(TAG, "getListFood: ${it.get("listFoods")}")
+                    val foods = it.get("listFoods") as ArrayList<HashMap<String, Any>>
+                    val foodList = foods.map { map ->
+                        mapToObject(map)
+                    }
+                    trySend(Result.success(foodList))
                 }
             }
         } catch (e: Exception) {
@@ -52,4 +53,15 @@ class FoodRepositoryImpl : FoodRepository {
         }
         awaitClose()
     }
+
+    private fun mapToObject(hashMap: HashMap<String, Any>): Food {
+        val id = hashMap["id"] as String
+        val image = hashMap["image"] as String
+        val description = hashMap["description"] as String
+        val name = hashMap["name"] as String
+        val price = hashMap["price"] as Long
+        val category = hashMap["category"] as List<String>
+        return Food(id, name, description, price, category, image)
+    }
+
 }

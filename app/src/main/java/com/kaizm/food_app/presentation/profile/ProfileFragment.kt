@@ -33,5 +33,9 @@ class ProfileFragment : Fragment() {
         binding.btnRes.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_addRestaurantFragment)
         }
+
+        binding.btnManageFood.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_manageFoodFragment)
+        }
     }
 }
