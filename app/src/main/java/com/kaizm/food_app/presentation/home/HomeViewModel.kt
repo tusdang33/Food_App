@@ -9,15 +9,20 @@ import com.kaizm.food_app.data.model.home_data.Banner
 import com.kaizm.food_app.data.model.home_data.HomeDataItem
 import com.kaizm.food_app.data.model.home_data.Title
 import com.kaizm.food_app.domain.BannerRepository
+import com.kaizm.food_app.domain.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val bannerRepository: BannerRepository
+    private val bannerRepository: BannerRepository,
+    private val restaurantRepository: RestaurantRepository
 ) : ViewModel() {
 
     private val listBanner = mutableListOf<Banner>()
@@ -37,29 +42,36 @@ class HomeViewModel @Inject constructor(
         get() = _stateUI
 
     init {
-        viewModelScope.launch {
-            fetchData()
-        }
+
+        fetchData()
     }
 
-    private suspend fun fetchData() {
-        bannerRepository.getBanner()
-            .onStart {
-                _event.trySend(Event.Loading)
+    private fun fetchData() {
+        listTitle.add(Title(1, "Best"))
+        listTitle.add(Title(2, "New"))
+        viewModelScope.launch(Dispatchers.IO) {
+            launch {
+                bannerRepository.getBanner().collect { result ->
+                    Log.e(TAG, "fetchBanner: Run ?")
+                    result.fold(onSuccess = {
+                        listBanner.addAll(it)
+                    }, onFailure = {
+                        Log.e(TAG, "fetchBanner: ${it.localizedMessage}")
+                    })
+                }
             }
-            .collect { result ->
-                Log.e(TAG, "fetchData: Run ?")
-
-                result.fold(onSuccess = {
-                    listBanner.addAll(it)
-                }, onFailure = {
-                    Log.e(TAG, "fetchHomeUI: ${it.localizedMessage}")
-                })
-                listTitle.add(Title(1, "Best"))
-                listTitle.add(Title(2, "New"))
-                listRestaurant.addAll(dummyRes())
-                _event.send(Event.LoadDone)
+            launch {
+                restaurantRepository.getRestaurant().collect { result ->
+                    Log.e(TAG, "fetchRes: Run ?")
+                    result.fold(onSuccess = {
+                        listRestaurant.addAll(it)
+                        _event.send(Event.LoadDone)
+                    }, onFailure = {
+                        Log.e(TAG, "fetchRestaurant: ${it.localizedMessage}")
+                    })
+                }
             }
+        }
     }
 
     fun fetchHomeUI() {
@@ -75,17 +87,5 @@ class HomeViewModel @Inject constructor(
             listRestaurant = this@HomeViewModel.listRestaurant.subList(6, 12)
         })
         _stateUI.value = tempList
-    }
-
-    private fun dummyRes(): List<Restaurant> {
-        val tempList = mutableListOf<Restaurant>()
-        for (i in 1..12) {
-            tempList.add(
-                Restaurant(
-                    "$i", "Name $i", listOf(), listOf(), "Image", 0.0
-                )
-            )
-        }
-        return tempList
     }
 }

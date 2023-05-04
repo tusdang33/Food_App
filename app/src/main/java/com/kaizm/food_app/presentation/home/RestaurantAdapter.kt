@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.databinding.ItemRestaurantBinding
 
@@ -31,9 +32,10 @@ class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewH
     inner class RestaurantViewHolder(private val binding: ItemRestaurantBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(restaurant: Restaurant) {
+            Glide.with(binding.root).load(restaurant.image).into(binding.ivFoodImg)
             binding.tvName.text = restaurant.name
             binding.tvRating.text = restaurant.rating.toString()
-            binding.tvCategory.text = "test"
+            binding.tvCategory.text = restaurant.listCategories[0]
         }
     }
 

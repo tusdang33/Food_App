@@ -24,7 +24,8 @@ class BannerRepositoryImpl : BannerRepository {
                     mapToObject(map)
                 }
                 trySend(Result.success(bannerList))
-            }.await()
+                Log.e(TAG, "getBanner: $bannerList", )
+            }
         } catch (e: Exception) {
             send(Result.failure(e))
         }

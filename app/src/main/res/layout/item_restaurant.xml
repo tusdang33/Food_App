@@ -9,7 +9,9 @@
         android:id="@+id/ivFoodImg"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="@color/main_color"
+        android:layout_marginTop="16dp"
+        android:src="@color/main_color"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -17,13 +19,15 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/utm_avo"
         android:text="Beef Steak"
+        android:maxLines="1"
         android:textColor="@color/main_text_color"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/ivFoodImg"
         app:layout_constraintTop_toBottomOf="@id/ivFoodImg" />
 
