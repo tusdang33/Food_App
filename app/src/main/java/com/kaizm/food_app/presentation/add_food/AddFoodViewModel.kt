@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -76,7 +77,8 @@ class AddFoodViewModel @Inject constructor(
 
     private fun getDefaultFoodCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-            foodRepository.getDefaultFoodCategory().collect { result ->
+            foodRepository.getDefaultFoodCategory()
+                .collect { result ->
                 result.fold(onSuccess = {
                     _listCategory.value = it
                     Log.e(TAG, "listCat: $it")
