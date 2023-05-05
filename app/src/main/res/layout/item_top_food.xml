@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@id/ivFoodImg" />
 
     <TextView
-        android:id="@id/tvCategory"
+        android:id="@id/tvItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/utm_avo"

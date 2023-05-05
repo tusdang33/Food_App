@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
     android:paddingVertical="15dp">
 
     <TextView
+        android:id="@+id/tvCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/utm_avo_bold"
+        android:fontFamily="@font/utm_avo"
+        android:textStyle="bold"
         android:text="Dummy"
         android:textColor="@color/body_text_color"
         android:textSize="24sp" />

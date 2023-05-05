@@ -5,15 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.kaizm.food_app.R
-import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.data.model.home_data.Banner
 import com.kaizm.food_app.data.model.home_data.HomeDataItem
 import com.kaizm.food_app.data.model.home_data.Title
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.databinding.ItemBannerBinding
 import com.kaizm.food_app.databinding.ItemTitleBinding
-import com.kaizm.food_app.databinding.LayoutListRestaurantBinding
+import com.kaizm.food_app.databinding.LayoutListItemBinding
 
 class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -36,8 +35,8 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when(list[position].viewType) {
             TYPE_BANNER -> R.layout.item_banner
             TYPE_TITLE -> R.layout.item_title
-            TYPE_BEST -> R.layout.layout_list_restaurant
-            TYPE_NEWEST -> R.layout.layout_list_restaurant
+            TYPE_BEST -> R.layout.layout_list_item
+            TYPE_NEWEST -> R.layout.layout_list_item
             else -> throw IllegalArgumentException("Invalid param")
         }
     }
@@ -60,7 +59,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             )
             else -> {
                 ListRestaurantViewHolder(
-                    LayoutListRestaurantBinding.inflate(
+                    LayoutListItemBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )
@@ -100,11 +99,11 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class TitleViewHolder(private val binding: ItemTitleBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindTitle(title: Title) {
-            binding.tvCategory.text = title.title
+            binding.tvItemTitle.text = title.title
         }
     }
 
-    inner class ListRestaurantViewHolder(private val binding: LayoutListRestaurantBinding) :
+    inner class ListRestaurantViewHolder(private val binding: LayoutListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindListRestaurant(viewType: Int, lisRestaurant: List<Restaurant>) {
             binding.rvListFood.apply {
@@ -112,9 +111,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     TYPE_BEST -> GridLayoutManager(binding.root.context, 2)
                     else -> {
                         LinearLayoutManager(
-                            binding.root.context,
-                            LinearLayoutManager.HORIZONTAL,
-                            false
+                            binding.root.context, LinearLayoutManager.HORIZONTAL, false
                         )
                     }
                 }

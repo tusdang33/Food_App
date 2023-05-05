@@ -1,7 +1,6 @@
 package com.kaizm.food_app.domain
 
-import com.kaizm.food_app.data.model.Restaurant
-import java.util.*
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 
 interface RestaurantRepository {
 

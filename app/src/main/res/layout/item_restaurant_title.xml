@@ -2,30 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/tvItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/utm_avo_bold"
+        android:fontFamily="@font/utm_avo"
         android:text="Category"
         android:textColor="@color/main_text_color"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/btnSee"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:fontFamily="@font/utm_avo"
-        android:text="See all"
-        android:textColor="@color/main_color"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvItemTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvItemTitle" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

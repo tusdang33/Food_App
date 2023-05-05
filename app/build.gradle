@@ -77,4 +77,7 @@ dependencies {
 
     //FlexBoxLayout
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
+    //Sticky Header
+//    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3'
 }

@@ -1,4 +1,4 @@
-package com.kaizm.food_app.data.model
+package com.kaizm.food_app.data.model.restaurant_data
 
 import java.io.Serializable
 
