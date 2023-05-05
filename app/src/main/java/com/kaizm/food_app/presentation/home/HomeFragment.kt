@@ -10,15 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kaizm.food_app.common.Const.TAG
-import com.kaizm.food_app.data.model.Restaurant
-import com.kaizm.food_app.data.model.home_data.Banner
-import com.kaizm.food_app.data.model.home_data.HomeDataItem
-import com.kaizm.food_app.data.model.home_data.Title
 import com.kaizm.food_app.databinding.FragmentHomeBinding
-import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_BANNER
-import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_BEST
-import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_NEWEST
-import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_TITLE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
