@@ -5,7 +5,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.RestaurantRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -37,7 +37,6 @@ class RestaurantRepositoryImpl : RestaurantRepository {
                 for (snapShot in snapShots.documents) {
                     snapShot.toObject<Restaurant>()?.let {
                         listRestaurant.add(it)
-                        Log.e(TAG, "getRestaurant: $it \n", )
                     }
                 }
                 trySend(Result.success(listRestaurant))

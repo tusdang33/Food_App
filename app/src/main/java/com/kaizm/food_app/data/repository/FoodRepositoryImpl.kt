@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.domain.FoodRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -44,7 +44,7 @@ class FoodRepositoryImpl : FoodRepository {
                 }
                 value?.let {
                     trySend(Result.success(it.get("listFoods") as List<Food>))
-                    Log.e(TAG, "getListFood: ${it.get("listFoods")}")
+                    Log.e(TU, "getListFood: ${it.get("listFoods")}")
                 }
             }
         } catch (e: Exception) {

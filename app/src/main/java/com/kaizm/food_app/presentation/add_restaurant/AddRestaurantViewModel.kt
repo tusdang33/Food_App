@@ -4,7 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.ImageRepository
 import com.kaizm.food_app.domain.RestaurantRepository
@@ -42,7 +42,7 @@ class AddRestaurantViewModel @Inject constructor(
         restaurantRepository.postRestaurant(restaurant).fold(onSuccess = {
             _event.trySend(Event.AddSuccess)
         }, onFailure = {
-            Log.e(TAG, "addRestaurant: ${it.localizedMessage}")
+            Log.e(TU, "addRestaurant: ${it.localizedMessage}")
             _event.trySend(Event.AddFail(it.toString()))
         })
     }
@@ -54,7 +54,7 @@ class AddRestaurantViewModel @Inject constructor(
             imageRepository.postImageRestaurant(uri).fold(onSuccess = {
                 addRestaurantAndImage(Restaurant("id", name, listOf(), list, it, 0.0))
             }, onFailure = {
-                Log.e(TAG, "addRestaurant: ${it.localizedMessage}")
+                Log.e(TU, "addRestaurant: ${it.localizedMessage}")
                 _event.trySend(Event.AddFail(it.toString()))
             })
         }
@@ -66,7 +66,7 @@ class AddRestaurantViewModel @Inject constructor(
             restaurantRepository.getCategory().fold(onSuccess = {
                 _listCategory.value = it
             }, onFailure = {
-                Log.e(TAG, "categoryRestaurant: ${it.localizedMessage}")
+                Log.e(TU, "categoryRestaurant: ${it.localizedMessage}")
             })
         }
     }

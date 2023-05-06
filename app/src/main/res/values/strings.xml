@@ -35,6 +35,9 @@
     <string name="fragment_addFood_btnCategory">Category</string>
     <string name="fragment_addFood_tvPrice">Price</string>
 
+    //Home Fragment
+    <string name="fragment_home_tvHome">Home Page</string>
+
 
     //Edit Restaurant
     <string name="edit_restaurant">Edit Restaurant</string>

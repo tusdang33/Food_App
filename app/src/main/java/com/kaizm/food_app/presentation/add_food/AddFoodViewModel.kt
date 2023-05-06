@@ -4,7 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.domain.FoodRepository
 import com.kaizm.food_app.domain.ImageRepository
@@ -55,7 +55,7 @@ class AddFoodViewModel @Inject constructor(
                     )
                 )
             }, onFailure = {
-                Log.e(TAG, "addRestaurant: ${it.localizedMessage}")
+                Log.e(TU, "addRestaurant: ${it.localizedMessage}")
                 _event.trySend(Event.AddFail(it.toString()))
             })
         }
@@ -64,11 +64,11 @@ class AddFoodViewModel @Inject constructor(
     private fun addFoodAndImage(food: Food) {
         viewModelScope.launch(Dispatchers.IO) {
             foodRepository.postFood("8hIrdDZzn4JMA2CoKQvl", food).fold(onSuccess = {
-                Log.e(TAG, "addFood: Success")
+                Log.e(TU, "addFood: Success")
                 _event.send(Event.AddSuccess)
             }, onFailure = {
                 _event.send(Event.AddFail(it.toString()))
-                Log.e(TAG, "addFood: Fail")
+                Log.e(TU, "addFood: Fail")
             })
         }
     }
@@ -79,17 +79,17 @@ class AddFoodViewModel @Inject constructor(
             foodRepository.getDefaultFoodCategory().collect { result ->
                 result.fold(onSuccess = {
                     _listCategory.value = it
-                    Log.e(TAG, "listCat: $it")
+                    Log.e(TU, "listCat: $it")
                 }, onFailure = {
-                    Log.e(TAG, "listCat: ${it.localizedMessage}")
+                    Log.e(TU, "listCat: ${it.localizedMessage}")
                 })
             }
 
             foodRepository.getListFood("4VY7rG960ekwHgyqFl62").collect { result ->
                 result.fold(onSuccess = {
-                    Log.e(TAG, "getListFoodViewModel: $it")
+                    Log.e(TU, "getListFoodViewModel: $it")
                 }, onFailure = {
-                    Log.e(TAG, "getListFoodViewModel: $it")
+                    Log.e(TU, "getListFoodViewModel: $it")
                 })
             }
         }

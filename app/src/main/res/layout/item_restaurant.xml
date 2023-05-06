@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivFoodImg"
-        android:layout_width="150dp"
+        android:layout_width="170dp"
         android:layout_height="150dp"
         android:layout_marginTop="16dp"
-        android:src="@color/main_color"
         android:scaleType="centerCrop"
+        android:src="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,8 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/utm_avo"
-        android:text="Beef Steak"
         android:maxLines="1"
+        android:text="Beef Steak"
         android:textColor="@color/main_text_color"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,6 +54,16 @@
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@id/tvName"
         app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+    <ImageView
+        android:id="@+id/ivDot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_dot"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/tvCategory"
+        app:layout_constraintEnd_toStartOf="@+id/tvCategory"
+        app:layout_constraintTop_toTopOf="@id/tvCategory" />
 
     <TextView
         android:id="@id/tvCategory"

@@ -3,7 +3,7 @@ package com.kaizm.food_app.presentation.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
-) : ViewModel(){
+) : ViewModel() {
     sealed class Event() {
         object LoginSuccess : Event()
         object LoginFail : Event()
@@ -29,10 +29,10 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             authRepository.login(email, pass).fold(onSuccess = {
                 _event.trySend(Event.LoginSuccess)
-                Log.e(TAG, "login: Success")
+                Log.e(TU, "login: Success")
             }, onFailure = {
                 _event.trySend(Event.LoginFail)
-                Log.e(TAG, "login: Fail")
+                Log.e(TU, "login: Fail")
 
             })
         }
