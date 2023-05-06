@@ -62,8 +62,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchData() {
-        listTitle.add(Title(1, "Best"))
-        listTitle.add(Title(2, "New"))
+        listTitle.add(Title(1, "Featured Partner"))
+        listTitle.add(Title(2, "All Restaurant"))
         viewModelScope.launch(Dispatchers.IO) {
             launch {
                 bannerRepository.getBanner().collect { result ->
@@ -97,12 +97,12 @@ class HomeViewModel @Inject constructor(
         val tempList = mutableListOf<HomeDataItem>()
         tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[0] })
         tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[0] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_BEST).apply {
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_FEATURED).apply {
             listRestaurant = this@HomeViewModel.listRestaurant.subList(0, 6)
         })
         tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[1] })
         tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[1] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_NEWEST).apply {
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_ALL).apply {
             listRestaurant = this@HomeViewModel.listRestaurant.subList(6, 12)
         })
         _stateUI.value = tempList
