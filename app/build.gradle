@@ -78,6 +78,8 @@ dependencies {
     //FlexBoxLayout
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
-    //Sticky Header
-//    implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3'
+//   //RECYCLER ADAPTER
+//    implementation 'io.github.manneohlund:smart-recycler-adapter:5.0.0-rc01'
+//    implementation 'io.github.manneohlund:smart-recycler-adapter-viewevent:1.0.0-beta03'
+//    implementation 'io.github.manneohlund:smart-recycler-adapter-stickyheader:1.0.0-alpha02'
 }
