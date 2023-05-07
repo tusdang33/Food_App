@@ -23,7 +23,6 @@ class ManageFoodViewModel @Inject constructor(
         object Loading : Event()
         object LoadDone : Event()
         object GetSuccess : Event()
-
         data class GetFail(val message: String) : Event()
     }
 
@@ -41,13 +40,15 @@ class ManageFoodViewModel @Inject constructor(
 
     fun getAllFood(resId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            foodRepository.getListFood(resId)
-                .onStart {
-                    _event.send(Event.Loading)
-                }
-                .collect { result ->
-                result.fold(onSuccess = {
-                    _listFood.value = it
+            foodRepository.getListFood(resId).onStart {
+                _event.send(Event.Loading)
+            }.collect { result ->
+                result.fold(onSuccess = { list ->
+                    if (list != null) {
+                        _listFood.value = list
+                    } else {
+                        _event.send(Event.GetFail("Restaurant has no Food"))
+                    }
                     _event.send(Event.GetSuccess)
                 }, onFailure = {
                     _event.send(Event.GetFail(it.toString()))

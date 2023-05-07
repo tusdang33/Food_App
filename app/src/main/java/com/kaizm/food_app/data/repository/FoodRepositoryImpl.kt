@@ -1,8 +1,10 @@
 package com.kaizm.food_app.data.repository
 
+import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.domain.FoodRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -34,17 +36,18 @@ class FoodRepositoryImpl : FoodRepository {
         awaitClose()
     }
 
-    override suspend fun getListFood(resId: String): Flow<Result<List<Food>>> = callbackFlow {
+    override suspend fun getListFood(resId: String): Flow<Result<List<Food>?>> = callbackFlow {
         try {
             restaurantCollectionRef.document(resId).addSnapshotListener { value, error ->
                 error?.let {
                     throw it
                 }
                 value?.let {
-                    val foods = it.get("listFoods") as ArrayList<HashMap<String, Any>>
-                    val foodList = foods.map { map ->
+                    val foods = it.get("listFoods") as ArrayList<HashMap<String, Any>>?
+                    val foodList = foods?.map { map ->
                         mapToObject(map)
                     }
+                    Log.e(TAG, "foodList: $foodList")
                     trySend(Result.success(foodList))
                 }
             }
