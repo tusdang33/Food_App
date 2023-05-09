@@ -10,10 +10,16 @@
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/drawable/ic_profile.xml" value="0.138" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/drawable/ic_search.xml" value="0.138" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/activity_main.xml" value="0.18857142857142858" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_add_restaurant.xml" value="0.18857142857142858" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_blank.xml" value="0.2115036231884058" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_home.xml" value="0.245018115942029" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_manage_restaurant.xml" value="0.18857142857142858" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_order.xml" value="0.245018115942029" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_profile.xml" value="0.245018115942029" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/fragment_search.xml" value="0.245018115942029" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/item_manage_restaurant.xml" value="0.3828571428571429" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/item_restaurant.xml" value="0.13541666666666666" />
+        <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/layout/list_item.xml" value="0.1342451874366768" />
         <entry key="..\:/Android project/Project vs TuDang/Food_App/app/src/main/res/menu/nav_menu.xml" value="0.2760416666666667" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/drawable/border_button.xml" value="0.25" />
         <entry key="..\:/Learn/Project/Android/Food_App/app/src/main/res/drawable/selected_color.xml" value="0.2935" />
