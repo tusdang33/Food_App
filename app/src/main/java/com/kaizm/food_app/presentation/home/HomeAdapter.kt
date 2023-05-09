@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.kaizm.food_app.R
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.data.model.home_data.Banner
@@ -93,7 +96,7 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class BannerViewHolder(private val binding: ItemBannerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindBanner(banner: Banner) {
-            binding.tvBanner.text = banner.img
+            Glide.with(binding.root).load(banner.img).into(binding.ivBanner)
         }
     }
 
@@ -109,7 +112,10 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bindListRestaurant(viewType: Int, lisRestaurant: List<Restaurant>) {
             binding.rvListFood.apply {
                 layoutManager = when(viewType) {
-                    TYPE_BEST -> GridLayoutManager(binding.root.context, 2)
+                    TYPE_BEST -> FlexboxLayoutManager(binding.root.context).apply {
+                        flexDirection = FlexDirection.ROW
+                        justifyContent = JustifyContent.SPACE_BETWEEN
+                    }
                     else -> {
                         LinearLayoutManager(
                             binding.root.context,
