@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_profileFragment_to_addRestaurantFragment"
             app:destination="@id/addRestaurantFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_manageRestaurantFragment"
+            app:destination="@id/manageRestaurantFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -42,4 +45,12 @@
         android:name="com.kaizm.food_app.presentation.add_restaurant.AddRestaurantFragment"
         android:label="fragment_add_restaurant"
         tools:layout="@layout/fragment_add_restaurant" />
+    <fragment
+        android:id="@+id/manageRestaurantFragment"
+        android:name="com.kaizm.food_app.presentation.manageRestaurant.ManageRestaurantFragment"
+        android:label="ManageRestaurantFragment" >
+        <action
+            android:id="@+id/action_manageRestaurantFragment_to_addRestaurantFragment"
+            app:destination="@id/addRestaurantFragment" />
+    </fragment>
 </navigation>

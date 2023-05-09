@@ -41,7 +41,6 @@ class RestaurantRepositoryImpl : RestaurantRepository {
                     }
                 }
                 trySend(Result.success(listRestaurant))
-
             }
         } catch (e: Exception) {
             send(Result.failure(e))
