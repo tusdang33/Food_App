@@ -1,6 +1,7 @@
 package com.kaizm.food_app.presentation.manage_food
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
+import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.databinding.FragmentManageFoodBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +25,8 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class ManageFoodFragment : Fragment() {
     private lateinit var binding: FragmentManageFoodBinding
+    private val args : ManageFoodFragmentArgs by navArgs()
+
     private val viewModel: ManageFoodViewModel by viewModels()
     private val foodAdapter: FoodAdapter by lazy {
         FoodAdapter(object : OnFoodClick {
@@ -33,8 +38,9 @@ class ManageFoodFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentManageFoodBinding.inflate(inflater, container, false)
+        Log.e(TAG, "onCreateView: $args", )
         return binding.root
     }
 

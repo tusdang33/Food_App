@@ -8,14 +8,13 @@ import com.bumptech.glide.Glide
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.databinding.ItemManageRestaurantBinding
 
-interface OnClickListener {
+interface OnRestaurantClickListener {
     fun onClick(model: Restaurant)
 }
 
 class ManageRestaurantAdapter(
-    private val onClickListener: OnClickListener
-) :
-    RecyclerView.Adapter<ManageRestaurantAdapter.RestaurantViewHolder>() {
+    private val onClickListener: OnRestaurantClickListener
+) : RecyclerView.Adapter<ManageRestaurantAdapter.RestaurantViewHolder>() {
     private val list = mutableListOf<Restaurant>()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -26,21 +25,17 @@ class ManageRestaurantAdapter(
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): ManageRestaurantAdapter.RestaurantViewHolder {
         return RestaurantViewHolder(
             ItemManageRestaurantBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
         )
     }
 
     override fun onBindViewHolder(
-        holder: ManageRestaurantAdapter.RestaurantViewHolder,
-        position: Int
+        holder: ManageRestaurantAdapter.RestaurantViewHolder, position: Int
     ) {
         val data = list[position]
         holder.bind(data)
@@ -58,10 +53,7 @@ class ManageRestaurantAdapter(
             Glide.with(binding.root).load(data.image).into(binding.ivRestaurant)
             binding.tvRating.text = data.rating.toString()
             val str = StringBuilder()
-            for (item in data.listCategories) {
-                str.append("$item \n")
-                binding.tvCategory.text = str
-            }
+            binding.tvCategory.text = data.listCategories[0]
             binding.root.setOnClickListener {
                 onClickListener.onClick(data)
             }

@@ -20,17 +20,17 @@ class ManageRestaurantFragment : Fragment() {
     private lateinit var binding: FragmentManageRestaurantBinding
     private val viewModel: ManageRestaurantViewModel by viewModels()
     private val manageRestaurantAdapter: ManageRestaurantAdapter by lazy {
-        ManageRestaurantAdapter(object : OnClickListener {
+        ManageRestaurantAdapter(object : OnRestaurantClickListener {
             override fun onClick(model: Restaurant) {
-//                val action = ManageRestaurantFragmentDirections.actionManageRestaurantFragmentToBlankFragment(model)
-//                findNavController().navigate(
-//                    action
-//                )
+                val action = ManageRestaurantFragmentDirections.actionManageRestaurantFragmentToManageFoodFragment(model)
+                findNavController().navigate(
+                    action
+                )
 //                val bundle = Bundle().apply {
 //                    putSerializable("model", model)
 //                }
 //                findNavController().navigate(
-//                    R.id.action_manageRestaurantFragment_to_blankFragment,
+//                    R.id.action_manageRestaurantFragment_to_manageFoodFragment,
 //                    bundle
 //                )
             }
