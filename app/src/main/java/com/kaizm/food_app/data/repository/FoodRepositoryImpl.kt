@@ -45,7 +45,7 @@ class FoodRepositoryImpl : FoodRepository {
                     val foodList = foods.map { map ->
                         mapToObject(map)
                     }
-                    trySend(Result.success(foodList))
+//                    trySend(Result.success(foodList))
                 }
             }
         } catch (e: Exception) {

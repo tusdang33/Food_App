@@ -3,7 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingHorizontal="10dp"
-    android:paddingVertical="15dp">
+    android:paddingVertical="15dp"
+    android:background="@color/main_color">
 
     <TextView
         android:id="@+id/tvCategory"
