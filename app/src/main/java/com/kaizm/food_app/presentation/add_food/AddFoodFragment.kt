@@ -79,9 +79,11 @@ class AddFoodFragment : Fragment() {
                 when(event) {
                     is AddFoodViewModel.Event.AddSuccess -> {
                         showToast("Add Success")
+                        enableConfirmButton()
                     }
                     is AddFoodViewModel.Event.AddFail -> {
                         showToast(event.message)
+                        enableConfirmButton()
                     }
                 }
             }
@@ -94,7 +96,6 @@ class AddFoodFragment : Fragment() {
                 flexDirection = FlexDirection.ROW
                 justifyContent = JustifyContent.FLEX_START
             }
-
             adapter = categoryAdapter
         }
 
@@ -118,6 +119,10 @@ class AddFoodFragment : Fragment() {
         }
 
         binding.btnConfirm.setOnClickListener {
+            it.apply {
+                setBackgroundColor(resources.getColor(R.color.gray))
+                isClickable = false
+            }
             viewModel.addFood(
                 args.data.id,
                 binding.edtName.text.toString(),
@@ -136,6 +141,13 @@ class AddFoodFragment : Fragment() {
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun enableConfirmButton() {
+        binding.btnConfirm.apply {
+            setBackgroundColor(resources.getColor(R.color.main_color))
+            isClickable = true
+        }
     }
 
     override fun onPause() {
