@@ -75,17 +75,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fetchHomeUI() {
-        val tempList = mutableListOf<HomeDataItem>()
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[0] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[0] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_BEST).apply {
-            listRestaurant = this@HomeViewModel.listRestaurant.subList(0, 6)
-        })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[1] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[1] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_NEWEST).apply {
-            listRestaurant = this@HomeViewModel.listRestaurant.subList(6, 12)
-        })
-        _stateUI.value = tempList
+//        val tempList = mutableListOf<HomeDataItem>()
+//        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[0] })
+//        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[0] })
+//        tempList.add(HomeDataItem(HomeAdapter.TYPE_BEST).apply {
+//            listRestaurant = this@HomeViewModel.listRestaurant.subList(0, 6)
+//        })
+//        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[1] })
+//        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[1] })
+//        tempList.add(HomeDataItem(HomeAdapter.TYPE_NEWEST).apply {
+//            listRestaurant = this@HomeViewModel.listRestaurant.subList(6, 12)
+//        })
+//        _stateUI.value = tempList
     }
 }

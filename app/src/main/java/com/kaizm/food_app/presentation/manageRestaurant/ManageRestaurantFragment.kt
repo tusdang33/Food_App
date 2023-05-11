@@ -22,24 +22,17 @@ class ManageRestaurantFragment : Fragment() {
     private val manageRestaurantAdapter: ManageRestaurantAdapter by lazy {
         ManageRestaurantAdapter(object : OnRestaurantClickListener {
             override fun onClick(model: Restaurant) {
-                val action = ManageRestaurantFragmentDirections.actionManageRestaurantFragmentToManageFoodFragment(model)
-                findNavController().navigate(
-                    action
-                )
-//                val bundle = Bundle().apply {
-//                    putSerializable("model", model)
-//                }
-//                findNavController().navigate(
-//                    R.id.action_manageRestaurantFragment_to_manageFoodFragment,
-//                    bundle
-//                )
+                val action =
+                    ManageRestaurantFragmentDirections.actionManageRestaurantFragmentToManageFoodFragment(
+                        model
+                    )
+                findNavController().navigate(action)
             }
         })
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentManageRestaurantBinding.inflate(inflater, container, false)
         return binding.root
@@ -53,7 +46,7 @@ class ManageRestaurantFragment : Fragment() {
                 binding.rvManage.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     adapter = manageRestaurantAdapter.apply {
-                        updateList(list)
+                        this.list = list
                     }
                 }
             }

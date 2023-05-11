@@ -47,7 +47,6 @@ class FoodRepositoryImpl : FoodRepository {
                     val foodList = foods?.map { map ->
                         mapToObject(map)
                     }
-                    Log.e(TAG, "foodList: $foodList")
                     trySend(Result.success(foodList))
                 }
             }
@@ -55,6 +54,19 @@ class FoodRepositoryImpl : FoodRepository {
             send(Result.failure(e))
         }
         awaitClose()
+    }
+
+    override suspend fun deleteFood(resId: String, food: Food): Result<Unit> {
+        return try {
+            restaurantCollectionRef.document(resId).update(
+                hashMapOf<String, Any>(
+                    "listFoods" to FieldValue.arrayRemove(food)
+                )
+            ).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     private fun mapToObject(hashMap: HashMap<String, Any>): Food {

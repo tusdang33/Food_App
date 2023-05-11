@@ -1,8 +1,11 @@
 package com.kaizm.food_app.presentation.manage_food
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Food
+import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.FoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +26,7 @@ class ManageFoodViewModel @Inject constructor(
         object Loading : Event()
         object LoadDone : Event()
         object GetSuccess : Event()
+        object GetNull : Event()
         data class GetFail(val message: String) : Event()
     }
 
@@ -33,27 +37,32 @@ class ManageFoodViewModel @Inject constructor(
     val listFood: StateFlow<List<Food>>
         get() = _listFood
 
-
-    init {
-        getAllFood("8hIrdDZzn4JMA2CoKQvl")
-    }
-
     fun getAllFood(resId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             foodRepository.getListFood(resId).onStart {
                 _event.send(Event.Loading)
             }.collect { result ->
                 result.fold(onSuccess = { list ->
-                    if (list != null) {
+                    if (list != null && list.isNotEmpty()) {
                         _listFood.value = list
                     } else {
-                        _event.send(Event.GetFail("Restaurant has no Food"))
+                        _event.send(Event.GetNull)
                     }
-                    _event.send(Event.GetSuccess)
+                    _event.send(Event.LoadDone)
                 }, onFailure = {
                     _event.send(Event.GetFail(it.toString()))
                 })
             }
+        }
+    }
+
+    fun delete(restaurant: Restaurant, food: Food) {
+        viewModelScope.launch(Dispatchers.IO) {
+            foodRepository.deleteFood(restaurant.id, food).fold(onSuccess = {
+                Log.e(TAG, "delete: Done")
+            }, onFailure = {
+                Log.e(TAG, "delete: Fail")
+            })
         }
     }
 }

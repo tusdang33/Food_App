@@ -1,7 +1,6 @@
 package com.kaizm.food_app.presentation.manage_food
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
-import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.databinding.FragmentManageFoodBinding
+import com.kaizm.food_app.ultils.SwipeGesture
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
 
@@ -25,27 +25,56 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class ManageFoodFragment : Fragment() {
     private lateinit var binding: FragmentManageFoodBinding
-    private val args : ManageFoodFragmentArgs by navArgs()
+    private val args: ManageFoodFragmentArgs by navArgs()
 
     private val viewModel: ManageFoodViewModel by viewModels()
     private val foodAdapter: FoodAdapter by lazy {
         FoodAdapter(object : OnFoodClick {
             override fun onClick(food: Food) {
             }
+
+            override fun onDelete(food: Food) {
+                viewModel.delete(args.data, food)
+            }
         })
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentManageFoodBinding.inflate(inflater, container, false)
-        Log.e(TAG, "onCreateView: $args", )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initData()
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.event.collect { event ->
+                when(event) {
+                    is ManageFoodViewModel.Event.Loading -> {
+                        binding.pgBar.visibility = View.VISIBLE
+                    }
+                    is ManageFoodViewModel.Event.LoadDone -> {
+                        binding.pgBar.visibility = View.GONE
+                    }
+                    is ManageFoodViewModel.Event.GetNull -> {
+                        binding.tvNoFood.visibility = View.VISIBLE
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }
+
+        binding.btnAdd.setOnClickListener {
+            val action =
+                ManageFoodFragmentDirections.actionManageFoodFragmentToAddFoodFragment(args.data)
+            findNavController().navigate(action)
+        }
 
         lifecycleScope.launchWhenCreated {
             viewModel.listFood.collect {
@@ -57,7 +86,7 @@ class ManageFoodFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
                 DividerItemDecoration(
-                    requireContext(), LinearLayoutManager.HORIZONTAL
+                    requireContext(), LinearLayoutManager.VERTICAL
                 )
             )
             adapter = foodAdapter
@@ -76,10 +105,13 @@ class ManageFoodFragment : Fragment() {
             }
         })
 
-        binding.toolBarLayout.apply {
-            setContentScrimColor(resources.getColor(R.color.white))
-        }
+        SwipeGesture(requireContext()).attachToRecyclerView(binding.rvListFood)
+    }
 
+    private fun initData() {
+        viewModel.getAllFood(args.data.id)
+        binding.toolBarLayout.title = args.data.name
+        Glide.with(requireContext()).load(args.data.image).into(binding.toolbarImg)
     }
 
     override fun onPause() {

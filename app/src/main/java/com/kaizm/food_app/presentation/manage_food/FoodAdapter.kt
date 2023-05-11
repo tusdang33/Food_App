@@ -1,17 +1,20 @@
 package com.kaizm.food_app.presentation.manage_food
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.databinding.ItemFoodBinding
-import java.text.DecimalFormat
+import com.kaizm.food_app.ultils.currencyFormat
 
 interface OnFoodClick {
     fun onClick(food: Food)
+    fun onDelete(food: Food)
 }
 
 class FoodAdapter(private val onFoodClick: OnFoodClick) :
@@ -35,16 +38,28 @@ class FoodAdapter(private val onFoodClick: OnFoodClick) :
         }
         get() = differ.currentList
 
-    inner class FoodViewHolder(private val binding: ItemFoodBinding) :
+    inner class FoodViewHolder(val binding: ItemFoodBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                if (binding.root.scrollX != 0) {
+                    binding.root.scrollTo(0, 0)
+                }
+            }
+        }
+
         fun bind(food: Food) {
             Glide.with(binding.root).load(food.image).into(binding.ivFoodImg)
             binding.tvName.text = food.name
             binding.tvDescription.text = food.description
             binding.ttvCategory.text = food.category[0]
-            binding.tvPrice.text = currencyFormat(food.price.toString())
+            binding.tvPrice.text = food.price.toString().currencyFormat()
             binding.root.setOnClickListener {
                 onFoodClick.onClick(food)
+            }
+            binding.ivDelete.setOnClickListener {
+                onFoodClick.onDelete(food)
+                Log.e(TAG, "delete: ${food.name}")
             }
         }
     }
@@ -63,9 +78,4 @@ class FoodAdapter(private val onFoodClick: OnFoodClick) :
     }
 
     override fun getItemCount(): Int = list.size
-
-    private fun currencyFormat(price: String): String {
-        val decimalFormat = DecimalFormat("###,###,##0" + " đ")
-        return decimalFormat.format(price.toDouble())
-    }
 }

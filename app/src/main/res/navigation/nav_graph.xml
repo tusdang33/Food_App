@@ -42,7 +42,11 @@
         android:id="@+id/addFoodFragment"
         android:name="com.kaizm.food_app.presentation.add_food.AddFoodFragment"
         android:label="fragment_add_food"
-        tools:layout="@layout/fragment_add_food" />
+        tools:layout="@layout/fragment_add_food" >
+        <argument
+            android:name="data"
+            app:argType="com.kaizm.food_app.data.model.Restaurant" />
+    </fragment>
     <fragment
         android:id="@+id/addRestaurantFragment"
         android:name="com.kaizm.food_app.presentation.add_restaurant.AddRestaurantFragment"
@@ -56,6 +60,9 @@
         <argument
             android:name="data"
             app:argType="com.kaizm.food_app.data.model.Restaurant" />
+        <action
+            android:id="@+id/action_manageFoodFragment_to_addFoodFragment"
+            app:destination="@id/addFoodFragment" />
     </fragment>
     <fragment
         android:id="@+id/manageRestaurantFragment"

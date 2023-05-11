@@ -6,6 +6,7 @@
     android:layout_marginHorizontal="8dp"
     android:paddingVertical="8dp">
 
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivRestaurant"
         android:layout_width="110dp"
@@ -65,6 +66,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ivRestaurant" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="@color/black_trans"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+    <TextView
+        android:id="@+id/tvNoFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:fontFamily="@font/utm_avo_bold"
+        android:text="This Restaurent has no Food"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

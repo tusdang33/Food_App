@@ -14,13 +14,14 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolBarLayout"
-            app:title="Manage"
-            app:collapsedTitleTextColor="@color/black"
-            app:expandedTitleGravity="bottom|center"
-            app:collapsedTitleGravity="center"
+            app:contentScrim="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:collapsedTitleGravity="center"
+            app:collapsedTitleTextColor="@color/black"
+            app:expandedTitleGravity="bottom|center"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="Manage">
 
             <ImageView
                 android:id="@+id/toolbarImg"
@@ -46,12 +47,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_collapseMode="pin" >
+                app:layout_collapseMode="pin">
+
                 <ImageButton
                     android:id="@+id/btnBackToolbar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_arrow_back" />
+
+                <ImageButton
+                    android:id="@+id/btnAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/ic_plus" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -60,7 +70,24 @@
         android:id="@+id/rvListFood"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintTop_toBottomOf="@id/toolbarContainer" />
+
+    <TextView
+        android:id="@+id/tvNoFood"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:fontFamily="@font/utm_avo_bold"
+        android:textColor="@color/main_text_color"
+        android:text="This Restaurant has no Food"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ProgressBar
+        android:id="@+id/pgBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

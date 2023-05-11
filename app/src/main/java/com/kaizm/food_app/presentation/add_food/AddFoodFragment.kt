@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -29,6 +30,7 @@ class AddFoodFragment : Fragment() {
     private lateinit var binding: FragmentAddFoodBinding
     private val viewModel: AddFoodViewModel by viewModels()
     private val listCategory = mutableSetOf<String>()
+    val args: AddFoodFragmentArgs by navArgs()
     private var imgUri: Uri? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
@@ -117,6 +119,7 @@ class AddFoodFragment : Fragment() {
 
         binding.btnConfirm.setOnClickListener {
             viewModel.addFood(
+                args.data.id,
                 binding.edtName.text.toString(),
                 binding.edtDescription.text.toString(),
                 binding.edtPrice.text.toString(),
