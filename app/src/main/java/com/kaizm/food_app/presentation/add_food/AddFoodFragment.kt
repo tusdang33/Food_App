@@ -2,6 +2,7 @@ package com.kaizm.food_app.presentation.add_food
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.kaizm.food_app.databinding.FragmentAddFoodBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.InputStream
 
 @AndroidEntryPoint
 class AddFoodFragment : Fragment() {
@@ -136,7 +138,6 @@ class AddFoodFragment : Fragment() {
         binding.btnBackToolbar.setOnClickListener {
             findNavController().popBackStack()
         }
-
     }
 
     private fun showToast(message: String) {

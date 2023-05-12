@@ -45,7 +45,7 @@ class AddFoodViewModel @Inject constructor(
         if (name.isBlank() || des.isBlank() || price.isBlank() || category.isEmpty() || uri == null) {
             _event.trySend(Event.AddFail("Information Missing"))
         } else viewModelScope.launch {
-            imageRepository.postImageRestaurant(uri).fold(onSuccess = {
+            imageRepository.postImageRestaurant("food", uri).fold(onSuccess = {
                 addFoodAndImage(
                     resId, Food(
                         System.currentTimeMillis().toString(),

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.databinding.FragmentManageRestaurantBinding
@@ -59,6 +60,16 @@ class ManageRestaurantFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).visibleBottomNav()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).invisibleBottomNav()
     }
 
 }

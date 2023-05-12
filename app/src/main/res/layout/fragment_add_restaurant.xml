@@ -70,6 +70,7 @@
     <EditText
         android:id="@+id/editRestaurantName"
         android:layout_width="match_parent"
+        android:backgroundTint="@color/main_color"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tvRestaurantName" />
 

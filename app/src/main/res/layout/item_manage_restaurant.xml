@@ -85,7 +85,7 @@
         android:textColor="@color/white"
         android:visibility="gone"
         android:fontFamily="@font/utm_avo_bold"
-        android:text="This Restaurent has no Food"
+        android:text="This Restaurant has no Food"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

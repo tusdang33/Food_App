@@ -1,20 +1,17 @@
 package com.kaizm.food_app.presentation.manage_food
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.databinding.ItemFoodBinding
 import com.kaizm.food_app.ultils.currencyFormat
 
 interface OnFoodClick {
     fun onClick(food: Food)
-    fun onDelete(food: Food)
 }
 
 class FoodAdapter(private val onFoodClick: OnFoodClick) :
@@ -56,10 +53,6 @@ class FoodAdapter(private val onFoodClick: OnFoodClick) :
             binding.tvPrice.text = food.price.toString().currencyFormat()
             binding.root.setOnClickListener {
                 onFoodClick.onClick(food)
-            }
-            binding.ivDelete.setOnClickListener {
-                onFoodClick.onDelete(food)
-                Log.e(TAG, "delete: ${food.name}")
             }
         }
     }
