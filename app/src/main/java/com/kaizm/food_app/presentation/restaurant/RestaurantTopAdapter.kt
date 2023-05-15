@@ -35,8 +35,6 @@ class RestaurantTopAdapter(private val onFoodClick: OnFoodClick) :
             differ.submitList(value)
         }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
         return FoodViewHolder(
             ItemTopFoodBinding.inflate(

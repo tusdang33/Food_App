@@ -1,20 +1,13 @@
 package com.kaizm.food_app.presentation.restaurant
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.kaizm.food_app.common.Const.TAG
-import com.kaizm.food_app.data.model.home_data.Title
 import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.data.model.restaurant_data.RestaurantDataItem
-import com.kaizm.food_app.presentation.restaurant.RestaurantBodyAdapter.Companion.CATEGORY
-import com.kaizm.food_app.presentation.restaurant.RestaurantBodyAdapter.Companion.FOOD
-import com.kaizm.food_app.presentation.restaurant.RestaurantBodyAdapter.Companion.TITLE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,34 +38,24 @@ class RestaurantViewModel @Inject constructor() : ViewModel() {
 
     private fun dummyList(): List<RestaurantDataItem> {
         val tempList = mutableListOf<RestaurantDataItem>()
-        tempList.add(RestaurantDataItem(CATEGORY).apply {
-            val tempCat = mutableListOf<String>()
-            for (i in 1..6) {
-                tempCat.add("Cate $i")
-            }
-            listCategory = tempCat
-        })
-        tempList.add(RestaurantDataItem(TITLE).apply {
-            title = Title(1, "Title 1")
-        })
 
-        tempList.add(RestaurantDataItem(FOOD).apply {
-            listFood = dummyListFood().subList(0, 3)
-        })
+        tempList.add(RestaurantDataItem("Title 1", dummyListFood()))
+        tempList.add(RestaurantDataItem("Title 2", dummyListFood()))
+        tempList.add(RestaurantDataItem("Title 3", dummyListFood()))
+//        tempList.add(RestaurantDataItem("Title 4", dummyListFood()))
+//        tempList.add(RestaurantDataItem("Title 5", dummyListFood()))
+//        tempList.add(RestaurantDataItem("Title 6", dummyListFood()))
+//        tempList.add(RestaurantDataItem("Title 7", dummyListFood()))
+//        tempList.add(RestaurantDataItem("Title 8", dummyListFood()))
+//        tempList.add(RestaurantDataItem("Title 9", dummyListFood()))
+//        tempList.add(RestaurantDataItem("Title 10", dummyListFood()))
 
-        tempList.add(RestaurantDataItem(TITLE).apply {
-            title = Title(1, "Title 2")
-        })
-        tempList.add(RestaurantDataItem(FOOD).apply {
-            listFood = dummyListFood().subList(4, 6)
-        })
-        Log.e(TAG, "dummyList: $tempList", )
         return tempList
     }
 
     private fun dummyListFood(): List<Food> {
         val tempList = mutableListOf<Food>()
-        for (i in 1..8) {
+        for (i in 1..10) {
             tempList.add(Food("1", "Food $i", "Des $i", i + 1000L, listOf("Cat $i"), ""))
         }
         return tempList

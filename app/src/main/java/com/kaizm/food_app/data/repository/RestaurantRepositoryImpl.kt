@@ -19,7 +19,7 @@ class RestaurantRepositoryImpl : RestaurantRepository {
             Result.success(Unit)
 
         } catch (e: Exception) {
-            Result.failure<Unit>(e)
+            Result.failure(e)
         }
     }
 
@@ -35,6 +35,4 @@ class RestaurantRepositoryImpl : RestaurantRepository {
             Result.failure(e)
         }
     }
-
-
 }

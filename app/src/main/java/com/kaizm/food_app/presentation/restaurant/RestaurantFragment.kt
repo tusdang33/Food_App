@@ -9,49 +9,45 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cruxlab.sectionedrecyclerview.lib.SectionAdapter
-import com.cruxlab.sectionedrecyclerview.lib.SectionDataManager
-import com.kaizm.food_app.data.model.home_data.Title
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.FragmentRestaurantBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class RestaurantFragment : Fragment() {
     private lateinit var binding: FragmentRestaurantBinding
     private val viewModel: RestaurantViewModel by viewModels()
 
-    private val restaurantTopAdapter: RestaurantTopAdapter by lazy {
+    private val restaurantTopAdapter: RestaurantTopAdapter =
         RestaurantTopAdapter(object : OnFoodClick {
             override fun onClick(food: Food) {
             }
         })
-    }
+
 
     //Test Data
-    private val dummyList = mutableListOf<Title>()
     private val dummyString = mutableListOf<String>()
 
-    val sectionDataManager: SectionDataManager by lazy {
-        SectionDataManager()
-    }
+    private val restaurantBodyAdapter: RestaurantBodyAdapter = RestaurantBodyAdapter()
+    private val restaurantCategoryAdapter: RestaurantCategoryAdapter =
+        RestaurantCategoryAdapter(object : OnCategoryClick {
+            override fun onClick(category: String) {
+                val pos = restaurantBodyAdapter.getItemPosition(category)
+                val smoothScroller: RecyclerView.SmoothScroller =
+                    object : LinearSmoothScroller(context) {
+                        override fun getVerticalSnapPreference(): Int {
+                            return SNAP_TO_START;
+                        }
+                    }
 
-
-    private val testAdapter1: SectionAdapter<MyItemViewHolder, MyHeaderViewHolder> by lazy {
-        TestAdapter(isHeaderVisible = true, isHeaderPinned = true).apply {
-            list = dummyList
-            listHeader = dummyString
-        }
-    }
-
-    private val testAdapter2: SectionAdapter<MyItemViewHolder, MyHeaderViewHolder> by lazy {
-        TestAdapter(isHeaderVisible = true, isHeaderPinned = true).apply {
-            list = dummyList
-            listHeader = dummyString
-        }
-    }
-
-    private val restaurantBodyAdapter: RestaurantBodyAdapter by lazy {
-        RestaurantBodyAdapter()
-    }
+                smoothScroller.targetPosition = pos
+                (binding.rvBody.layoutManager as LinearLayoutManager).startSmoothScroll(
+                    smoothScroller
+                )
+            }
+        })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -76,41 +72,76 @@ class RestaurantFragment : Fragment() {
             }
         }
 
-//        binding.rvTop.apply {
-//            layoutManager =
-//                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//            adapter = restaurantTopAdapter
-//        }
-//        binding.rvBody.apply {
-//            layoutManager =
-//                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//            adapter = restaurantBodyAdapter
-//        }
+        binding.btnBackToolbar.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
+        binding.rvCategory.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = restaurantCategoryAdapter.apply {
+                updateList(dummyString)
+            }
+        }
 
-        sectionDataManager.addSection(testAdapter1, 1)
-        sectionDataManager.addSection(testAdapter2, 2)
-
+        binding.rvTop.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = restaurantTopAdapter
+        }
 
         binding.rvBody.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            adapter = sectionDataManager.adapter
+            adapter = restaurantBodyAdapter
+            var posItemView: View? = null
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    val newItemView = recyclerView.getChildAt(0)
+                    if(newItemView != posItemView){
+                        posItemView = newItemView
+                        newItemView?.let {
+                            val pes = recyclerView.getChildAdapterPosition(it)
+                            val str = restaurantBodyAdapter.getSectionAtPosition(pes)
+                            val pos = restaurantCategoryAdapter.getItemPosition(str)
+
+                            val smoothScroller: RecyclerView.SmoothScroller =
+                                object : LinearSmoothScroller(context) {
+                                    override fun getHorizontalSnapPreference(): Int {
+                                        return SNAP_TO_ANY;
+                                    }
+                                }
+                            smoothScroller.targetPosition = pos
+                            (binding.rvCategory.layoutManager as LinearLayoutManager).startSmoothScroll(
+                                smoothScroller
+                            )
+
+//                            lifecycleScope.launch {
+//                                delay(100)
+//                                val categoryHolder =
+//                                    binding.rvCategory.findViewHolderForAdapterPosition(pos)
+//                                (categoryHolder as RestaurantCategoryAdapter.CategoryViewHolder).clickOnButton(
+//                                    pos
+//                                )
+//                            }
+                        }
+                    }
+                }
+            })
         }
-
-//        binding.btnBackToolbar.setOnClickListener {
-//            findNavController().popBackStack()
-//        }
-        binding.sectionHeaderLayout.attachTo(binding.rvBody,sectionDataManager)
-
     }
 
     private fun initData() {
-        for (i in 1..20) {
-            dummyList.add(Title(i, "Title $i"))
-        }
-        for (i in 1..6) {
-            dummyString.add("String $i")
+        for (i in 1..10) {
+            dummyString.add("Title $i")
         }
     }
+
+//    private fun dummyFood(): List<Food> {
+//        val tempList = mutableListOf<Food>()
+//        for (i in 1..10) {
+//            tempList.add(Food("$i", "Food $i", "Des $i", 1000L, listOf("Baker"), "null"))
+//        }
+//        return tempList
+//    }
 }
