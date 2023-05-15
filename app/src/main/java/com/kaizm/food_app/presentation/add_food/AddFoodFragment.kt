@@ -2,6 +2,7 @@ package com.kaizm.food_app.presentation.add_food
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -23,12 +25,14 @@ import com.kaizm.food_app.databinding.FragmentAddFoodBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.InputStream
 
 @AndroidEntryPoint
 class AddFoodFragment : Fragment() {
     private lateinit var binding: FragmentAddFoodBinding
     private val viewModel: AddFoodViewModel by viewModels()
     private val listCategory = mutableSetOf<String>()
+    val args: AddFoodFragmentArgs by navArgs()
     private var imgUri: Uri? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
@@ -77,9 +81,11 @@ class AddFoodFragment : Fragment() {
                 when(event) {
                     is AddFoodViewModel.Event.AddSuccess -> {
                         showToast("Add Success")
+                        enableConfirmButton()
                     }
                     is AddFoodViewModel.Event.AddFail -> {
                         showToast(event.message)
+                        enableConfirmButton()
                     }
                 }
             }
@@ -92,7 +98,6 @@ class AddFoodFragment : Fragment() {
                 flexDirection = FlexDirection.ROW
                 justifyContent = JustifyContent.FLEX_START
             }
-
             adapter = categoryAdapter
         }
 
@@ -116,7 +121,12 @@ class AddFoodFragment : Fragment() {
         }
 
         binding.btnConfirm.setOnClickListener {
+            it.apply {
+                setBackgroundColor(resources.getColor(R.color.gray))
+                isClickable = false
+            }
             viewModel.addFood(
+                args.data.id,
                 binding.edtName.text.toString(),
                 binding.edtDescription.text.toString(),
                 binding.edtPrice.text.toString(),
@@ -128,11 +138,17 @@ class AddFoodFragment : Fragment() {
         binding.btnBackToolbar.setOnClickListener {
             findNavController().popBackStack()
         }
-
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun enableConfirmButton() {
+        binding.btnConfirm.apply {
+            setBackgroundColor(resources.getColor(R.color.main_color))
+            isClickable = true
+        }
     }
 
     override fun onPause() {

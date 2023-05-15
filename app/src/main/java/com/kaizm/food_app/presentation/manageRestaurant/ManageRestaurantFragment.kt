@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.databinding.FragmentManageRestaurantBinding
@@ -20,26 +21,19 @@ class ManageRestaurantFragment : Fragment() {
     private lateinit var binding: FragmentManageRestaurantBinding
     private val viewModel: ManageRestaurantViewModel by viewModels()
     private val manageRestaurantAdapter: ManageRestaurantAdapter by lazy {
-        ManageRestaurantAdapter(object : OnClickListener {
+        ManageRestaurantAdapter(object : OnRestaurantClickListener {
             override fun onClick(model: Restaurant) {
-//                val action = ManageRestaurantFragmentDirections.actionManageRestaurantFragmentToBlankFragment(model)
-//                findNavController().navigate(
-//                    action
-//                )
-//                val bundle = Bundle().apply {
-//                    putSerializable("model", model)
-//                }
-//                findNavController().navigate(
-//                    R.id.action_manageRestaurantFragment_to_blankFragment,
-//                    bundle
-//                )
+                val action =
+                    ManageRestaurantFragmentDirections.actionManageRestaurantFragmentToManageFoodFragment(
+                        model
+                    )
+                findNavController().navigate(action)
             }
         })
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentManageRestaurantBinding.inflate(inflater, container, false)
         return binding.root
@@ -53,7 +47,7 @@ class ManageRestaurantFragment : Fragment() {
                 binding.rvManage.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     adapter = manageRestaurantAdapter.apply {
-                        updateList(list)
+                        this.list = list
                     }
                 }
             }
@@ -66,6 +60,16 @@ class ManageRestaurantFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).visibleBottomNav()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).invisibleBottomNav()
     }
 
 }

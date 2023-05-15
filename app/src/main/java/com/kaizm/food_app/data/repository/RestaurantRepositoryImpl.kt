@@ -1,11 +1,8 @@
 package com.kaizm.food_app.data.repository
 
-import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.RestaurantRepository
 import kotlinx.coroutines.channels.awaitClose
@@ -32,15 +29,19 @@ class RestaurantRepositoryImpl : RestaurantRepository {
 
     override suspend fun getRestaurant(): Flow<Result<List<Restaurant>>> = callbackFlow {
         try {
-            restaurantCollectionRef.get().addOnSuccessListener { snapShots ->
-                val listRestaurant = mutableListOf<Restaurant>()
-                for (snapShot in snapShots.documents) {
-                    snapShot.toObject<Restaurant>()?.let {
-                        listRestaurant.add(it)
-                        Log.e(TAG, "getRestaurant: $it \n", )
-                    }
+            restaurantCollectionRef.addSnapshotListener { value, error ->
+                error?.let {
+                    throw it
                 }
-                trySend(Result.success(listRestaurant))
+                value?.let { snapShots ->
+                    val listRestaurant = mutableListOf<Restaurant>()
+                    for (snapShot in snapShots.documents) {
+                        snapShot.toObject<Restaurant>()?.let {
+                            listRestaurant.add(it)
+                        }
+                    }
+                    trySend(Result.success(listRestaurant))
+                }
             }
         } catch (e: Exception) {
             send(Result.failure(e))
@@ -60,6 +61,4 @@ class RestaurantRepositoryImpl : RestaurantRepository {
             Result.failure(e)
         }
     }
-
-
 }
