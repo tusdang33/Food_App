@@ -49,4 +49,11 @@
     <string name="tv_rating_restaurant">Rating</string>
     <string name="tv_category">Category</string>
 
+    //Search Food
+    <string name="search">Search</string>
+    <string name="tv_search_hint">Search here</string>
+    <string name="tv_cancel">Cancel</string>
+    <string name="tv_recent_searches">RECENT SEARCHES</string>
+    <string name="tv_clear_all">CLEAR ALL</string>
+    <string name="tv_food">Food</string>
 </resources>

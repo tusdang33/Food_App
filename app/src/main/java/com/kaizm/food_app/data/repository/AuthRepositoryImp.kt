@@ -35,4 +35,12 @@ class AuthRepositoryImp : AuthRepository {
             Result.failure(e)
         }
     }
+
+    override suspend fun getCurrentUserId(): Result<String> {
+        return try {
+            Result.success(firebaseAuth.currentUser!!.uid)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

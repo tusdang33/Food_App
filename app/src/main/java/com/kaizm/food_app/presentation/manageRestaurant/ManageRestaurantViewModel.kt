@@ -7,9 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kaizm.food_app.common.Const
 import com.kaizm.food_app.data.model.Restaurant
-import com.kaizm.food_app.data.model.home_data.HomeDataItem
 import com.kaizm.food_app.domain.RestaurantRepository
-import com.kaizm.food_app.presentation.home.HomeViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.channels.Channel

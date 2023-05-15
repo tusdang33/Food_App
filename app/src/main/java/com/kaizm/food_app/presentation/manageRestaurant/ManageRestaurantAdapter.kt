@@ -46,9 +46,6 @@ class ManageRestaurantAdapter(
         holder.bind(data)
     }
 
-    // onClickListener Interface
-
-
     override fun getItemCount(): Int = list.size
 
     inner class RestaurantViewHolder(private val binding: ItemManageRestaurantBinding) :

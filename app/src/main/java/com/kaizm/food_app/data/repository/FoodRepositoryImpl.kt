@@ -44,7 +44,6 @@ class FoodRepositoryImpl : FoodRepository {
                 }
                 value?.let {
                     trySend(Result.success(it.get("listFoods") as List<Food>))
-                    Log.e(TAG, "getListFood: ${it.get("listFoods")}")
                 }
             }
         } catch (e: Exception) {

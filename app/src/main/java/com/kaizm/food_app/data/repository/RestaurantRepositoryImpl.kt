@@ -3,7 +3,6 @@ package com.kaizm.food_app.data.repository
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Restaurant
@@ -37,7 +36,6 @@ class RestaurantRepositoryImpl : RestaurantRepository {
                 for (snapShot in snapShots.documents) {
                     snapShot.toObject<Restaurant>()?.let {
                         listRestaurant.add(it)
-                        Log.e(TAG, "getRestaurant: $it \n", )
                     }
                 }
                 trySend(Result.success(listRestaurant))
@@ -53,7 +51,7 @@ class RestaurantRepositoryImpl : RestaurantRepository {
 
         return try {
             categoryCollectionRef.get().addOnSuccessListener {
-                list.addAll(it.get("category") as List<String>)
+                    list.addAll(it.get("category") as List<String>)
             }.await()
             Result.success(list)
         } catch (e: Exception) {
