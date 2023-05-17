@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -31,8 +31,7 @@ class ManageFoodViewModel @Inject constructor(
     val event = _event.receiveAsFlow()
 
     private val _listFood = MutableStateFlow<List<Food>>(listOf())
-    val listFood: StateFlow<List<Food>>
-        get() = _listFood
+    val listFood = _listFood.asStateFlow()
 
 
     init {
@@ -41,18 +40,16 @@ class ManageFoodViewModel @Inject constructor(
 
     fun getAllFood(resId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            foodRepository.getListFood(resId)
-                .onStart {
+            foodRepository.getListFood(resId).onStart {
                     _event.send(Event.Loading)
+                }.collect { result ->
+                    result.fold(onSuccess = {
+                        _listFood.value = it
+                        _event.send(Event.GetSuccess)
+                    }, onFailure = {
+                        _event.send(Event.GetFail(it.toString()))
+                    })
                 }
-                .collect { result ->
-                result.fold(onSuccess = {
-                    _listFood.value = it
-                    _event.send(Event.GetSuccess)
-                }, onFailure = {
-                    _event.send(Event.GetFail(it.toString()))
-                })
-            }
         }
     }
 }

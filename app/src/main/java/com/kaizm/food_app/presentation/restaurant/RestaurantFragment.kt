@@ -1,9 +1,13 @@
 package com.kaizm.food_app.presentation.restaurant
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,14 +15,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.kaizm.food_app.MainActivity
+import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.FragmentRestaurantBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RestaurantFragment : Fragment() {
     private lateinit var binding: FragmentRestaurantBinding
     private val viewModel: RestaurantViewModel by viewModels()
+    private val restaurantBottomSheet = RestaurantBottomSheet()
 
     private val restaurantTopAdapter: RestaurantTopAdapter =
         RestaurantTopAdapter(object : OnFoodClick {
@@ -26,11 +33,13 @@ class RestaurantFragment : Fragment() {
             }
         })
 
-
-    //Test Data
-    private val dummyString = mutableListOf<String>()
-
-    private val restaurantBodyAdapter: RestaurantBodyAdapter = RestaurantBodyAdapter()
+    private val restaurantBodyAdapter: RestaurantBodyAdapter =
+        RestaurantBodyAdapter(object : OnRestaurantClick {
+            @RequiresApi(Build.VERSION_CODES.N)
+            override fun onClick(food: Food) {
+                viewModel.addToOrder(food)
+            }
+        })
     private val restaurantCategoryAdapter: RestaurantCategoryAdapter =
         RestaurantCategoryAdapter(object : OnCategoryClick {
             override fun onClick(category: String) {
@@ -41,7 +50,6 @@ class RestaurantFragment : Fragment() {
                             return SNAP_TO_START;
                         }
                     }
-
                 smoothScroller.targetPosition = pos
                 (binding.rvBody.layoutManager as LinearLayoutManager).startSmoothScroll(
                     smoothScroller
@@ -53,22 +61,47 @@ class RestaurantFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentRestaurantBinding.inflate(inflater, container, false)
-        initData()
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
-            viewModel.listTopFood.collect {
-                restaurantTopAdapter.list = it
+            viewModel.restaurantUiState.collect { UiState ->
+
+                if (UiState.isLoad) {
+                    binding.pgBar.visibility = View.VISIBLE
+                } else {
+                    binding.pgBar.visibility = View.GONE
+                    val tempCategory = mutableListOf<String>()
+                    UiState.listBody.forEach {
+                        tempCategory.add(it.title)
+                    }
+                    binding.tvPrice.text = UiState.totalPrice.toString()
+                    binding.tvQuantity.text = UiState.listOrder.size.toString()
+                    restaurantTopAdapter.list = UiState.listTop
+                    restaurantCategoryAdapter.updateList(tempCategory)
+                    restaurantBodyAdapter.updateList(UiState.listBody)
+                    if (UiState.listOrder.isEmpty()) {
+                        binding.footerContainer.visibility = View.GONE
+                    } else {
+                        binding.footerContainer.visibility = View.VISIBLE
+                    }
+                }
             }
         }
 
+
         lifecycleScope.launchWhenCreated {
-            viewModel.listBodyFood.collect {
-                restaurantBodyAdapter.updateList(it)
+            viewModel.event.collect { event ->
+                when(event) {
+                    is RestaurantViewModel.Event.AddCartSuccess -> {
+                        showToast("Add To Cart Success")
+                    }
+                    else -> {}
+                }
             }
         }
 
@@ -79,9 +112,7 @@ class RestaurantFragment : Fragment() {
         binding.rvCategory.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = restaurantCategoryAdapter.apply {
-                updateList(dummyString)
-            }
+            adapter = restaurantCategoryAdapter
         }
 
         binding.rvTop.apply {
@@ -98,7 +129,7 @@ class RestaurantFragment : Fragment() {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     val newItemView = recyclerView.getChildAt(0)
-                    if(newItemView != posItemView){
+                    if (newItemView != posItemView) {
                         posItemView = newItemView
                         newItemView?.let {
                             val pes = recyclerView.getChildAdapterPosition(it)
@@ -129,19 +160,27 @@ class RestaurantFragment : Fragment() {
                 }
             })
         }
-    }
 
-    private fun initData() {
-        for (i in 1..10) {
-            dummyString.add("Title $i")
+        binding.footerContainer.setOnClickListener {
+            restaurantBottomSheet.show(childFragmentManager, null)
         }
     }
 
-//    private fun dummyFood(): List<Food> {
-//        val tempList = mutableListOf<Food>()
-//        for (i in 1..10) {
-//            tempList.add(Food("$i", "Food $i", "Des $i", 1000L, listOf("Baker"), "null"))
-//        }
-//        return tempList
-//    }
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun getSharedViewModel(): RestaurantViewModel {
+        return viewModel
+    }
+
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).visibleBottomNav()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).invisibleBottomNav()
+    }
 }

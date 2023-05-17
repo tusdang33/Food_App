@@ -14,6 +14,7 @@ import kotlinx.coroutines.tasks.await
 class FoodRepositoryImpl : FoodRepository {
     private val restaurantCollectionRef = Firebase.firestore.collection("restaurant")
     private val foodCategoryRef = Firebase.firestore.collection("category").document("food")
+
     override suspend fun postFood(resId: String, food: Food): Result<Unit> {
         return try {
             restaurantCollectionRef.document(resId).update("listFoods", FieldValue.arrayUnion(food))
@@ -45,7 +46,7 @@ class FoodRepositoryImpl : FoodRepository {
                     val foodList = foods.map { map ->
                         mapToObject(map)
                     }
-//                    trySend(Result.success(foodList))
+                    trySend(Result.success(foodList))
                 }
             }
         } catch (e: Exception) {
@@ -63,7 +64,6 @@ class FoodRepositoryImpl : FoodRepository {
         val category = hashMap["category"] as List<String>
         return Food(id, name, description, price, category, image)
     }
-
 
 
 }

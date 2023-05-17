@@ -10,8 +10,12 @@ class AuthRepositoryImp : AuthRepository {
     private val firebaseAuth = FirebaseAuth.getInstance()
 
     @Suppress("UNCHECKED_CAST")
-    override suspend fun <T> checkCurrentUser(): T? {
-        return firebaseAuth.currentUser as T
+    override suspend fun <T> checkCurrentUser(): Result<T?> {
+        return try {
+            Result.success(firebaseAuth.currentUser as T)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun login(email: String, pass: String): Result<Unit> {
@@ -31,6 +35,14 @@ class AuthRepositoryImp : AuthRepository {
         return try {
             val fireUser = firebaseAuth.createUserWithEmailAndPassword(email, pass).await().user!!
             Result.success(User(fireUser.uid, null, email, 0, null))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getCurrentUid(): Result<String> {
+        return try {
+            Result.success(firebaseAuth.currentUser!!.uid)
         } catch (e: Exception) {
             Result.failure(e)
         }

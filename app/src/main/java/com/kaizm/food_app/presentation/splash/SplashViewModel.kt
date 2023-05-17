@@ -30,14 +30,18 @@ class SplashViewModel @Inject constructor(
 
     fun checkCurrentUser() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (authRepository.checkCurrentUser<FirebaseUser>() != null) {
-                _event.send(Event.LoginSuccess)
-                Log.e(TAG, "checkCurrentUser: Success")
-            } else {
-                _event.send(Event.LoginFail)
-                Log.e(TAG, "checkCurrentUser: Fail")
+            authRepository.checkCurrentUser<FirebaseUser>().fold(onSuccess = {
+                if (it != null) {
+                    _event.send(Event.LoginSuccess)
+                    Log.e(TAG, "checkCurrentUser: Success")
+                } else {
+                    _event.send(Event.LoginFail)
+                    Log.e(TAG, "checkCurrentUser: Fail")
+                }
+            }, onFailure = {
 
-            }
+            })
+
         }
     }
 }

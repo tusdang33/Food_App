@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.databinding.ItemListCategoryBinding
 import com.kaizm.food_app.presentation.restaurant.RestaurantCategoryAdapter.CategoryViewHolder
-import kotlin.properties.Delegates
 
 interface OnCategoryClick {
     fun onClick(category: String)
@@ -59,8 +58,11 @@ class RestaurantCategoryAdapter(private val onCategoryClick: OnCategoryClick) :
                     it.isChecked = false
                 }
                 lastChecked = binding.btnToggleCategory
+            } else {
+                lastChecked = null
             }
-            Log.e(TAG, "clickOnButton: $lastChecked", )
+            notifyItemChanged(position)
+            Log.e(TAG, "clickOnButton: $lastChecked")
         }
     }
 

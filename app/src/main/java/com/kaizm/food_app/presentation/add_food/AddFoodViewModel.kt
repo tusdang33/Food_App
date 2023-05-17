@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,8 +32,7 @@ class AddFoodViewModel @Inject constructor(
     val event = _event.receiveAsFlow()
 
     private val _listCategory = MutableStateFlow<List<String>>(listOf())
-    val listCategory: StateFlow<List<String>>
-        get() = _listCategory
+    val listCategory = _listCategory.asStateFlow()
 
     init {
         getDefaultFoodCategory()
@@ -76,15 +75,14 @@ class AddFoodViewModel @Inject constructor(
 
     private fun getDefaultFoodCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-            foodRepository.getDefaultFoodCategory()
-                .collect { result ->
-                result.fold(onSuccess = {
-                    _listCategory.value = it
-                    Log.e(TAG, "listCat: $it")
-                }, onFailure = {
-                    Log.e(TAG, "listCat: ${it.localizedMessage}")
-                })
-            }
+            foodRepository.getDefaultFoodCategory().collect { result ->
+                    result.fold(onSuccess = {
+                        _listCategory.value = it
+                        Log.e(TAG, "listCat: $it")
+                    }, onFailure = {
+                        Log.e(TAG, "listCat: ${it.localizedMessage}")
+                    })
+                }
 
             foodRepository.getListFood("4VY7rG960ekwHgyqFl62").collect { result ->
                 result.fold(onSuccess = {

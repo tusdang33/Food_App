@@ -17,7 +17,6 @@ class RestaurantRepositoryImpl : RestaurantRepository {
         return try {
             restaurantCollectionRef.document(fireId).set(restaurant).await()
             Result.success(Unit)
-
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -4,10 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.data.model.restaurant_data.RestaurantDataItem
 import com.kaizm.food_app.databinding.LayoutSectionFoodBinding
 
-class RestaurantBodyAdapter : RecyclerView.Adapter<RestaurantBodyAdapter.ListItemViewHolder>() {
+interface OnRestaurantClick {
+    fun onClick(food: Food)
+}
+
+class RestaurantBodyAdapter(private val onRestaurantClick: OnRestaurantClick) :
+    RecyclerView.Adapter<RestaurantBodyAdapter.ListItemViewHolder>() {
     private val list = mutableListOf<RestaurantDataItem>()
 
     fun updateList(newList: List<RestaurantDataItem>) {
@@ -40,7 +46,12 @@ class RestaurantBodyAdapter : RecyclerView.Adapter<RestaurantBodyAdapter.ListIte
                 layoutManager = LinearLayoutManager(
                     binding.root.context, LinearLayoutManager.VERTICAL, false
                 )
-                adapter = RestaurantBodyChildAdapter(data.listFood)
+                adapter = RestaurantBodyChildAdapter(data.listFood, object : OnRestaurantFoodClick {
+                    override fun onClick(food: Food) {
+                        onRestaurantClick.onClick(food)
+                    }
+                })
+
             }
         }
     }

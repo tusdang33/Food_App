@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,9 +31,9 @@ class AddRestaurantViewModel @Inject constructor(
 
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
+
     private val _listCategory = MutableStateFlow<List<String>>(listOf())
-    val listCategory: StateFlow<List<String>>
-        get() = _listCategory
+    val listCategory =  _listCategory.asStateFlow()
 
     init {
         categoryRestaurant()
