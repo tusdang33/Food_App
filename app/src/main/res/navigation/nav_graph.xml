@@ -34,7 +34,14 @@
         android:id="@+id/searchFragment"
         android:name="com.kaizm.food_app.presentation.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_blankFragment"
+            app:destination="@id/blankFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchResultsFragment"
+            app:destination="@id/searchResultsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addFoodFragment"
         android:name="com.kaizm.food_app.presentation.add_food.AddFoodFragment"
@@ -52,5 +59,26 @@
         <action
             android:id="@+id/action_manageRestaurantFragment_to_addRestaurantFragment"
             app:destination="@id/addRestaurantFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.kaizm.food_app.presentation.search.BlankFragment"
+        android:label="fragment_blank"
+        tools:layout="@layout/fragment_blank" >
+        <argument
+            android:name="Action"
+            app:argType="com.kaizm.food_app.data.model.Restaurant" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchResultsFragment"
+        android:name="com.kaizm.food_app.presentation.search_result.SearchResultsFragment"
+        android:label="fragment_search_results"
+        tools:layout="@layout/fragment_search_results" >
+        <argument
+            android:name="data"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_blankFragment"
+            app:destination="@id/blankFragment" />
     </fragment>
 </navigation>

@@ -1,26 +1,34 @@
 package com.kaizm.food_app.presentation.search
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.kaizm.food_app.data.model.Restaurant
-import com.kaizm.food_app.databinding.FragmentSearchBinding
 import com.kaizm.food_app.databinding.ItemHistoryBinding
 
-class RecentSearchesAdapter : RecyclerView.Adapter<RecentSearchesAdapter.RecentSearchViewHolder>() {
+interface OnRecentClickListener {
+    fun onClick(model: String)
+}
+class RecentSearchesAdapter (
+        private val onRecentClickListener: OnRecentClickListener
+        ) : RecyclerView.Adapter<RecentSearchesAdapter.RecentSearchViewHolder>() {
 
     private val list = mutableListOf<String>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateList(newList: List<String>) {
         list.clear()
         list.addAll(newList)
+        notifyDataSetChanged()
     }
 
-    class RecentSearchViewHolder(private val binding: ItemHistoryBinding) :
+    inner  class RecentSearchViewHolder(private val binding: ItemHistoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: String) {
             binding.tvHistory.text = data
+            binding.root.setOnClickListener {
+                onRecentClickListener.onClick(data)
+            }
         }
     }
 

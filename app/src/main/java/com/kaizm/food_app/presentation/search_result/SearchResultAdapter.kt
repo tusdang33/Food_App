@@ -1,4 +1,4 @@
-package com.kaizm.food_app.presentation.search
+package com.kaizm.food_app.presentation.search_result
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.databinding.ItemSearchBinding
-interface OnSearchClickListener {
+import com.kaizm.food_app.databinding.ItemSearchResultBinding
+import com.kaizm.food_app.presentation.search.SearchAdapter
+
+interface OnRecentClickListener {
     fun onClick(model: Restaurant)
 }
 
-class SearchAdapter(private val onClickListener: OnSearchClickListener) :
-    RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
+class SearchResultAdapter(private val onClickListener: OnRecentClickListener):
+    RecyclerView.Adapter<SearchResultAdapter.RecentViewHolder>() {
     private val list = mutableListOf<Restaurant>()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -22,10 +25,12 @@ class SearchAdapter(private val onClickListener: OnSearchClickListener) :
         notifyDataSetChanged()
     }
 
-    inner class SearchViewHolder(private val binding: ItemSearchBinding) :
+    inner class RecentViewHolder(private val binding: ItemSearchResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Restaurant) {
-            binding.tvRestaurantName.text = data.name
+            binding.tvRestaurant.text = data.name
+            binding.tvRate.text = data.rating.toString()
+            binding.tvCategory.text = data.listCategories[0]
             Glide.with(binding.root).load(data.image).into(binding.ivRestaurant)
             binding.root.setOnClickListener {
                 onClickListener.onClick(data)
@@ -36,9 +41,9 @@ class SearchAdapter(private val onClickListener: OnSearchClickListener) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SearchViewHolder {
-        return SearchViewHolder(
-            ItemSearchBinding.inflate(
+    ): RecentViewHolder {
+        return RecentViewHolder(
+            ItemSearchResultBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -46,11 +51,11 @@ class SearchAdapter(private val onClickListener: OnSearchClickListener) :
         )
     }
 
-    override fun getItemCount(): Int = list.size
-
-
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecentViewHolder, position: Int) {
         val data = list[position]
         holder.bind(data)
     }
+
+    override fun getItemCount(): Int = list.size
+
 }

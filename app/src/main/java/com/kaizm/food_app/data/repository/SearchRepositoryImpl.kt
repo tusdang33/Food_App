@@ -22,7 +22,7 @@ class SearchRepositoryImpl : SearchRepository {
         return try {
             val data = searchCollectionRef.document(uId).get().addOnSuccessListener {
                 it.data?.let {map->
-                    if(map.size==0){
+                    if(map.isEmpty()){
                         searchCollectionRef.document(uId).set(hashMapOf(
                             "searches" to listOf(data)
                         ))
@@ -43,15 +43,15 @@ class SearchRepositoryImpl : SearchRepository {
         }
     }
 
-    override suspend fun getSearch(uId: String): Flow<Result<List<String>>> = callbackFlow {
+    override suspend fun getSearch(uId: String): Flow<Result<List<String>?>> = callbackFlow {
         try {
             searchCollectionRef.document(uId).addSnapshotListener { value, error ->
                 error?.let {
                     throw it
                 }
                 value?.let {
-                    trySend(Result.success(it.get("searches") as List<String>))
-                    Log.e(TAG, "getSearch: ${(it.get("searches") as List<String>).javaClass}", )
+                    trySend(Result.success(it.get("searches") as List<String>?))
+                    Log.e(TAG, "getSearch: ${(it.get("searches") as List<String>?)?.javaClass}", )
                 }
             }
         }
@@ -59,5 +59,18 @@ class SearchRepositoryImpl : SearchRepository {
             send(Result.failure(e))
         }
         awaitClose()
+    }
+
+    override suspend fun deleteSearch(uId: String): Result<Unit> {
+        return try {
+            val updates = hashMapOf<String, Any>(
+                "searches" to FieldValue.delete(),
+            )
+            searchCollectionRef.document(uId).update(updates).addOnSuccessListener { }
+            Result.success(Unit)
+        }
+        catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

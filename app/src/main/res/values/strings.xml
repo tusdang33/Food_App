@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Food_App</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     //Activity Login
     <string name="activity_login_tvSignIn">Sign In</string>
@@ -56,4 +55,8 @@
     <string name="tv_recent_searches">RECENT SEARCHES</string>
     <string name="tv_clear_all">CLEAR ALL</string>
     <string name="tv_food">Food</string>
+
+    //Search Result
+    <string name="search_result">Search Result</string>
+    <string name="rate">4.2</string>
 </resources>

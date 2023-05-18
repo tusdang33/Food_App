@@ -3,16 +3,16 @@ package com.kaizm.food_app.presentation.search
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const
 import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.AuthRepository
 import com.kaizm.food_app.domain.RestaurantRepository
 import com.kaizm.food_app.domain.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,13 +30,13 @@ class SearchViewModel @Inject constructor(
 
 
     private val _stateUI = MutableStateFlow<List<Restaurant>>(listOf())
-    val stateUI: StateFlow<List<Restaurant>>
-        get() = _stateUI
+    val stateUI = _stateUI.asStateFlow()
 
     private val _search = MutableStateFlow<List<String>>(listOf())
-    val search: StateFlow<List<String>>
-        get() = _search
+    val search = _search.asStateFlow()
     var id = ""
+
+    private var listTemp: MutableList<String> = mutableListOf()
 
     sealed class Event {
         object Loading : Event()
@@ -50,6 +50,23 @@ class SearchViewModel @Inject constructor(
         loadRestaurant()
         loadSearch()
     }
+
+    fun filter(data: String) {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (data != "") {
+                val tempListString = listTemp.filter { str ->
+                    if (str.contains(data)) {
+                        return@filter true
+                    }
+                    false
+                }
+                _search.emit(tempListString)
+            }else{
+                _search.emit(listTemp)
+            }
+        }
+    }
+
 
     private fun getUserId() {
         viewModelScope.launch {
@@ -75,16 +92,17 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-
     private fun loadSearch() {
         viewModelScope.launch {
             searchRepository.getSearch(id).collect { result ->
                 result.fold(onSuccess = {
-                    _search.value = it
-                    Log.e(TAG, "loadSearch: $it", )
+                    if (it != null) {
+                        listTemp.addAll(it)
+                    }
+                    Log.e(TAG, "loadSearch: $it")
                     _event.send(Event.LoadDone)
                 }, onFailure = {
-                    Log.e(Const.TAG, "fetchSearch: ${it.localizedMessage}")
+                    Log.e(TAG, "fetchSearch: ${it.localizedMessage}")
                 })
             }
         }
@@ -93,14 +111,24 @@ class SearchViewModel @Inject constructor(
     private fun loadRestaurant() {
         viewModelScope.launch {
             restaurantRepository.getRestaurant().collect { result ->
-                Log.e(Const.TAG, "fetchRes: Run ?")
+                Log.e(TAG, "fetchRes: Run ?")
                 result.fold(onSuccess = {
                     _stateUI.value = it
                     _event.send(Event.LoadDone)
                 }, onFailure = {
-                    Log.e(Const.TAG, "fetchRestaurant: ${it.localizedMessage}")
+                    Log.e(TAG, "fetchRestaurant: ${it.localizedMessage}")
                 })
             }
+        }
+    }
+
+    fun deleteSearch() {
+        viewModelScope.launch {
+            searchRepository.deleteSearch(id).fold(onSuccess = {
+                _search.value = listOf()
+            }, onFailure = {
+                Log.e(TAG, "fetchSearch: ${it.localizedMessage}")
+            })
         }
     }
 }
