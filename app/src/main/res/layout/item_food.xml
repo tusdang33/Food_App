@@ -21,9 +21,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
+        android:fontFamily="@font/utm_avo"
         android:text="Sandwich"
         android:textSize="18sp"
-        android:fontFamily="@font/utm_avo"
         app:layout_constraintLeft_toRightOf="@id/ivFoodImg"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,8 +33,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:textSize="16sp"
         android:text="lorem ipsum dolosit atmet"
+        android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@id/ivFoodImg"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvName" />
@@ -44,9 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:textSize="14sp"
-        android:text="Test Category"
         android:fontFamily="@font/utm_avo"
+        android:text="Test Category"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/ivFoodImg" />
 
@@ -54,10 +54,10 @@
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="testPrice"
-        android:textSize="14sp"
         android:fontFamily="@font/utm_avo_bold"
+        android:text="testPrice"
         android:textColor="@color/main_color"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

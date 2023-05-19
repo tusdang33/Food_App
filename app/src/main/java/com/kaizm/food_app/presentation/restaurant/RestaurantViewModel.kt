@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.order_data.FoodInOrder
 import com.kaizm.food_app.data.model.order_data.Order
 import com.kaizm.food_app.data.model.restaurant_data.Food
@@ -46,10 +46,9 @@ class RestaurantViewModel @Inject constructor(
         data class Error(val message: String) : Event()
     }
 
-    companion object {
-        var uId = ""
-        var currentOrderId = ""
-    }
+    var uId = ""
+    var currentOrderId = ""
+    var currentResId = ""
 
     private var _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
@@ -70,24 +69,38 @@ class RestaurantViewModel @Inject constructor(
                 .collect { result ->
                     result.fold(onSuccess = { list ->
                         val tempMap = hashMapOf<String, MutableList<Food>>()
-                        for (i in list) {
-                            val currentList =
-                                tempMap.getOrDefault(i.category[0], mutableListOf())
-                            currentList.add(i)
-                            tempMap[i.category[0]] = currentList
+                        if (!list.isNullOrEmpty()) {
+                            for (i in list) {
+                                val currentList =
+                                    tempMap.getOrDefault(
+                                        i.category[0],
+                                        mutableListOf()
+                                    )
+                                currentList.add(i)
+                                tempMap[i.category[0]] = currentList
+                            }
+
+                            val tempList = mutableListOf<RestaurantDataItem>()
+                            for ((key, value) in tempMap) {
+                                tempList.add(RestaurantDataItem(key, value))
+                            }
+                            _restaurantUiState.update {
+                                it.copy(
+                                    isLoad = false,
+                                    listTop = list.subList(0, 4),
+                                    listBody = tempList
+                                )
+                            }
+                        } else {
+                            _restaurantUiState.update {
+                                it.copy(
+                                    isLoad = false,
+                                    listTop = listOf(),
+                                    listBody = listOf()
+                                )
+                            }
                         }
 
-                        val tempList = mutableListOf<RestaurantDataItem>()
-                        for ((key, value) in tempMap) {
-                            tempList.add(RestaurantDataItem(key, value))
-                        }
-                        _restaurantUiState.update {
-                            it.copy(
-                                isLoad = false,
-                                listTop = list.subList(0, 4),
-                                listBody = tempList
-                            )
-                        }
                     }, onFailure = {
                         _event.send(Event.Error(it.localizedMessage as String))
                     })
@@ -104,13 +117,15 @@ class RestaurantViewModel @Inject constructor(
                         if (listOrder.isNotEmpty()) {
                             _restaurantUiState.update {
                                 currentOrderId = listOrder[0].id
-                                Log.e(TAG, "current oid: $currentOrderId ")
                                 it.copy(
                                     isLoad = false,
                                     listFoodInOrder = listOrder[0].listFood.toMutableSet(),
                                 )
                             }
                             calPrice()
+                        }else{
+                            currentOrderId = ""
+
                         }
                     }, onFailure = {
                         _event.send(Event.Error(it.localizedMessage as String))
@@ -171,7 +186,7 @@ class RestaurantViewModel @Inject constructor(
         }
         _event.trySend(Event.AddCartSuccess)
         calPrice()
-        postOrder("97PS0oLeElLtWZgezSOK")
+        postOrder(currentResId)
     }
 
     fun onPlusOrder(foodInOrder: FoodInOrder) {
@@ -212,6 +227,7 @@ class RestaurantViewModel @Inject constructor(
                     )
                 )
                     .fold(onSuccess = {
+                        Log.e(TU, "postOrder: $it", )
                         currentOrderId = it.id
                     }, onFailure = {
                         _event.send(Event.Error(it.localizedMessage as String))
@@ -238,7 +254,6 @@ class RestaurantViewModel @Inject constructor(
                 .fold(onSuccess = {
                     uId = it
                 }, onFailure = {
-                    Log.e(TAG, "getUid: $it")
                 })
         }
     }

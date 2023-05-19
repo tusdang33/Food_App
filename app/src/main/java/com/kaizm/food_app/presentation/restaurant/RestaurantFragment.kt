@@ -13,14 +13,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
 import com.kaizm.food_app.data.model.restaurant_data.CategoryState
 import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.FragmentRestaurantBinding
+import com.kaizm.food_app.ultils.currencyFormat
 import dagger.hilt.android.AndroidEntryPoint
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -28,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class RestaurantFragment : Fragment() {
     private lateinit var binding: FragmentRestaurantBinding
     private val viewModel: RestaurantViewModel by viewModels()
+    private val argument: RestaurantFragmentArgs by navArgs()
     private val restaurantBottomSheet = RestaurantBottomSheet()
 
     private val restaurantTopAdapter: RestaurantTopAdapter =
@@ -45,7 +49,8 @@ class RestaurantFragment : Fragment() {
     private val restaurantCategoryAdapter: RestaurantCategoryAdapter =
         RestaurantCategoryAdapter(object : OnCategoryClick {
             override fun onClick(categoryState: CategoryState) {
-                val itemPos = restaurantBodyAdapter.getItemPosition(categoryState.category)
+                val itemPos =
+                    restaurantBodyAdapter.getItemPosition(categoryState.category)
                 val smoothScroller: RecyclerView.SmoothScroller =
                     object : LinearSmoothScroller(context) {
                         override fun getVerticalSnapPreference(): Int {
@@ -60,15 +65,22 @@ class RestaurantFragment : Fragment() {
         })
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentRestaurantBinding.inflate(inflater, container, false)
-        viewModel.getFood("97PS0oLeElLtWZgezSOK")
-        viewModel.getOrder("97PS0oLeElLtWZgezSOK")
+        fillToolbarUI()
+        viewModel.currentResId = argument.data.id
+        viewModel.getFood(argument.data.id)
+        viewModel.getOrder(argument.data.id)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
@@ -81,7 +93,7 @@ class RestaurantFragment : Fragment() {
                     UiState.listBody.forEach {
                         tempCategory.add(CategoryState(it.title, false))
                     }
-                    binding.tvPrice.text = UiState.totalPrice.toString()
+                    binding.tvPrice.text = UiState.totalPrice.toString().currencyFormat()
                     binding.tvQuantity.text = UiState.listFoodInOrder.size.toString()
                     restaurantTopAdapter.list = UiState.listTop
                     restaurantCategoryAdapter.updateList(tempCategory)
@@ -93,7 +105,10 @@ class RestaurantFragment : Fragment() {
                         }
                     } else if (UiState.listFoodInOrder.isNotEmpty() && !binding.footerContainer.isVisible) {
                         val animation =
-                            AnimationUtils.loadAnimation(context, R.anim.appear_bottom_anim)
+                            AnimationUtils.loadAnimation(
+                                context,
+                                R.anim.appear_bottom_anim
+                            )
                         binding.footerContainer.startAnimation(animation)
                         binding.footerContainer.visibility = View.VISIBLE
                     }
@@ -107,9 +122,11 @@ class RestaurantFragment : Fragment() {
                     is RestaurantViewModel.Event.AddCartSuccess -> {
                         showToast("Add To Cart Success")
                     }
+
                     is RestaurantViewModel.Event.Error -> {
                         showToast(event.message)
                     }
+
                     else -> {}
                 }
             }
@@ -121,31 +138,50 @@ class RestaurantFragment : Fragment() {
 
         binding.rvCategory.apply {
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
             adapter = restaurantCategoryAdapter
         }
 
         binding.rvTop.apply {
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
             adapter = restaurantTopAdapter
         }
 
         binding.rvBody.apply {
             layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
             adapter = restaurantBodyAdapter
             var posItemView: View? = null
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                override fun onScrollStateChanged(
+                    recyclerView: RecyclerView,
+                    newState: Int
+                ) {
                     val newItemView = recyclerView.getChildAt(0)
                     if (newItemView != posItemView) {
                         posItemView = newItemView
                         newItemView?.let {
-                            val childAdapterPos = recyclerView.getChildAdapterPosition(it)
+                            val childAdapterPos =
+                                recyclerView.getChildAdapterPosition(it)
                             val category =
-                                restaurantBodyAdapter.getSectionAtPosition(childAdapterPos)
-                            val itemPos = restaurantCategoryAdapter.getItemPosition(category)
+                                restaurantBodyAdapter.getSectionAtPosition(
+                                    childAdapterPos
+                                )
+                            val itemPos =
+                                restaurantCategoryAdapter.getItemPosition(category)
 
                             val smoothScroller: RecyclerView.SmoothScroller =
                                 object : LinearSmoothScroller(context) {
@@ -175,8 +211,16 @@ class RestaurantFragment : Fragment() {
         }
     }
 
+    private fun fillToolbarUI() {
+        Glide.with(requireContext()).load(argument.data.image).into(binding.toolbarImg)
+        binding.toolBarLayout.title = argument.data.name
+        binding.tvName.text = argument.data.name
+        binding.tvItemTitle.text = argument.data.listCategories[0]
+    }
+
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+            .show()
     }
 
     fun getSharedViewModel(): RestaurantViewModel {

@@ -1,10 +1,12 @@
 package com.kaizm.food_app.data.di
 
+import android.content.Context
 import com.kaizm.food_app.data.repository.*
 import com.kaizm.food_app.domain.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -45,8 +47,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideImageRepository(): ImageRepository {
-        return ImageRepositoryImpl()
+    fun provideImageRepository(@ApplicationContext context: Context): ImageRepository {
+        return ImageRepositoryImpl(context)
+
     }
 
+    @Singleton
+    @Provides
+    fun provideBannerRepository(): BannerRepository {
+        return BannerRepositoryImpl()
+    }
 }

@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.order_data.FoodInOrder
 import com.kaizm.food_app.databinding.BottomsheetRestaurantBinding
 import kotlinx.coroutines.launch
@@ -71,9 +71,8 @@ class RestaurantBottomSheet : BottomSheetDialogFragment() {
     override fun onPause() {
         super.onPause()
 
-        Log.e(TAG, "sheet: ${RestaurantViewModel.currentOrderId}")
-        if (RestaurantViewModel.currentOrderId != "") {
-            viewModel.postOrder("97PS0oLeElLtWZgezSOK")
+        if (viewModel.currentOrderId != "") {
+            viewModel.postOrder(viewModel.currentResId)
         }
     }
 }

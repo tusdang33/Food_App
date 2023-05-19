@@ -21,7 +21,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.databinding.FragmentAddRestaurantBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,7 +52,7 @@ class AddRestaurantFragment : Fragment() {
             if (result.resultCode == RESULT_OK) {
                 result?.let {
                     imgUri = it.data!!.data
-                    Log.e(TAG, "resultIntent ${it.data}")
+                    Log.e(TU, "resultIntent ${it.data}")
                     Glide.with(requireContext()).load(imgUri).into(binding.imgRestaurant)
                 }
 

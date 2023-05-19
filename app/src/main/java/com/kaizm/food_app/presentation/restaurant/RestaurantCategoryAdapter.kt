@@ -1,14 +1,12 @@
 package com.kaizm.food_app.presentation.restaurant
 
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.kaizm.food_app.R
-import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.data.model.restaurant_data.CategoryState
 import com.kaizm.food_app.databinding.ItemListCategoryBinding
 import com.kaizm.food_app.presentation.restaurant.RestaurantCategoryAdapter.CategoryViewHolder
@@ -23,20 +21,25 @@ class RestaurantCategoryAdapter(private val onCategoryClick: OnCategoryClick) :
 
     private val list = mutableListOf<CategoryState>()
 
-    companion object{
+    companion object {
         var lastCheckedPosition = 0
     }
 
     fun updateList(newList: List<CategoryState>) {
         list.clear()
         list.addAll(newList)
-        list[0].isChecked = true
+        if (list.isNotEmpty()) {
+            list[0].isChecked = true
+        }
         notifyDataSetChanged()
     }
 
     inner class CategoryViewHolder(val binding: ItemListCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int, categoryState: CategoryState) {
+        fun bind(
+            position: Int,
+            categoryState: CategoryState
+        ) {
             binding.tvCategory.text = categoryState.category
 
             if (categoryState.isChecked) {
@@ -64,7 +67,10 @@ class RestaurantCategoryAdapter(private val onCategoryClick: OnCategoryClick) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CategoryViewHolder {
         return CategoryViewHolder(
             ItemListCategoryBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
@@ -72,7 +78,10 @@ class RestaurantCategoryAdapter(private val onCategoryClick: OnCategoryClick) :
         )
     }
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: CategoryViewHolder,
+        position: Int
+    ) {
         val categoryState = list[position]
         holder.bind(position, categoryState)
     }

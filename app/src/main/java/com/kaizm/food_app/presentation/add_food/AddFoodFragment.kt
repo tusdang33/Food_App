@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -29,11 +30,15 @@ class AddFoodFragment : Fragment() {
     private lateinit var binding: FragmentAddFoodBinding
     private val viewModel: AddFoodViewModel by viewModels()
     private val listCategory = mutableSetOf<String>()
+    private val args: AddFoodFragmentArgs by navArgs()
     private var imgUri: Uri? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
         CategoryAdapter(object : OnCategoryClick {
-            override fun onClick(state: Boolean, category: String) {
+            override fun onClick(
+                state: Boolean,
+                category: String
+            ) {
                 if (state) {
                     listCategory.add(category)
                 } else {
@@ -52,13 +57,17 @@ class AddFoodFragment : Fragment() {
                         imgUri = uri
                     }
                 }
-                Glide.with(requireContext()).load(imgUri).into(binding.ivImage)
+                Glide.with(requireContext())
+                    .load(imgUri)
+                    .into(binding.ivImage)
             }
         }
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddFoodBinding.inflate(inflater, container, false)
         lifecycleScope.launch(Dispatchers.IO) {
@@ -69,7 +78,10 @@ class AddFoodFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launchWhenStarted {
@@ -77,9 +89,12 @@ class AddFoodFragment : Fragment() {
                 when(event) {
                     is AddFoodViewModel.Event.AddSuccess -> {
                         showToast("Add Success")
+                        enableConfirmButton()
                     }
+
                     is AddFoodViewModel.Event.AddFail -> {
                         showToast(event.message)
+                        enableConfirmButton()
                     }
                 }
             }
@@ -92,7 +107,6 @@ class AddFoodFragment : Fragment() {
                 flexDirection = FlexDirection.ROW
                 justifyContent = JustifyContent.FLEX_START
             }
-
             adapter = categoryAdapter
         }
 
@@ -116,7 +130,12 @@ class AddFoodFragment : Fragment() {
         }
 
         binding.btnConfirm.setOnClickListener {
+            it.apply {
+                setBackgroundColor(resources.getColor(R.color.gray))
+                isClickable = false
+            }
             viewModel.addFood(
+                args.data.id,
                 binding.edtName.text.toString(),
                 binding.edtDescription.text.toString(),
                 binding.edtPrice.text.toString(),
@@ -128,11 +147,18 @@ class AddFoodFragment : Fragment() {
         binding.btnBackToolbar.setOnClickListener {
             findNavController().popBackStack()
         }
-
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun enableConfirmButton() {
+        binding.btnConfirm.apply {
+            setBackgroundColor(resources.getColor(R.color.main_color))
+            isClickable = true
+        }
     }
 
     override fun onPause() {

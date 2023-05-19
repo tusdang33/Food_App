@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kaizm.food_app.data.model.order_data.FoodInOrder
 import com.kaizm.food_app.databinding.ItemCartBinding
+import com.kaizm.food_app.ultils.currencyFormat
 
 interface OnCartClick {
     fun onPlusClick(foodInOrder: FoodInOrder)
@@ -45,7 +46,7 @@ class RestaurantBottomSheetAdapter(private val onCartClick: OnCartClick) :
             binding.tvDescription.text = foodInOrder.food.description
             binding.tvFoodCategory.text = foodInOrder.food.category[0]
             binding.tvQuantity.text = foodInOrder.quantity.toString()
-            binding.tvPrice.text = foodInOrder.food.price.toString()
+            binding.tvPrice.text = foodInOrder.food.price.toString().currencyFormat()
             binding.btnPlus.setOnClickListener {
                 binding.tvQuantity.text =
                     (binding.tvQuantity.text.toString().toInt() + 1).toString()

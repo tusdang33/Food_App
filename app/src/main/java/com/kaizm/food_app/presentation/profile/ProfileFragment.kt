@@ -18,7 +18,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,12 +34,8 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_addRestaurantFragment)
         }
 
-        binding.btnManageFood.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_manageFoodFragment)
-        }
-
-        binding.btnResScreen.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_restaurantFragment)
+        binding.btnManage.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_manageRestaurantFragment)
         }
     }
 }

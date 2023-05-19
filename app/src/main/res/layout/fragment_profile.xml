@@ -20,7 +20,7 @@
         android:text="food" />
 
     <Button
-        android:id="@+id/btnManageFood"
+        android:id="@+id/btnManage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="manage" />

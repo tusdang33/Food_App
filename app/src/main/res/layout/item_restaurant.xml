@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingVertical="10dp"
-    android:paddingHorizontal="15dp">
+    android:padding="5dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivFoodImg"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@color/main_color"
+        android:layout_width="200dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:src="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,17 +19,20 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/utm_avo"
+        android:maxLines="1"
         android:text="Beef Steak"
         android:textColor="@color/main_text_color"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/ivFoodImg"
         app:layout_constraintTop_toBottomOf="@id/ivFoodImg" />
 
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/shapeAbleImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/main_color"
@@ -36,21 +40,43 @@
         app:layout_constraintEnd_toEndOf="@id/tvRating"
         app:layout_constraintStart_toStartOf="@id/tvRating"
         app:layout_constraintTop_toTopOf="@id/tvRating"
-        app:shapeAppearanceOverlay="@style/roundedImageView" />
+        app:shapeAppearanceOverlay="@style/roundedImageView20" />
+
 
     <TextView
         android:id="@+id/tvRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:fontFamily="@font/utm_avo"
+        android:fontFamily="@font/utm_avo_bold"
         android:paddingHorizontal="15sp"
         android:paddingVertical="5sp"
-        android:text="4.5"
         android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@id/tvName"
         app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+    <TextView
+        android:id="@id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="25min"
+        android:fontFamily="@font/utm_avo"
+        android:textColor="@color/body_text_color"
+        app:layout_constraintBottom_toBottomOf="@id/shapeAbleImageView"
+        app:layout_constraintEnd_toStartOf="@+id/ivDot"
+        app:layout_constraintStart_toEndOf="@id/tvRating"
+        app:layout_constraintTop_toTopOf="@+id/shapeAbleImageView" />
+
+    <ImageView
+        android:id="@+id/ivDot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_dot"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/tvCategory"
+        app:layout_constraintEnd_toStartOf="@+id/tvCategory"
+        app:layout_constraintTop_toTopOf="@id/tvCategory" />
 
     <TextView
         android:id="@+id/tvCategory"

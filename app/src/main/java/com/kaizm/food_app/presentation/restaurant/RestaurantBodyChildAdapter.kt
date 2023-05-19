@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.ItemRestaurantFoodBinding
+import com.kaizm.food_app.ultils.currencyFormat
 
 interface OnRestaurantFoodClick {
     fun onClick(food: Food)
@@ -44,7 +45,7 @@ class RestaurantBodyChildAdapter(
             binding.btnPlus.setOnClickListener {
                 onRestaurantFoodClick.onClick(food)
             }
-            binding.tvPrice.text = food.price.toString()
+            binding.tvPrice.text = food.price.toString().currencyFormat()
         }
     }
 }

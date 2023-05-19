@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface FoodRepository {
     suspend fun postFood(resId: String, food: Food): Result<Unit>
     suspend fun getDefaultFoodCategory(): Flow<Result<List<String>>>
-    suspend fun getListFood(resId: String): Flow<Result<List<Food>>>
+    suspend fun getListFood(resId: String): Flow<Result<List<Food>?>>
+    suspend fun deleteFood(resId: String, food: Food): Result<Unit>
 }
