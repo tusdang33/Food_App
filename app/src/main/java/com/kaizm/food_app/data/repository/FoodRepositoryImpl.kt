@@ -36,15 +36,19 @@ class FoodRepositoryImpl : FoodRepository {
         awaitClose()
     }
 
-    override suspend fun getListFood(resId: String): Flow<Result<List<Food>>> = callbackFlow {
+    override suspend fun getListFood(resId: String): Flow<Result<List<Food>?>> = callbackFlow {
         try {
             restaurantCollectionRef.document(resId).addSnapshotListener { value, error ->
                 error?.let {
                     throw it
                 }
                 value?.let {
-                    trySend(Result.success(it.get("listFoods") as List<Food>))
-                    Log.e(TU, "getListFood: ${it.get("listFoods")}")
+                    val foods = it.get("listFoods") as ArrayList<HashMap<String, Any>>?
+                    val foodList = foods?.map { map ->
+                        mapToObject(map)
+                    }
+                    trySend(Result.success(foodList))
+
                 }
             }
         } catch (e: Exception) {
@@ -52,4 +56,28 @@ class FoodRepositoryImpl : FoodRepository {
         }
         awaitClose()
     }
+
+    override suspend fun deleteFood(resId: String, food: Food): Result<Unit> {
+        return try {
+            restaurantCollectionRef.document(resId).update(
+                hashMapOf<String, Any>(
+                    "listFoods" to FieldValue.arrayRemove(food)
+                )
+            ).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private fun mapToObject(hashMap: HashMap<String, Any>): Food {
+        val id = hashMap["id"] as String
+        val image = hashMap["image"] as String
+        val description = hashMap["description"] as String
+        val name = hashMap["name"] as String
+        val price = hashMap["price"] as Long
+        val category = hashMap["category"] as List<String>
+        return Food(id, name, description, price, category, image)
+    }
+
 }
