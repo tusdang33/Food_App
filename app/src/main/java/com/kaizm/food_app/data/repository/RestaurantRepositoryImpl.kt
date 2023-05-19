@@ -3,6 +3,8 @@ package com.kaizm.food_app.data.repository
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.kaizm.food_app.common.Const.TU
+
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.RestaurantRepository
 import kotlinx.coroutines.channels.awaitClose

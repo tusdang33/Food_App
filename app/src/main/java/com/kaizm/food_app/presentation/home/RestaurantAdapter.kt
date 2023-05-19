@@ -6,10 +6,14 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.kaizm.food_app.R
 import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.databinding.ItemHomeHorizontalRestaurantBinding
 import com.kaizm.food_app.databinding.ItemRestaurantBinding
+import com.kaizm.food_app.presentation.home.HomeAdapter.Companion.TYPE_FEATURED
 
-class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
+class RestaurantAdapter(private val viewType: Int) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Restaurant>() {
         override fun areItemsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
@@ -29,28 +33,62 @@ class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewH
             differ.submitList(value)
         }
 
-    inner class RestaurantViewHolder(private val binding: ItemRestaurantBinding) :
+    override fun getItemViewType(position: Int): Int {
+        return when(viewType) {
+            TYPE_FEATURED -> R.layout.item_restaurant
+            else -> R.layout.item_home_horizontal_restaurant
+        }
+    }
+
+    inner class FeaturedRestaurantViewHolder(private val binding: ItemRestaurantBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(restaurant: Restaurant) {
+        fun bindFeaturedRes(restaurant: Restaurant) {
             Glide.with(binding.root).load(restaurant.image).into(binding.ivFoodImg)
+            binding.tvName.text = restaurant.name
+//            binding.tvRating.text = restaurant.rating.toString()
+            binding.tvCategory.text = restaurant.listCategories[0]
+        }
+    }
+
+    inner class AllRestaurantViewHolder(private val binding: ItemHomeHorizontalRestaurantBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindAllRes(restaurant: Restaurant) {
+            Glide.with(binding.root).load(restaurant.image).into(binding.ivImage)
             binding.tvName.text = restaurant.name
             binding.tvRating.text = restaurant.rating.toString()
             binding.tvCategory.text = restaurant.listCategories[0]
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
-        return RestaurantViewHolder(
-            ItemRestaurantBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
+    override fun onCreateViewHolder(
+        parent: ViewGroup, viewType: Int
+    ): RecyclerView.ViewHolder {
+        return when(viewType) {
+            R.layout.item_restaurant -> FeaturedRestaurantViewHolder(
+                ItemRestaurantBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
             )
-        )
-    }
+            else -> AllRestaurantViewHolder(
+                ItemHomeHorizontalRestaurantBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+        }
 
-    override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
-        val restaurant = list[position]
-        holder.bind(restaurant)
     }
 
     override fun getItemCount(): Int = list.size
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val restaurant = list[position]
+        when(holder) {
+            is FeaturedRestaurantViewHolder -> {
+                holder.bindFeaturedRes(restaurant)
+            }
+            is AllRestaurantViewHolder -> {
+                holder.bindAllRes(restaurant)
+            }
+        }
+    }
 }

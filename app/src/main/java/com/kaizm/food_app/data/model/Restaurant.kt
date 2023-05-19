@@ -8,5 +8,5 @@ data class Restaurant(
     val listFoods: List<Food> = listOf(),
     val listCategories: List<String> = listOf(),
     val image: String = "",
-    val rating: Double = 0.0,
+    val rating: Double = 0.0
 ) : Serializable

@@ -8,7 +8,7 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivBanner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
+        android:layout_height="185dp"
+        android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/roundedImageView" />
 </FrameLayout>

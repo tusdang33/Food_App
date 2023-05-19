@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="10dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="185dp"
+        android:src="@color/black"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="Name"
+        android:textColor="@color/main_text_color"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivImage" />
+
+    <ImageView
+        android:id="@+id/ivDot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ic_dot"
+        app:layout_constraintBottom_toBottomOf="@id/tvCategory"
+        app:layout_constraintEnd_toStartOf="@id/tvCategory"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvCategory" />
+
+    <TextView
+        android:id="@id/tvCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="Chinese"
+        android:textColor="@color/body_text_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/ivDot"
+        app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+    <TextView
+        android:id="@+id/tvRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="5.0"
+        android:textColor="@color/main_text_color"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivRating" />
+
+    <ImageView
+        android:id="@+id/ivRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_rating"
+        app:layout_constraintStart_toEndOf="@id/tvRating"
+        app:layout_constraintTop_toBottomOf="@id/tvCategory" />
+
+    <TextView
+        android:id="@+id/tvRatingCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="200+ Rating"
+        android:textColor="@color/main_text_color"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRating"
+        app:layout_constraintStart_toEndOf="@id/ivRating"
+        app:layout_constraintTop_toTopOf="@id/ivRating" />
+
+    <ImageView
+        android:id="@+id/ivTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clock"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRating"
+        app:layout_constraintEnd_toStartOf="@+id/tvTime"
+        app:layout_constraintTop_toTopOf="@id/ivRating" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25 Min"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRating"
+        app:layout_constraintEnd_toStartOf="@+id/ivDotLine"
+        app:layout_constraintTop_toTopOf="@id/ivRating" />
+
+    <ImageView
+        android:id="@+id/ivDotLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_dot"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRating"
+        app:layout_constraintEnd_toStartOf="@+id/ivDelivery"
+        app:layout_constraintTop_toTopOf="@id/ivRating" />
+
+    <ImageView
+        android:id="@+id/ivDelivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delivery"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRating"
+        app:layout_constraintEnd_toStartOf="@id/tvDelivery"
+        app:layout_constraintTop_toTopOf="@id/ivRating" />
+
+    <TextView
+        android:id="@+id/tvDelivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Free"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivRating"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivRating" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

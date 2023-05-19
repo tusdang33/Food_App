@@ -2,13 +2,9 @@ package com.kaizm.food_app.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.kaizm.food_app.R
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.data.model.home_data.Banner
@@ -23,8 +19,8 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
         const val TYPE_BANNER = 1
         const val TYPE_TITLE = 2
-        const val TYPE_BEST = 3
-        const val TYPE_NEWEST = 4
+        const val TYPE_FEATURED = 3
+        const val TYPE_ALL = 4
     }
 
     private val list = mutableListOf<HomeDataItem>()
@@ -39,8 +35,8 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when(list[position].viewType) {
             TYPE_BANNER -> R.layout.item_banner
             TYPE_TITLE -> R.layout.item_title
-            TYPE_BEST -> R.layout.layout_list_restaurant
-            TYPE_NEWEST -> R.layout.layout_list_restaurant
+            TYPE_FEATURED -> R.layout.layout_list_restaurant
+            TYPE_ALL -> R.layout.layout_list_restaurant
             else -> throw IllegalArgumentException("Invalid param")
         }
     }
@@ -111,21 +107,23 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bindListRestaurant(viewType: Int, lisRestaurant: List<Restaurant>) {
             binding.rvListFood.apply {
-                layoutManager = when(viewType) {
-                    TYPE_BEST -> FlexboxLayoutManager(binding.root.context).apply {
-                        flexDirection = FlexDirection.ROW
-                        justifyContent = JustifyContent.SPACE_BETWEEN
+                when(viewType) {
+                    TYPE_FEATURED -> {
+                        layoutManager = LinearLayoutManager(
+                            binding.root.context, LinearLayoutManager.HORIZONTAL, false
+                        )
+                        adapter = RestaurantAdapter(viewType).apply {
+                            list = lisRestaurant
+                        }
                     }
                     else -> {
-                        LinearLayoutManager(
-                            binding.root.context,
-                            LinearLayoutManager.HORIZONTAL,
-                            false
+                        layoutManager = LinearLayoutManager(
+                            binding.root.context, LinearLayoutManager.VERTICAL, false
                         )
+                        adapter = RestaurantAdapter(viewType).apply {
+                            list = lisRestaurant
+                        }
                     }
-                }
-                adapter = RestaurantAdapter().apply {
-                    list = lisRestaurant
                 }
             }
         }
