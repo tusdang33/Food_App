@@ -2,7 +2,6 @@ package com.kaizm.food_app.presentation.add_food
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,19 +24,21 @@ import com.kaizm.food_app.databinding.FragmentAddFoodBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.InputStream
 
 @AndroidEntryPoint
 class AddFoodFragment : Fragment() {
     private lateinit var binding: FragmentAddFoodBinding
     private val viewModel: AddFoodViewModel by viewModels()
     private val listCategory = mutableSetOf<String>()
-    val args: AddFoodFragmentArgs by navArgs()
+    private val args: AddFoodFragmentArgs by navArgs()
     private var imgUri: Uri? = null
 
     private val categoryAdapter: CategoryAdapter by lazy {
         CategoryAdapter(object : OnCategoryClick {
-            override fun onClick(state: Boolean, category: String) {
+            override fun onClick(
+                state: Boolean,
+                category: String
+            ) {
                 if (state) {
                     listCategory.add(category)
                 } else {
@@ -56,13 +57,17 @@ class AddFoodFragment : Fragment() {
                         imgUri = uri
                     }
                 }
-                Glide.with(requireContext()).load(imgUri).into(binding.ivImage)
+                Glide.with(requireContext())
+                    .load(imgUri)
+                    .into(binding.ivImage)
             }
         }
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddFoodBinding.inflate(inflater, container, false)
         lifecycleScope.launch(Dispatchers.IO) {
@@ -73,7 +78,10 @@ class AddFoodFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launchWhenStarted {
@@ -83,6 +91,7 @@ class AddFoodFragment : Fragment() {
                         showToast("Add Success")
                         enableConfirmButton()
                     }
+
                     is AddFoodViewModel.Event.AddFail -> {
                         showToast(event.message)
                         enableConfirmButton()
@@ -141,7 +150,8 @@ class AddFoodFragment : Fragment() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun enableConfirmButton() {

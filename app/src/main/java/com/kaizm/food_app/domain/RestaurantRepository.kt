@@ -1,7 +1,10 @@
 package com.kaizm.food_app.domain
 
-import com.kaizm.food_app.data.model.Restaurant
+
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
+
 import kotlinx.coroutines.flow.Flow
+
 
 interface RestaurantRepository {
 

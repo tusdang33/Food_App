@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.kaizm.food_app.data.model.Food
+import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.ItemFoodBinding
 import com.kaizm.food_app.ultils.currencyFormat
 
@@ -49,7 +49,7 @@ class FoodAdapter(private val onFoodClick: OnFoodClick) :
             Glide.with(binding.root).load(food.image).into(binding.ivFoodImg)
             binding.tvName.text = food.name
             binding.tvDescription.text = food.description
-            binding.ttvCategory.text = food.category[0]
+            binding.tvFoodCategory.text = food.category[0]
             binding.tvPrice.text = food.price.toString().currencyFormat()
             binding.root.setOnClickListener {
                 onFoodClick.onClick(food)

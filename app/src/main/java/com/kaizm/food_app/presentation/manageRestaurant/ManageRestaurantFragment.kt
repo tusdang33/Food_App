@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.databinding.FragmentManageRestaurantBinding
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizm.food_app.common.Const
-import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.data.model.home_data.Banner
 import com.kaizm.food_app.data.model.home_data.HomeDataItem
 import com.kaizm.food_app.data.model.home_data.Title
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.domain.BannerRepository
 import com.kaizm.food_app.domain.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,42 +66,52 @@ class HomeViewModel @Inject constructor(
         listTitle.add(Title(2, "All Restaurant"))
         viewModelScope.launch(Dispatchers.IO) {
             launch {
-                bannerRepository.getBanner().collect { result ->
-                    result.fold(onSuccess = {
-                        listBanner.addAll(it)
-                        dataFlag.update { state ->
-                            state.copy(
-                                banner = true
-                            )
-                        }
-                    }, onFailure = {})
-                }
+                bannerRepository.getBanner()
+                    .collect { result ->
+                        result.fold(onSuccess = {
+                            listBanner.addAll(it)
+                            dataFlag.update { state ->
+                                state.copy(
+                                    banner = true
+                                )
+                            }
+                        }, onFailure = {})
+                    }
             }
 
             launch {
-                restaurantRepository.getRestaurant().collect { result ->
-                    result.fold(onSuccess = {
-                        listRestaurant.addAll(it)
-                        dataFlag.update { state ->
-                            state.copy(
-                                restaurant = true
-                            )
-                        }
-                    }, onFailure = {})
-                }
+                restaurantRepository.getRestaurant()
+                    .collect { result ->
+                        result.fold(onSuccess = {
+                            listRestaurant.addAll(it)
+                            dataFlag.update { state ->
+                                state.copy(
+                                    restaurant = true
+                                )
+                            }
+                        }, onFailure = {})
+                    }
             }
         }
     }
 
     fun fetchHomeUI() {
         val tempList = mutableListOf<HomeDataItem>()
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[0] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[0] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_FEATURED).apply {
-            listRestaurant = this@HomeViewModel.listRestaurant.subList(0, 6)
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply {
+            banner = listBanner[0]
         })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply { banner = listBanner[1] })
-        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply { title = listTitle[1] })
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply {
+            title = listTitle[0]
+        })
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_FEATURED).apply {
+            listRestaurant = this@HomeViewModel.listRestaurant.reversed().subList(0,6)
+        })
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_BANNER).apply {
+            banner = listBanner[1]
+        })
+        tempList.add(HomeDataItem(HomeAdapter.TYPE_TITLE).apply {
+            title = listTitle[1]
+        })
         tempList.add(HomeDataItem(HomeAdapter.TYPE_ALL).apply {
             listRestaurant = this@HomeViewModel.listRestaurant.subList(6, 12)
         })

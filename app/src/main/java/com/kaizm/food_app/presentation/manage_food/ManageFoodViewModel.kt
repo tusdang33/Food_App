@@ -3,15 +3,14 @@ package com.kaizm.food_app.presentation.manage_food
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TU
-import com.kaizm.food_app.data.model.Food
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Food
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.domain.FoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -34,8 +33,7 @@ class ManageFoodViewModel @Inject constructor(
     val event = _event.receiveAsFlow()
 
     private val _listFood = MutableStateFlow<List<Food>>(listOf())
-    val listFood: StateFlow<List<Food>>
-        get() = _listFood
+    val listFood = _listFood.asStateFlow()
 
     fun getAllFood(resId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -45,7 +43,7 @@ class ManageFoodViewModel @Inject constructor(
                 }
                 .collect { result ->
                     result.fold(onSuccess = { list ->
-                        if (list != null && list.isNotEmpty()) {
+                        if (!list.isNullOrEmpty()) {
                             _listFood.value = list
                         } else {
                             _event.send(Event.GetNull)
@@ -65,9 +63,9 @@ class ManageFoodViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             foodRepository.deleteFood(restaurant.id, food)
                 .fold(onSuccess = {
-                    Log.e(TU, "delete: Done")
+                    Log.e("AAA", "delete: Done")
                 }, onFailure = {
-                    Log.e(TU, "delete: Fail")
+                    Log.e("AAA", "delete: Fail")
                 })
         }
     }

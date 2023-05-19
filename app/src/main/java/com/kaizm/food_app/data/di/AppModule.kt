@@ -1,18 +1,8 @@
 package com.kaizm.food_app.data.di
 
 import android.content.Context
-import com.kaizm.food_app.data.repository.AuthRepositoryImp
-import com.kaizm.food_app.data.repository.BannerRepositoryImpl
-import com.kaizm.food_app.data.repository.FoodRepositoryImpl
-import com.kaizm.food_app.data.repository.ImageRepositoryImpl
-import com.kaizm.food_app.data.repository.ProfileRepositoryImpl
-import com.kaizm.food_app.data.repository.RestaurantRepositoryImpl
-import com.kaizm.food_app.domain.AuthRepository
-import com.kaizm.food_app.domain.BannerRepository
-import com.kaizm.food_app.domain.FoodRepository
-import com.kaizm.food_app.domain.ImageRepository
-import com.kaizm.food_app.domain.ProfileRepository
-import com.kaizm.food_app.domain.RestaurantRepository
+import com.kaizm.food_app.data.repository.*
+import com.kaizm.food_app.domain.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,8 +41,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideImageRepository(@ApplicationContext context: Context): ImageRepository{
+    fun provideOrderRepository(): OrderRepository {
+        return OrderRepositoryImpl()
+    }
+
+    @Singleton
+    @Provides
+    fun provideImageRepository(@ApplicationContext context: Context): ImageRepository {
         return ImageRepositoryImpl(context)
+
     }
 
     @Singleton
@@ -60,5 +57,4 @@ object AppModule {
     fun provideBannerRepository(): BannerRepository {
         return BannerRepositoryImpl()
     }
-
 }

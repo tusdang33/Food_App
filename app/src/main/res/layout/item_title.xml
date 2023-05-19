@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/containerTitle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tvCategory"
+        android:id="@+id/tvItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/utm_avo"
@@ -17,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/btnSee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -24,8 +26,8 @@
         android:text="See all"
         android:textColor="@color/main_color"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/tvCategory"
+        app:layout_constraintBottom_toBottomOf="@id/tvItemTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvCategory" />
+        app:layout_constraintTop_toTopOf="@id/tvItemTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

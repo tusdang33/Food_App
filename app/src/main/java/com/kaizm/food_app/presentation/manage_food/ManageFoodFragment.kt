@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
-import com.kaizm.food_app.data.model.Food
+import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.FragmentManageFoodBinding
 import com.kaizm.food_app.ultils.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint

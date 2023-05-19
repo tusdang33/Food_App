@@ -1,6 +1,6 @@
 package com.kaizm.food_app.domain
 
-import com.kaizm.food_app.data.model.Food
+import com.kaizm.food_app.data.model.restaurant_data.Food
 import kotlinx.coroutines.flow.Flow
 
 interface FoodRepository {

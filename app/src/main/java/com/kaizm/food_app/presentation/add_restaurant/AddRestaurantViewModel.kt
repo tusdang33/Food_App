@@ -5,13 +5,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizm.food_app.common.Const.TU
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
+
 import com.kaizm.food_app.domain.ImageRepository
 import com.kaizm.food_app.domain.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,9 +32,9 @@ class AddRestaurantViewModel @Inject constructor(
 
     private val _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
+
     private val _listCategory = MutableStateFlow<List<String>>(listOf())
-    val listCategory: StateFlow<List<String>>
-        get() = _listCategory
+    val listCategory =  _listCategory.asStateFlow()
 
     init {
         categoryRestaurant()
@@ -82,7 +84,7 @@ class AddRestaurantViewModel @Inject constructor(
                 .fold(onSuccess = {
                     _listCategory.value = it
                 }, onFailure = {
-                    Log.e(TU, "categoryRestaurant: ${it.localizedMessage}")
+                    Log.e("AAA", "categoryRestaurant: ${it.localizedMessage}")
                 })
         }
     }

@@ -3,9 +3,9 @@ package com.kaizm.food_app.data.repository
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TU
 
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
+
 import com.kaizm.food_app.domain.RestaurantRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,6 @@ class RestaurantRepositoryImpl : RestaurantRepository {
         return try {
             restaurantCollectionRef.document(fireId).set(restaurant).await()
             Result.success(Unit)
-
         } catch (e: Exception) {
             Result.failure(e)
         }
