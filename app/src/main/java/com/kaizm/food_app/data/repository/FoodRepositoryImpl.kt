@@ -37,6 +37,7 @@ class FoodRepositoryImpl : FoodRepository {
 
     override suspend fun getListFood(resId: String): Flow<Result<List<Food>>> = callbackFlow {
         try {
+            restaurantCollectionRef.get()
             restaurantCollectionRef.document(resId).addSnapshotListener { value, error ->
                 error?.let {
                     throw it

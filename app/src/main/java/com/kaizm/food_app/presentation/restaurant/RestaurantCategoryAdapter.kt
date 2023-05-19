@@ -1,68 +1,66 @@
 package com.kaizm.food_app.presentation.restaurant
 
-import android.annotation.SuppressLint
-import android.graphics.Color
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ToggleButton
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.kaizm.food_app.R
 import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.data.model.restaurant_data.CategoryState
 import com.kaizm.food_app.databinding.ItemListCategoryBinding
 import com.kaizm.food_app.presentation.restaurant.RestaurantCategoryAdapter.CategoryViewHolder
 
 interface OnCategoryClick {
-    fun onClick(category: String)
+    fun onClick(categoryState: CategoryState)
 }
 
+@RequiresApi(Build.VERSION_CODES.M)
 class RestaurantCategoryAdapter(private val onCategoryClick: OnCategoryClick) :
     RecyclerView.Adapter<CategoryViewHolder>() {
 
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        var lastChecked: ToggleButton? = null
+    private val list = mutableListOf<CategoryState>()
+
+    companion object{
+        var lastCheckedPosition = 0
     }
 
-    private val list = mutableListOf<String>()
-
-    fun updateList(newList: List<String>) {
+    fun updateList(newList: List<CategoryState>) {
         list.clear()
         list.addAll(newList)
+        list[0].isChecked = true
         notifyDataSetChanged()
     }
 
     inner class CategoryViewHolder(val binding: ItemListCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int, category: String) {
-            binding.btnToggleCategory.text = category
-            binding.btnToggleCategory.textOff = category
-            binding.btnToggleCategory.textOn = category
-            binding.btnToggleCategory.tag = position
+        fun bind(position: Int, categoryState: CategoryState) {
+            binding.tvCategory.text = categoryState.category
 
-            if (binding.btnToggleCategory.isChecked) {
-                binding.btnToggleCategory.setTextColor(Color.parseColor("#CC0000"))
+            if (categoryState.isChecked) {
+                binding.line.visibility = View.VISIBLE
+                binding.tvCategory.setTextColor(binding.root.context.getColor(R.color.holo_red))
             } else {
-                binding.btnToggleCategory.setTextColor(Color.parseColor("#6b6b6b"))
+                binding.line.visibility = View.GONE
+                binding.tvCategory.setTextColor(binding.root.context.getColor(R.color.body_text_color))
             }
 
-            binding.btnToggleCategory.setOnClickListener {
+            binding.root.setOnClickListener {
                 clickOnButton(position)
-                onCategoryClick.onClick(category)
+                lastCheckedPosition = position
+                onCategoryClick.onClick(categoryState)
             }
         }
 
         fun clickOnButton(position: Int) {
-            binding.btnToggleCategory.isChecked = true
-            if (binding.btnToggleCategory != lastChecked) {
-                lastChecked?.let {
-                    it.isChecked = false
-                }
-                lastChecked = binding.btnToggleCategory
-            } else {
-                lastChecked = null
+            list.forEach {
+                it.isChecked = false
             }
+            list[position].isChecked = true
+            notifyItemChanged(lastCheckedPosition)
             notifyItemChanged(position)
-            Log.e(TAG, "clickOnButton: $lastChecked")
         }
     }
 
@@ -75,19 +73,15 @@ class RestaurantCategoryAdapter(private val onCategoryClick: OnCategoryClick) :
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category = list[position]
-        holder.bind(position, category)
-        if (position == 0) {
-            lastChecked = holder.binding.btnToggleCategory
-            holder.binding.btnToggleCategory.isChecked = true
-        }
+        val categoryState = list[position]
+        holder.bind(position, categoryState)
     }
 
     override fun getItemCount(): Int = list.size
 
     fun getItemPosition(category: String): Int {
         for (i in 0 until itemCount) {
-            if (list[i] == category) {
+            if (list[i].category == category) {
                 return i
             }
         }

@@ -14,6 +14,7 @@ import com.kaizm.food_app.domain.AuthRepository
 import com.kaizm.food_app.domain.FoodRepository
 import com.kaizm.food_app.domain.OrderRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ data class RestaurantUiState(
     val isLoad: Boolean = true,
     val listTop: List<Food> = listOf(),
     val listBody: List<RestaurantDataItem> = listOf(),
-    val listOrder: MutableSet<FoodInOrder> = mutableSetOf(),
+    val listFoodInOrder: MutableSet<FoodInOrder> = mutableSetOf(),
     val totalPrice: Int = 0,
     val state: String = ""
 )
@@ -40,13 +41,15 @@ class RestaurantViewModel @Inject constructor(
 ) : ViewModel() {
 
     sealed class Event {
-        object GetSuccess : Event()
+        object Success : Event()
         object AddCartSuccess : Event()
-        data class GetFail(val message: String) : Event()
+        data class Error(val message: String) : Event()
     }
 
-    private var uId = ""
-    private var currentOrderId = ""
+    companion object {
+        var uId = ""
+        var currentOrderId = ""
+    }
 
     private var _event = Channel<Event>(Channel.UNLIMITED)
     val event = _event.receiveAsFlow()
@@ -59,7 +62,6 @@ class RestaurantViewModel @Inject constructor(
         getUid()
         getOrder("97PS0oLeElLtWZgezSOK")
     }
-
 
     private fun getFood(resId: String) {
         viewModelScope.launch {
@@ -84,7 +86,7 @@ class RestaurantViewModel @Inject constructor(
                         )
                     }
                 }, onFailure = {
-
+                    _event.send(Event.Error(it.localizedMessage as String))
                 })
             }
         }
@@ -97,62 +99,77 @@ class RestaurantViewModel @Inject constructor(
                     if (listOrder.isNotEmpty()) {
                         _restaurantUiState.update {
                             currentOrderId = listOrder[0].id
+                            Log.e(TAG, "current oid: $currentOrderId ")
                             it.copy(
                                 isLoad = false,
-                                listOrder = listOrder[0].listFood.toMutableSet(),
+                                listFoodInOrder = listOrder[0].listFood.toMutableSet(),
                             )
                         }
                         calPrice()
                     }
                 }, onFailure = {
-
+                    _event.send(Event.Error(it.localizedMessage as String))
                 })
             }
         }
     }
 
-    fun addToOrder(food: Food) {
+    private fun deleteFoodInOrder(foodInOrder: FoodInOrder) {
+        viewModelScope.launch {
+            orderRepository.deleteFoodInOrder(currentOrderId, foodInOrder).fold(onSuccess = {
+                setLoading()
+                _restaurantUiState.update {
+                    _restaurantUiState.value.listFoodInOrder.remove(foodInOrder)
+                    val tempList = mutableSetOf<FoodInOrder>()
+                    tempList.addAll(_restaurantUiState.value.listFoodInOrder)
+                    it.copy(
+                        isLoad = false,
+                        listFoodInOrder = tempList,
+                    )
+                }
+                if (_restaurantUiState.value.listFoodInOrder.isEmpty()) {
+                    deleteOrder()
+                }
+            }, onFailure = {
+                _event.send(Event.Error(it.localizedMessage as String))
+            })
+        }
+    }
+
+    fun deleteOrder() {
+        viewModelScope.launch {
+            orderRepository.deleteOrder(currentOrderId).fold(onSuccess = {
+                currentOrderId = ""
+                setLoading()
+                _restaurantUiState.update {
+                    it.copy(
+                        isLoad = false,
+                        listFoodInOrder = mutableSetOf(),
+                    )
+                }
+            }, onFailure = {
+                _event.send(Event.Error(it.localizedMessage as String))
+            })
+        }
+    }
+
+    fun addFoodToOrder(food: Food) {
         setLoading()
         _restaurantUiState.update {
-            val tempList = it.listOrder
+            val tempList = it.listFoodInOrder
             tempList.add(FoodInOrder(food, 1))
             it.copy(
-                isLoad = false, listOrder = tempList
+                isLoad = false, listFoodInOrder = tempList
             )
         }
         _event.trySend(Event.AddCartSuccess)
         calPrice()
-
-        viewModelScope.launch {
-            if (_restaurantUiState.value.listOrder.isNotEmpty()) {
-                orderRepository.postOrder(
-                    Order(
-                        currentOrderId,
-                        uId,
-                        "97PS0oLeElLtWZgezSOK",
-                        _restaurantUiState.value.listOrder.toList(),
-                        _restaurantUiState.value.totalPrice,
-                        true
-                    )
-                )
-            } else {
-                orderRepository.postOrder(
-                    Order(
-                        "",
-                        uId,
-                        "97PS0oLeElLtWZgezSOK",
-                        _restaurantUiState.value.listOrder.toList(),
-                        _restaurantUiState.value.totalPrice,
-                        true
-                    )
-                )
-            }
-        }
+        postOrder("97PS0oLeElLtWZgezSOK")
     }
 
     fun onPlusOrder(foodInOrder: FoodInOrder) {
         _restaurantUiState.update {
-            it.listOrder.find { order ->
+            it.listFoodInOrder.find { order ->
                 order == foodInOrder
             }?.quantity = foodInOrder.quantity + 1
             it
@@ -161,18 +178,43 @@ class RestaurantViewModel @Inject constructor(
     }
 
     fun onMinusOrder(foodInOrder: FoodInOrder) {
-        _restaurantUiState.update {
-            it.listOrder.find { order ->
-                order == foodInOrder
-            }?.quantity = foodInOrder.quantity - 1
-            it
+        if (foodInOrder.quantity > 1) {
+            _restaurantUiState.update {
+                it.listFoodInOrder.find { order ->
+                    order == foodInOrder
+                }?.quantity = foodInOrder.quantity - 1
+                it
+            }
+        } else {
+            deleteFoodInOrder(foodInOrder)
         }
         calPrice()
     }
 
+    fun postOrder(resId: String) {
+        viewModelScope.launch(NonCancellable) {
+            if (_restaurantUiState.value.listFoodInOrder.isNotEmpty()) {
+                orderRepository.postOrder(
+                    Order(
+                        currentOrderId,
+                        uId,
+                        resId,
+                        _restaurantUiState.value.listFoodInOrder.toList(),
+                        _restaurantUiState.value.totalPrice,
+                        true
+                    )
+                ).fold(onSuccess = {
+                    currentOrderId = it.id
+                }, onFailure = {
+                    _event.send(Event.Error(it.localizedMessage as String))
+                })
+            }
+        }
+    }
+
     private fun calPrice() {
         var totalPrice = 0L
-        _restaurantUiState.value.listOrder.forEach {
+        _restaurantUiState.value.listFoodInOrder.forEach {
             totalPrice += it.food.price * it.quantity
         }
         _restaurantUiState.update {

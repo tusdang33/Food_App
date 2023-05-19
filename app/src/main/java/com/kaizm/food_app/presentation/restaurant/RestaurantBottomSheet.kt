@@ -20,37 +20,60 @@ class RestaurantBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: BottomsheetRestaurantBinding
     private lateinit var viewModel: RestaurantViewModel
 
-    private val restaurantBottomSheetAdapter = RestaurantBottomSheetAdapter(object : OnCartClick {
-        override fun onPlusClick(foodInOrder: FoodInOrder) {
-            viewModel.onPlusOrder(foodInOrder)
-        }
+    private val restaurantBottomSheetAdapter =
+        RestaurantBottomSheetAdapter(object : OnCartClick {
+            override fun onPlusClick(foodInOrder: FoodInOrder) {
+                viewModel.onPlusOrder(foodInOrder)
+            }
 
-        override fun onMinusClick(foodInOrder: FoodInOrder) {
-            viewModel.onMinusOrder(foodInOrder)
-        }
-    })
+            override fun onMinusClick(foodInOrder: FoodInOrder) {
+                viewModel.onMinusOrder(foodInOrder)
+            }
+        })
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = BottomsheetRestaurantBinding.inflate(inflater, container, false)
         viewModel = (parentFragment as RestaurantFragment).getSharedViewModel()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.rvCart.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            adapter = restaurantBottomSheetAdapter
-        }
 
         lifecycleScope.launch {
             viewModel.restaurantUiState.collect {
-                restaurantBottomSheetAdapter.list = it.listOrder.toList()
+                restaurantBottomSheetAdapter.list = it.listFoodInOrder.toList()
             }
+        }
+
+        binding.tvDeleteAll.setOnClickListener {
+            viewModel.deleteOrder()
+        }
+
+        binding.rvCart.apply {
+            layoutManager =
+                LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+            adapter = restaurantBottomSheetAdapter
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Log.e(TAG, "sheet: ${RestaurantViewModel.currentOrderId}")
+        if (RestaurantViewModel.currentOrderId != "") {
+            viewModel.postOrder("97PS0oLeElLtWZgezSOK")
         }
     }
 }

@@ -2,12 +2,13 @@ package com.kaizm.food_app.presentation.restaurant
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,11 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.kaizm.food_app.MainActivity
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.R
+import com.kaizm.food_app.data.model.restaurant_data.CategoryState
 import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.FragmentRestaurantBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+@RequiresApi(Build.VERSION_CODES.N)
 @AndroidEntryPoint
 class RestaurantFragment : Fragment() {
     private lateinit var binding: FragmentRestaurantBinding
@@ -35,22 +38,21 @@ class RestaurantFragment : Fragment() {
 
     private val restaurantBodyAdapter: RestaurantBodyAdapter =
         RestaurantBodyAdapter(object : OnRestaurantClick {
-            @RequiresApi(Build.VERSION_CODES.N)
             override fun onClick(food: Food) {
-                viewModel.addToOrder(food)
+                viewModel.addFoodToOrder(food)
             }
         })
     private val restaurantCategoryAdapter: RestaurantCategoryAdapter =
         RestaurantCategoryAdapter(object : OnCategoryClick {
-            override fun onClick(category: String) {
-                val pos = restaurantBodyAdapter.getItemPosition(category)
+            override fun onClick(categoryState: CategoryState) {
+                val itemPos = restaurantBodyAdapter.getItemPosition(categoryState.category)
                 val smoothScroller: RecyclerView.SmoothScroller =
                     object : LinearSmoothScroller(context) {
                         override fun getVerticalSnapPreference(): Int {
                             return SNAP_TO_START;
                         }
                     }
-                smoothScroller.targetPosition = pos
+                smoothScroller.targetPosition = itemPos
                 (binding.rvBody.layoutManager as LinearLayoutManager).startSmoothScroll(
                     smoothScroller
                 )
@@ -64,41 +66,47 @@ class RestaurantFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
             viewModel.restaurantUiState.collect { UiState ->
-
                 if (UiState.isLoad) {
                     binding.pgBar.visibility = View.VISIBLE
                 } else {
                     binding.pgBar.visibility = View.GONE
-                    val tempCategory = mutableListOf<String>()
+                    val tempCategory = mutableListOf<CategoryState>()
                     UiState.listBody.forEach {
-                        tempCategory.add(it.title)
+                        tempCategory.add(CategoryState(it.title, false))
                     }
                     binding.tvPrice.text = UiState.totalPrice.toString()
-                    binding.tvQuantity.text = UiState.listOrder.size.toString()
+                    binding.tvQuantity.text = UiState.listFoodInOrder.size.toString()
                     restaurantTopAdapter.list = UiState.listTop
                     restaurantCategoryAdapter.updateList(tempCategory)
                     restaurantBodyAdapter.updateList(UiState.listBody)
-                    if (UiState.listOrder.isEmpty()) {
+                    if (UiState.listFoodInOrder.isEmpty() && binding.footerContainer.isVisible) {
                         binding.footerContainer.visibility = View.GONE
-                    } else {
+                        if (restaurantBottomSheet.isAdded) {
+                            restaurantBottomSheet.dismiss()
+                        }
+                    } else if (UiState.listFoodInOrder.isNotEmpty() && !binding.footerContainer.isVisible) {
+                        val animation =
+                            AnimationUtils.loadAnimation(context, R.anim.appear_bottom_anim)
+                        binding.footerContainer.startAnimation(animation)
                         binding.footerContainer.visibility = View.VISIBLE
                     }
                 }
             }
         }
 
-
         lifecycleScope.launchWhenCreated {
             viewModel.event.collect { event ->
                 when(event) {
                     is RestaurantViewModel.Event.AddCartSuccess -> {
                         showToast("Add To Cart Success")
+                    }
+                    is RestaurantViewModel.Event.Error -> {
+                        showToast(event.message)
                     }
                     else -> {}
                 }
@@ -132,9 +140,10 @@ class RestaurantFragment : Fragment() {
                     if (newItemView != posItemView) {
                         posItemView = newItemView
                         newItemView?.let {
-                            val pes = recyclerView.getChildAdapterPosition(it)
-                            val str = restaurantBodyAdapter.getSectionAtPosition(pes)
-                            val pos = restaurantCategoryAdapter.getItemPosition(str)
+                            val childAdapterPos = recyclerView.getChildAdapterPosition(it)
+                            val category =
+                                restaurantBodyAdapter.getSectionAtPosition(childAdapterPos)
+                            val itemPos = restaurantCategoryAdapter.getItemPosition(category)
 
                             val smoothScroller: RecyclerView.SmoothScroller =
                                 object : LinearSmoothScroller(context) {
@@ -142,19 +151,17 @@ class RestaurantFragment : Fragment() {
                                         return SNAP_TO_ANY;
                                     }
                                 }
-                            smoothScroller.targetPosition = pos
+                            smoothScroller.targetPosition = itemPos
                             (binding.rvCategory.layoutManager as LinearLayoutManager).startSmoothScroll(
                                 smoothScroller
                             )
+//
+//                            val categoryHolder =
+//                                binding.rvCategory.findViewHolderForAdapterPosition(itemPos)
+//                            (categoryHolder as RestaurantCategoryAdapter.CategoryViewHolder).clickOnButton(
+//                                itemPos
+//                            )
 
-//                            lifecycleScope.launch {
-//                                delay(100)
-//                                val categoryHolder =
-//                                    binding.rvCategory.findViewHolderForAdapterPosition(pos)
-//                                (categoryHolder as RestaurantCategoryAdapter.CategoryViewHolder).clickOnButton(
-//                                    pos
-//                                )
-//                            }
                         }
                     }
                 }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kaizm.food_app.data.model.restaurant_data.CategoryState
 import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.data.model.restaurant_data.RestaurantDataItem
 import com.kaizm.food_app.databinding.LayoutSectionFoodBinding
@@ -21,6 +22,7 @@ class RestaurantBodyAdapter(private val onRestaurantClick: OnRestaurantClick) :
         list.addAll(newList)
         notifyDataSetChanged()
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
         return ListItemViewHolder(

@@ -56,6 +56,8 @@ class RestaurantBottomSheetAdapter(private val onCartClick: OnCartClick) :
                     binding.tvQuantity.text =
                         (binding.tvQuantity.text.toString().toInt() - 1).toString()
                     onCartClick.onMinusClick(foodInOrder)
+                } else {
+                    onCartClick.onMinusClick(foodInOrder)
                 }
             }
         }
