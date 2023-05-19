@@ -56,7 +56,7 @@ class AddRestaurantViewModel @Inject constructor(
         if (name.isBlank() || uri == null || list.isEmpty()) {
             _event.trySend(Event.AddFail("Information Missing"))
         } else viewModelScope.launch {
-            imageRepository.postImageRestaurant(uri)
+            imageRepository.postImageRestaurant("restaurant", uri)
                 .fold(onSuccess = {
                     addRestaurantAndImage(
                         Restaurant(

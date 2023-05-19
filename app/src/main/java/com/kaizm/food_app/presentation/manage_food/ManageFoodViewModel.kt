@@ -3,7 +3,7 @@ package com.kaizm.food_app.presentation.manage_food
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.data.model.Restaurant
 import com.kaizm.food_app.domain.FoodRepository
@@ -39,30 +39,36 @@ class ManageFoodViewModel @Inject constructor(
 
     fun getAllFood(resId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            foodRepository.getListFood(resId).onStart {
-                _event.send(Event.Loading)
-            }.collect { result ->
-                result.fold(onSuccess = { list ->
-                    if (list != null && list.isNotEmpty()) {
-                        _listFood.value = list
-                    } else {
-                        _event.send(Event.GetNull)
-                    }
-                    _event.send(Event.LoadDone)
-                }, onFailure = {
-                    _event.send(Event.GetFail(it.toString()))
-                })
-            }
+            foodRepository.getListFood(resId)
+                .onStart {
+                    _event.send(Event.Loading)
+                }
+                .collect { result ->
+                    result.fold(onSuccess = { list ->
+                        if (list != null && list.isNotEmpty()) {
+                            _listFood.value = list
+                        } else {
+                            _event.send(Event.GetNull)
+                        }
+                        _event.send(Event.LoadDone)
+                    }, onFailure = {
+                        _event.send(Event.GetFail(it.toString()))
+                    })
+                }
         }
     }
 
-    fun delete(restaurant: Restaurant, food: Food) {
+    fun delete(
+        restaurant: Restaurant,
+        food: Food
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            foodRepository.deleteFood(restaurant.id, food).fold(onSuccess = {
-                Log.e(TAG, "delete: Done")
-            }, onFailure = {
-                Log.e(TAG, "delete: Fail")
-            })
+            foodRepository.deleteFood(restaurant.id, food)
+                .fold(onSuccess = {
+                    Log.e(TU, "delete: Done")
+                }, onFailure = {
+                    Log.e(TU, "delete: Fail")
+                })
         }
     }
 }

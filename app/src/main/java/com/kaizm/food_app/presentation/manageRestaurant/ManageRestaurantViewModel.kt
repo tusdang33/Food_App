@@ -43,7 +43,7 @@ class ManageRestaurantViewModel @Inject constructor(
                     _stateUI.value = it
                     _event.send(Event.LoadDone)
                 }, onFailure = {
-                    Log.e(Const.TAG, "fetchRestaurant: ${it.localizedMessage}")
+                    Log.e(Const.TU, "fetchRestaurant: ${it.localizedMessage}")
                 })
             }
         }

@@ -67,7 +67,7 @@ class AddFoodViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             foodRepository.postFood(resId, food).fold(onSuccess = {
-                Log.e(TAG, "addFood: Success")
+                Log.e(TU, "addFood: Success")
 
                 _event.send(Event.AddSuccess)
             }, onFailure = {
