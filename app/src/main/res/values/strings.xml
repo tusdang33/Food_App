@@ -49,4 +49,15 @@
     <string name="tv_rating_restaurant">Rating</string>
     <string name="tv_category">Category</string>
 
+    //Profile Settings
+    <string name="acc_settings">Account Settings</string>
+    <string name="body_settings">Update your settings like notifications, payments, profile edit etc</string>
+    <string name="tv_inf">Profile Information</string>
+    <string name="tv_body_inf">Change your account information</string>
+    <string name="tv_change_pw">Change Password</string>
+    <string name="tv_body_change_pw">Change your password</string>
+    <string name="tv_manage">Manage restaurants</string>
+    <string name="tv_body_manage">Manage your Restaurants</string>
+    <string name="tv_logout">Logout</string>
+
 </resources>

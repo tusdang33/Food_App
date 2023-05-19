@@ -21,14 +21,11 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_addFoodFragment"
-            app:destination="@id/addFoodFragment" />
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_addRestaurantFragment"
-            app:destination="@id/addRestaurantFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_manageFoodFragment"
-            app:destination="@id/manageFoodFragment" />
+            android:id="@+id/action_profileFragment_to_profileSettingsFragment"
+            app:destination="@id/profileSettingsFragment" />
         <action
             android:id="@+id/action_profileFragment_to_manageRestaurantFragment"
             app:destination="@id/manageRestaurantFragment" />
@@ -83,4 +80,14 @@
             app:popEnterAnim="@anim/anim_slide_in_right"
             app:popExitAnim="@anim/anim_slide_out_right"/>
     </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.kaizm.food_app.presentation.profile.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/profileSettingsFragment"
+        android:name="com.kaizm.food_app.presentation.profile.ProfileSettingsFragment"
+        android:label="fragment_profile_settings"
+        tools:layout="@layout/fragment_profile_settings" />
 </navigation>

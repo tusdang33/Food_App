@@ -26,12 +26,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnFood.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_addFoodFragment)
+        binding.btnProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_profileSettingsFragment)
         }
 
-        binding.btnRes.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_addRestaurantFragment)
+        binding.btnPassword.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
         }
 
         binding.btnManage.setOnClickListener {
