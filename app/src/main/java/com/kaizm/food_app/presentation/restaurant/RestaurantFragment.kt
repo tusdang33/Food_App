@@ -63,6 +63,8 @@ class RestaurantFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentRestaurantBinding.inflate(inflater, container, false)
+        viewModel.getFood("97PS0oLeElLtWZgezSOK")
+        viewModel.getOrder("97PS0oLeElLtWZgezSOK")
         return binding.root
     }
 
