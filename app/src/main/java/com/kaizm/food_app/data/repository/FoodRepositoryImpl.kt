@@ -4,7 +4,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kaizm.food_app.data.model.restaurant_data.Food
-
 import com.kaizm.food_app.domain.FoodRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -82,6 +81,30 @@ class FoodRepositoryImpl : FoodRepository {
                 )
                 .await()
             Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun updateFood(
+        resId: String,
+        oldFood: Food,
+        newFood: Food
+    ): Result<Food> {
+        return try {
+            Firebase.firestore.runBatch { batch ->
+                batch.update(
+                    restaurantCollectionRef.document(resId), hashMapOf<String, Any>(
+                        "listFoods" to FieldValue.arrayRemove(oldFood)
+                    )
+                )
+                batch.update(
+                    restaurantCollectionRef.document(resId), hashMapOf<String, Any>(
+                        "listFoods" to FieldValue.arrayUnion(newFood)
+                    )
+                )
+            }.await()
+            Result.success(newFood)
         } catch (e: Exception) {
             Result.failure(e)
         }

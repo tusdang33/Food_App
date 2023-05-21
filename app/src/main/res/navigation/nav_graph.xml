@@ -48,21 +48,32 @@
         android:label="fragment_add_food"
         tools:layout="@layout/fragment_add_food" >
         <argument
-            android:name="data"
+            android:name="dataRes"
             app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
+        <argument
+            android:name="dataFood"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Food"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/addRestaurantFragment"
         android:name="com.kaizm.food_app.presentation.add_restaurant.AddRestaurantFragment"
         android:label="fragment_add_restaurant"
-        tools:layout="@layout/fragment_add_restaurant" />
+        tools:layout="@layout/fragment_add_restaurant" >
+        <argument
+            android:name="dataRes"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
      <fragment
         android:id="@+id/manageFoodFragment"
         android:name="com.kaizm.food_app.presentation.manage_food.ManageFoodFragment"
         android:label="fragment_manage_food"
         tools:layout="@layout/fragment_manage_food" >
         <argument
-            android:name="data"
+            android:name="dataRes"
             app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
          <action
              android:id="@+id/action_manageFoodFragment_to_addFoodFragment"

@@ -29,6 +29,8 @@ class ManageRestaurantViewModel @Inject constructor(
     sealed class Event {
         object Loading : Event()
         object LoadDone : Event()
+        object Success : Event()
+        data class Fail(val message: String) : Event()
     }
 
     init {
@@ -49,4 +51,16 @@ class ManageRestaurantViewModel @Inject constructor(
                 }
         }
     }
+
+    fun delete(restaurant: Restaurant) {
+        viewModelScope.launch {
+            restaurantRepository.deleteRestaurant(restaurant)
+                .fold(onSuccess = {
+                    _event.send(Event.Success)
+                }, onFailure = {
+                    _event.send(Event.Fail("Delete Fail"))
+                })
+        }
+    }
+
 }

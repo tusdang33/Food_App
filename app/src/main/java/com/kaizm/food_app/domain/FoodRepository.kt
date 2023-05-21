@@ -8,4 +8,5 @@ interface FoodRepository {
     suspend fun getDefaultFoodCategory(): Flow<Result<List<String>>>
     suspend fun getListFood(resId: String): Flow<Result<List<Food>?>>
     suspend fun deleteFood(resId: String, food: Food): Result<Unit>
+    suspend fun updateFood(resId: String, oldFood: Food, newFood: Food): Result<Food>
 }

@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -22,7 +23,10 @@ import com.google.android.flexbox.JustifyContent
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
 import com.kaizm.food_app.common.Const.TU
+import com.kaizm.food_app.data.model.restaurant_data.CategoryState
 import com.kaizm.food_app.databinding.FragmentAddRestaurantBinding
+import com.kaizm.food_app.presentation.add_food.CategoryAdapter
+import com.kaizm.food_app.presentation.add_food.OnCategoryClick
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -31,15 +35,17 @@ class AddRestaurantFragment : Fragment() {
 
     private lateinit var binding: FragmentAddRestaurantBinding
     private val viewModel: AddRestaurantViewModel by viewModels()
+    private val args: AddRestaurantFragmentArgs by navArgs()
     private var imgUri: Uri? = null
     private val listCategory = mutableSetOf<String>()
+
     private val categoryAdapter: CategoryAdapter by lazy {
-        CategoryAdapter(object : CategoryClick {
-            override fun onClick(category: String, boolean: Boolean) {
-                if (boolean) {
-                    listCategory.add(category)
+        CategoryAdapter(object : OnCategoryClick {
+            override fun onClick(categoryState: CategoryState) {
+                if (categoryState.isChecked) {
+                    listCategory.add(categoryState.category)
                 } else {
-                    listCategory.remove(category)
+                    listCategory.remove(categoryState.category)
                 }
             }
         })
@@ -53,25 +59,47 @@ class AddRestaurantFragment : Fragment() {
                 result?.let {
                     imgUri = it.data!!.data
                     Log.e(TU, "resultIntent ${it.data}")
-                    Glide.with(requireContext()).load(imgUri).into(binding.imgRestaurant)
+                    Glide.with(requireContext())
+                        .load(imgUri)
+                        .into(binding.imgRestaurant)
                 }
 
             }
         }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentAddRestaurantBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
 
         lifecycleScope.launchWhenCreated {
-            viewModel.listCategory.collect {
-                categoryAdapter.updateList(it)
+            viewModel.listCategory.collect { list ->
+                val tempList = mutableListOf<CategoryState>()
+                list.forEach { category ->
+                    if (args.dataRes != null && args.dataRes?.listCategories?.contains(
+                            category
+                        ) == true
+                    ) {
+                        tempList.add(CategoryState(category, true))
+                    } else {
+                        tempList.add(CategoryState(category, false))
+                    }
+                }
+                categoryAdapter.list = tempList
+                if (list.isNotEmpty()) {
+                    initData()
+                }
             }
         }
 
@@ -80,9 +108,12 @@ class AddRestaurantFragment : Fragment() {
                 when(event) {
                     is AddRestaurantViewModel.Event.AddSuccess -> {
                         showToast("Add Success")
+                        enableConfirmButton()
                     }
+
                     is AddRestaurantViewModel.Event.AddFail -> {
                         showToast(event.message)
+                        enableConfirmButton()
                     }
                 }
             }
@@ -96,10 +127,33 @@ class AddRestaurantFragment : Fragment() {
         }
 
         binding.btnConfirmUpdate.setOnClickListener {
-            viewModel.addRestaurant(
-                binding.editRestaurantName.text.toString(), imgUri, listCategory.toList()
-            )
-//
+            it.apply {
+                setBackgroundColor(resources.getColor(R.color.gray))
+                isClickable = false
+            }
+
+            if (args.dataRes == null) {
+                viewModel.addRestaurant(
+                    binding.editRestaurantName.text.toString(),
+                    imgUri,
+                    listCategory.toList()
+                )
+            } else {
+                if (imgUri == null) {
+                    viewModel.addRestaurant(
+                        name = binding.editRestaurantName.text.toString(),
+                        listCategory = args.dataRes!!.listCategories,
+                        oldRestaurant = args.dataRes!!
+                    )
+                } else {
+                    viewModel.addRestaurant(
+                        name = binding.editRestaurantName.text.toString(),
+                        listCategory = args.dataRes!!.listCategories,
+                        uri = imgUri,
+                        oldRestaurant = args.dataRes!!
+                    )
+                }
+            }
         }
 
         binding.rvCategory.apply {
@@ -125,8 +179,25 @@ class AddRestaurantFragment : Fragment() {
         }
     }
 
+    private fun initData() {
+        args.dataRes?.let {
+            Glide.with(requireContext())
+                .load(it.image)
+                .into(binding.imgRestaurant)
+            binding.editRestaurantName.setText(it.name)
+        }
+    }
+
+    private fun enableConfirmButton() {
+        binding.btnConfirmUpdate.apply {
+            setBackgroundColor(resources.getColor(R.color.main_color))
+            isClickable = true
+        }
+    }
+
     private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+            .show()
     }
 
     override fun onResume() {
