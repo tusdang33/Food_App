@@ -46,47 +46,99 @@ class AddFoodViewModel @Inject constructor(
         des: String,
         price: String,
         category: List<String>,
-        uri: Uri?
+        uri: Uri? = null,
+        oldFood: Food? = null
     ) {
-        if (name.isBlank() || des.isBlank() || price.isBlank() || category.isEmpty() || uri == null) {
-            _event.trySend(Event.AddFail("Information Missing"))
-        } else viewModelScope.launch {
-            imageRepository.postImageRestaurant("food", uri)
-                .fold(onSuccess = {
-                    addFoodAndImage(
-                        resId, Food(
-                            System.currentTimeMillis()
-                                .toString(),
+        if (oldFood == null) {
+            if (name.isBlank() || des.isBlank() || price.isBlank() || category.isEmpty() || uri == null) {
+                _event.trySend(Event.AddFail("Information Missing in Add"))
+            } else viewModelScope.launch {
+                Log.e(TU, "addFood: Add")
+                imageRepository.postImageRestaurant("food", uri)
+                    .fold(onSuccess = {
+                        addFoodAndImage(
+                            resId, Food(
+                                System.currentTimeMillis()
+                                    .toString(),
+                                name,
+                                des,
+                                price.toLong(),
+                                category,
+                                it
+                            )
+                        )
+                    }, onFailure = {
+                        Log.e(TU, "addRestaurant: ${it.localizedMessage}")
+                        _event.trySend(Event.AddFail(it.toString()))
+                    })
+            }
+        } else {
+            if (name.isBlank() || des.isBlank() || price.isBlank() || category.isEmpty()) {
+                _event.trySend(Event.AddFail("Information Missing in Update"))
+            } else viewModelScope.launch {
+                if (uri != null) {
+                    imageRepository.postImageRestaurant("food", uri)
+                        .fold(onSuccess = {
+                            updateFoodAndImage(
+                                resId, oldFood, Food(
+                                    oldFood.id,
+                                    name,
+                                    des,
+                                    price.toLong(),
+                                    category,
+                                    it
+                                )
+                            )
+                        }, onFailure = {
+                            Log.e(TU, "addRestaurant: ${it.localizedMessage}")
+                            _event.trySend(Event.AddFail(it.toString()))
+                        })
+                } else {
+                    Log.e(TU, "addFood: $resId without img")
+                    updateFoodAndImage(
+                        resId, oldFood, Food(
+                            oldFood.id,
                             name,
                             des,
                             price.toLong(),
                             category,
-                            it
+                            oldFood.image
                         )
                     )
-                }, onFailure = {
-                    Log.e(TU, "addRestaurant: ${it.localizedMessage}")
-                    _event.trySend(Event.AddFail(it.toString()))
-                })
+                }
+            }
+
+
         }
     }
 
-    private fun addFoodAndImage(
+    private suspend fun addFoodAndImage(
         resId: String,
         food: Food
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        foodRepository.postFood(resId, food)
+            .fold(onSuccess = {
+                Log.e(TU, "addFood: Success")
+                _event.send(Event.AddSuccess)
+            }, onFailure = {
+                _event.send(Event.AddFail(it.toString()))
+                Log.e(TU, "addFood: Fail")
+            })
+    }
 
-            foodRepository.postFood(resId, food)
-                .fold(onSuccess = {
-                    Log.e(TU, "addFood: Success")
-
-                    _event.send(Event.AddSuccess)
-                }, onFailure = {
-                    _event.send(Event.AddFail(it.toString()))
-                    Log.e(TU, "addFood: Fail")
-                })
-        }
+    private suspend fun updateFoodAndImage(
+        resId: String,
+        oldFood: Food,
+        newFood: Food
+    ) {
+        foodRepository.updateFood(resId, oldFood, newFood)
+            .fold(onSuccess = {
+                Log.e(TU, "addFood: Success")
+                _event.send(Event.AddSuccess)
+            }, onFailure = {
+                _event.send(Event.AddFail(it.toString()))
+                Log.e(TU, "addFood: Fail ${it.localizedMessage}")
+            })
     }
 
 
@@ -99,14 +151,6 @@ class AddFoodViewModel @Inject constructor(
                         Log.e("AAA", "listCat: $it")
                     }, onFailure = {
                         Log.e("AAA", "listCat: ${it.localizedMessage}")
-                    })
-                }
-            foodRepository.getListFood("4VY7rG960ekwHgyqFl62")
-                .collect { result ->
-                    result.fold(onSuccess = {
-                        Log.e(TU, "getListFoodViewModel: $it")
-                    }, onFailure = {
-                        Log.e(TU, "getListFoodViewModel: $it")
                     })
                 }
         }
