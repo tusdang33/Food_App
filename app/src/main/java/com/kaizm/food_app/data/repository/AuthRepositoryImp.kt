@@ -23,8 +23,14 @@ class AuthRepositoryImp : AuthRepository {
         }
     }
 
-    override suspend fun logout() {
-        firebaseAuth.signOut()
+    override suspend fun logout(): Result<Unit> {
+        return try {
+            firebaseAuth.signOut()
+            Result.success(Unit)
+        }catch (e: Exception) {
+            Result.failure(e)
+        }
+
     }
 
     override suspend fun register(email: String, pass: String): Result<User> {
@@ -35,4 +41,24 @@ class AuthRepositoryImp : AuthRepository {
             Result.failure(e)
         }
     }
+
+    override suspend fun updatePass(pass: String): Result<Unit> {
+        return try {
+            firebaseAuth.currentUser!!.updatePassword(pass).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun loadUser(): Result<User> {
+        return try {
+            val user = firebaseAuth.currentUser.apply {  }
+            Result.success()
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
 }

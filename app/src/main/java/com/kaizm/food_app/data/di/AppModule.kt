@@ -60,5 +60,4 @@ object AppModule {
     fun provideBannerRepository(): BannerRepository {
         return BannerRepositoryImpl()
     }
-
 }
