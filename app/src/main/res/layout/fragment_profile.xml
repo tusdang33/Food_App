@@ -1,34 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="15dp"
     tools:context=".presentation.profile.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <Button
-        android:id="@+id/btnRes"
+    <TextView
+        android:id="@+id/tvAccSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit_restaurant" />
+        android:layout_marginStart="15dp"
+        android:fontFamily="@font/utm_avo_bold"
+        android:text="@string/acc_settings"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="@string/body_settings"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAccSettings" />
 
     <Button
-        android:id="@+id/btnFood"
+        android:id="@+id/btnProfile"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvBody"
+
+        />
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ic_profile"
+        android:elevation="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/btnProfile"
+        app:layout_constraintStart_toStartOf="@id/btnProfile"
+        app:layout_constraintTop_toTopOf="@id/btnProfile" />
+
+    <TextView
+        android:id="@+id/tvInf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="food" />
+        android:layout_marginStart="25dp"
+        android:elevation="50dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="@string/tv_inf"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tvBodyInf"
+        app:layout_constraintStart_toEndOf="@id/ivProfile"
+        app:layout_constraintTop_toTopOf="@id/btnProfile"
+        app:layout_constraintVertical_chainStyle="packed"
+
+        />
+
+    <TextView
+        android:id="@+id/tvBodyInf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:elevation="50dp"
+        android:text="@string/tv_body_inf"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnProfile"
+        app:layout_constraintStart_toEndOf="@id/ivProfile"
+        app:layout_constraintTop_toBottomOf="@id/tvInf"
+
+        />
+
+    <ImageView
+        android:id="@+id/ivBackInf"
+        android:layout_width="12dp"
+        android:layout_height="21dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="50dp"
+        android:src="@drawable/ic_back_inf"
+        app:layout_constraintBottom_toBottomOf="@id/btnProfile"
+        app:layout_constraintEnd_toEndOf="@id/btnProfile"
+        app:layout_constraintTop_toTopOf="@id/btnProfile"
+
+        />
+
+    <Button
+        android:id="@+id/btnPassword"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/btnProfile" />
+
+    <ImageView
+        android:id="@+id/ivLock"
+        android:layout_width="21dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ic_lock"
+        android:elevation="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/btnPassword"
+        app:layout_constraintStart_toStartOf="@id/btnPassword"
+        app:layout_constraintTop_toTopOf="@id/btnPassword" />
+
+
+    <ImageView
+        android:id="@+id/ivBackMange"
+        android:layout_width="12dp"
+        android:layout_height="21dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="50dp"
+        android:src="@drawable/ic_back_inf"
+        app:layout_constraintBottom_toBottomOf="@id/btnPassword"
+        app:layout_constraintEnd_toEndOf="@id/btnPassword"
+        app:layout_constraintTop_toTopOf="@id/btnPassword"
+
+        />
+
+    <ImageView
+        android:id="@+id/ivBackChangePw"
+        android:layout_width="12dp"
+        android:layout_height="21dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="50dp"
+        android:src="@drawable/ic_back_inf"
+        app:layout_constraintBottom_toBottomOf="@id/btnPassword"
+        app:layout_constraintEnd_toEndOf="@id/btnPassword"
+        app:layout_constraintTop_toTopOf="@id/btnPassword"
+
+        />
 
     <Button
         android:id="@+id/btnManage"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/btnPassword" />
+
+    <ImageView
+        android:id="@+id/ivRes"
+        android:layout_width="21dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/ic_home"
+        android:elevation="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/btnManage"
+        app:layout_constraintStart_toStartOf="@id/btnManage"
+        app:layout_constraintTop_toTopOf="@id/btnManage" />
+
+    <TextView
+        android:id="@+id/tvManage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="manage" />
+        android:layout_marginStart="25dp"
+        android:elevation="50dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="@string/tv_manage"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tvBodyManage"
+        app:layout_constraintStart_toEndOf="@id/ivRes"
+        app:layout_constraintTop_toTopOf="@id/btnManage"
+        app:layout_constraintVertical_chainStyle="packed"
+
+        />
+
+    <TextView
+        android:id="@+id/tvChangePw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:elevation="50dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="@string/tv_change_pw"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tvBodyChangePw"
+        app:layout_constraintStart_toEndOf="@id/ivLock"
+        app:layout_constraintTop_toTopOf="@id/btnPassword"
+        app:layout_constraintVertical_chainStyle="packed"
+
+        />
+
+    <TextView
+        android:id="@+id/tvBodyChangePw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:elevation="50dp"
+        android:text="@string/tv_body_change_pw"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnPassword"
+        app:layout_constraintStart_toEndOf="@id/ivLock"
+        app:layout_constraintTop_toBottomOf="@id/tvChangePw"
+
+        />
+
+    <TextView
+        android:id="@+id/tvBodyManage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:elevation="50dp"
+        android:text="@string/tv_body_manage"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnManage"
+        app:layout_constraintStart_toEndOf="@id/ivRes"
+        app:layout_constraintTop_toBottomOf="@id/tvManage"
+
+        />
+
+    <ImageView
+        android:id="@+id/ivBackManage"
+        android:layout_width="12dp"
+        android:layout_height="21dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="50dp"
+        android:src="@drawable/ic_back_inf"
+        app:layout_constraintBottom_toBottomOf="@id/btnManage"
+        app:layout_constraintEnd_toEndOf="@id/btnManage"
+        app:layout_constraintTop_toTopOf="@id/btnManage" />
 
     <Button
-        android:id="@+id/btnResScreen"
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/btnManage" />
+
+
+
+    <TextView
+        android:id="@+id/tvLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Res Screen" />
+        android:elevation="50dp"
+        android:text="@string/tv_logout"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnLogout"
+        app:layout_constraintEnd_toEndOf="@id/btnLogout"
+        app:layout_constraintTop_toTopOf="@id/btnLogout"
+        app:layout_constraintStart_toStartOf="@id/btnLogout"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

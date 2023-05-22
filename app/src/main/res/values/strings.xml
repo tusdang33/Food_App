@@ -53,4 +53,36 @@
     <string name="tv_rating_restaurant">Rating</string>
     <string name="tv_category">Category</string>
 
+    //Acc Settings
+    <string name="acc_settings">Account Settings</string>
+    <string name="body_settings">Update your settings like notifications, payments, profile edit etc</string>
+    <string name="tv_inf">Profile Information</string>
+    <string name="tv_body_inf">Change your account information</string>
+    <string name="tv_change_pw">Change Password</string>
+    <string name="tv_body_change_pw">Change your password</string>
+    <string name="tv_manage">Manage restaurants</string>
+    <string name="tv_body_manage">Manage your Restaurants</string>
+    <string name="tv_logout">Logout</string>
+
+    //Profile Settings
+    <string name="profile_settings">Profile Settings</string>
+    <string name="tv_full_name">FULL NAME</string>
+    <string name="tv_email_add">EMAIL ADDRESS</string>
+    <string name="tv_pw">PASSWORD</string>
+    <string name="tv_change">Change</string>
+    <string name="tv_change_settings">CHANGE SETTINGS</string>
+
+    //Change Password
+    <string name="tv_change_password">CHANGE PASSWORD</string>
+    <string name="tv_new_pw">NEW PASSWORD</string>
+    <string name="tv_cf_pw">CONFIRM PASSWORD</string>
+
+    //Order
+    <string name="tv_your_order">Your Order\'s</string>
+    <string name="tv_upcoming">UPCOMING ORDERS</string>
+    <string name="tv_clear">CLEAR ALL</string>
+    <string name="tv_description">Shortbread, chocolate turtle cookies, and red velvet.</string>
+    <string name="tv_food_name">Food name</string>
+
+
 </resources>
