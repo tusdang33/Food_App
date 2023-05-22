@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.databinding.ItemManageRestaurantBinding
+import kotlin.random.Random
 
 interface OnRestaurantClickListener {
     fun onClick(model: Restaurant)
@@ -49,23 +50,24 @@ class ManageRestaurantAdapter(
     override fun onBindViewHolder(
         holder: ManageRestaurantAdapter.RestaurantViewHolder, position: Int
     ) {
-        val data = list[position]
-        holder.bind(data)
+        val restaurant = list[position]
+        holder.bind(restaurant)
     }
 
     override fun getItemCount(): Int = list.size
 
     inner class RestaurantViewHolder(private val binding: ItemManageRestaurantBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Restaurant) {
-            binding.tvRestaurantName.text = data.name
-            Glide.with(binding.root).load(data.image).into(binding.ivRestaurant)
-            binding.tvRating.text = data.rating.toString()
-            binding.tvCategory.text = data.listCategories[0]
+        fun bind(restaurant: Restaurant) {
+            binding.tvRestaurantName.text = restaurant.name
+            Glide.with(binding.root).load(restaurant.image).into(binding.ivRestaurant)
+            val randomNumber = Random.nextDouble(3.0, 5.0)
+            binding.tvRating.text = String.format("%.1f", randomNumber)
+            binding.tvCategory.text = restaurant.listCategories[0]
             binding.root.setOnClickListener {
-                onClickListener.onClick(data)
+                onClickListener.onClick(restaurant)
             }
-            if (data.listFoods.isEmpty()) {
+            if (restaurant.listFoods.isEmpty()) {
                 binding.view.visibility = View.VISIBLE
                 binding.tvNoFood.visibility = View.VISIBLE
             } else {

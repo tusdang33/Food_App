@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
-import com.kaizm.food_app.data.model.Food
+import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.databinding.FragmentManageFoodBinding
 import com.kaizm.food_app.ultils.SwipeHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,13 +41,18 @@ class ManageFoodFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentManageFoodBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         initData()
@@ -58,13 +63,16 @@ class ManageFoodFragment : Fragment() {
                     is ManageFoodViewModel.Event.Loading -> {
                         binding.pgBar.visibility = View.VISIBLE
                     }
+
                     is ManageFoodViewModel.Event.LoadDone -> {
                         binding.pgBar.visibility = View.GONE
                     }
+
                     is ManageFoodViewModel.Event.GetNull -> {
                         foodAdapter.list = listOf()
                         binding.tvNoFood.visibility = View.VISIBLE
                     }
+
                     else -> {
 
                     }
@@ -74,9 +82,10 @@ class ManageFoodFragment : Fragment() {
 
         binding.btnAdd.setOnClickListener {
             val action =
-                ManageFoodFragmentDirections.actionManageFoodFragmentToAddFoodFragment(args.data)
+                ManageFoodFragmentDirections.actionManageFoodFragmentToAddFoodFragment(args.dataRes)
             findNavController().navigate(action)
         }
+
 
         lifecycleScope.launchWhenCreated {
             viewModel.listFood.collect {
@@ -111,13 +120,16 @@ class ManageFoodFragment : Fragment() {
     }
 
     private fun initData() {
-        viewModel.getAllFood(args.data.id)
-        binding.toolBarLayout.title = args.data.name
-        Glide.with(requireContext()).load(args.data.image).into(binding.toolbarImg)
+        viewModel.getAllFood(args.dataRes.id)
+        binding.toolBarLayout.title = args.dataRes.name
+        Glide.with(requireContext())
+            .load(args.dataRes.image)
+            .into(binding.toolbarImg)
 
         object : SwipeHelper(requireContext(), binding.rvListFood, false) {
             override fun instantiateUnderlayButton(
-                viewHolder: RecyclerView.ViewHolder, underlayButtons: MutableList<UnderlayButton>
+                viewHolder: RecyclerView.ViewHolder,
+                underlayButtons: MutableList<UnderlayButton>
             ) {
                 underlayButtons.add(UnderlayButton(
                     "Delete",
@@ -129,7 +141,7 @@ class ManageFoodFragment : Fragment() {
                     Color.parseColor("#ffffff")
                 ) { pos ->
                     val food = currentListFood[pos]
-                    viewModel.delete(args.data, food)
+                    viewModel.delete(args.dataRes, food)
                 })
 
                 underlayButtons.add(UnderlayButton(
@@ -142,9 +154,10 @@ class ManageFoodFragment : Fragment() {
                     Color.parseColor("#AA8500"),
                     Color.parseColor("#ffffff")
                 ) { pos ->
-                    // TODO: Edit Food Here 
-//                    val food = currentListFood[pos]
-//                    viewModel.delete(args.data, food)
+                    val action =
+                        ManageFoodFragmentDirections.actionManageFoodFragmentToAddFoodFragment(args.dataRes)
+                            .setDataFood(currentListFood[pos])
+                    findNavController().navigate(action)
                 })
             }
         }

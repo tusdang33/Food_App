@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizm.food_app.common.Const
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.domain.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -29,6 +29,8 @@ class ManageRestaurantViewModel @Inject constructor(
     sealed class Event {
         object Loading : Event()
         object LoadDone : Event()
+        object Success : Event()
+        data class Fail(val message: String) : Event()
     }
 
     init {
@@ -38,14 +40,27 @@ class ManageRestaurantViewModel @Inject constructor(
 
     private fun loadData() {
         viewModelScope.launch {
-            restaurantRepository.getRestaurant().collect { result ->
-                result.fold(onSuccess = {
-                    _stateUI.value = it
-                    _event.send(Event.LoadDone)
-                }, onFailure = {
-                    Log.e(Const.TAG, "fetchRestaurant: ${it.localizedMessage}")
-                })
-            }
+            restaurantRepository.getRestaurant()
+                .collect { result ->
+                    result.fold(onSuccess = {
+                        _stateUI.value = it
+                        _event.send(Event.LoadDone)
+                    }, onFailure = {
+                        Log.e(Const.TU, "fetchRestaurant: ${it.localizedMessage}")
+                    })
+                }
         }
     }
+
+    fun delete(restaurant: Restaurant) {
+        viewModelScope.launch {
+            restaurantRepository.deleteRestaurant(restaurant)
+                .fold(onSuccess = {
+                    _event.send(Event.Success)
+                }, onFailure = {
+                    _event.send(Event.Fail("Delete Fail"))
+                })
+        }
+    }
+
 }

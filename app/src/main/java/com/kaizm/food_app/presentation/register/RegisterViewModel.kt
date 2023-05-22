@@ -3,7 +3,7 @@ package com.kaizm.food_app.presentation.register
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.domain.AuthRepository
 import com.kaizm.food_app.domain.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +37,7 @@ class RegisterViewModel @Inject constructor(
                     _event.trySend(Event.RegSuccess)
                     profileRepository.addAccount(it)
                 }, onFailure = {
-                    Log.e(TAG, "register: ${it.localizedMessage}")
+                    Log.e(TU, "register: ${it.localizedMessage}")
                     _event.trySend(Event.RegFail)
                 })
             }

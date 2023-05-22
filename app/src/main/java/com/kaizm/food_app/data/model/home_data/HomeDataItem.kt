@@ -1,6 +1,6 @@
 package com.kaizm.food_app.data.model.home_data
 
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 
 class HomeDataItem(val viewType: Int) {
     var banner: Banner? = null

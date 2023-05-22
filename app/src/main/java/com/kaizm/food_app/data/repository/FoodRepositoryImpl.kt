@@ -1,11 +1,9 @@
 package com.kaizm.food_app.data.repository
 
-import android.util.Log
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TAG
-import com.kaizm.food_app.data.model.Food
+import com.kaizm.food_app.data.model.restaurant_data.Food
 import com.kaizm.food_app.domain.FoodRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -15,55 +13,98 @@ import kotlinx.coroutines.tasks.await
 @Suppress("UNCHECKED_CAST")
 class FoodRepositoryImpl : FoodRepository {
     private val restaurantCollectionRef = Firebase.firestore.collection("restaurant")
-    private val foodCategoryRef = Firebase.firestore.collection("category").document("food")
-    override suspend fun postFood(resId: String, food: Food): Result<Unit> {
+    private val foodCategoryRef = Firebase.firestore.collection("category")
+        .document("food")
+
+    override suspend fun postFood(
+        resId: String,
+        food: Food
+    ): Result<Unit> {
         return try {
-            restaurantCollectionRef.document(resId).update("listFoods", FieldValue.arrayUnion(food))
+            restaurantCollectionRef.document(resId)
+                .update("listFoods", FieldValue.arrayUnion(food))
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun getDefaultFoodCategory(): Flow<Result<List<String>>> = callbackFlow {
-        try {
-            foodCategoryRef.get().addOnSuccessListener {
-                trySend(Result.success(it.get("category") as List<String>))
-            }.await()
-        } catch (e: Exception) {
-            send(Result.failure(e))
-        }
-        awaitClose()
-    }
-
-    override suspend fun getListFood(resId: String): Flow<Result<List<Food>?>> = callbackFlow {
-        try {
-            restaurantCollectionRef.document(resId).addSnapshotListener { value, error ->
-                error?.let {
-                    throw it
-                }
-                value?.let {
-                    val foods = it.get("listFoods") as ArrayList<HashMap<String, Any>>?
-                    val foodList = foods?.map { map ->
-                        mapToObject(map)
+    override suspend fun getDefaultFoodCategory(): Flow<Result<List<String>>> =
+        callbackFlow {
+            try {
+                foodCategoryRef.get()
+                    .addOnSuccessListener {
+                        trySend(Result.success(it.get("category") as List<String>))
                     }
-                    trySend(Result.success(foodList))
-                }
+                    .await()
+            } catch (e: Exception) {
+                send(Result.failure(e))
             }
-        } catch (e: Exception) {
-            send(Result.failure(e))
+            awaitClose()
         }
-        awaitClose()
+
+    override suspend fun getListFood(resId: String): Flow<Result<List<Food>?>> =
+        callbackFlow {
+            try {
+                restaurantCollectionRef.get()
+                restaurantCollectionRef.document(resId)
+                    .addSnapshotListener { value, error ->
+                        error?.let {
+                            throw it
+                        }
+                        value?.let {
+                            val foods =
+                                it.get("listFoods") as ArrayList<HashMap<String, Any>>?
+                            val foodList = foods?.map { map ->
+                                mapToObject(map)
+                            }
+                            trySend(Result.success(foodList))
+
+                        }
+                    }
+            } catch (e: Exception) {
+                send(Result.failure(e))
+            }
+            awaitClose()
+        }
+
+    override suspend fun deleteFood(
+        resId: String,
+        food: Food
+    ): Result<Unit> {
+        return try {
+            restaurantCollectionRef.document(resId)
+                .update(
+                    hashMapOf<String, Any>(
+                        "listFoods" to FieldValue.arrayRemove(food)
+                    )
+                )
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    override suspend fun deleteFood(resId: String, food: Food): Result<Unit> {
+    override suspend fun updateFood(
+        resId: String,
+        oldFood: Food,
+        newFood: Food
+    ): Result<Food> {
         return try {
-            restaurantCollectionRef.document(resId).update(
-                hashMapOf<String, Any>(
-                    "listFoods" to FieldValue.arrayRemove(food)
+            Firebase.firestore.runBatch { batch ->
+                batch.update(
+                    restaurantCollectionRef.document(resId), hashMapOf<String, Any>(
+                        "listFoods" to FieldValue.arrayRemove(oldFood)
+                    )
                 )
-            ).await()
-            Result.success(Unit)
+                batch.update(
+                    restaurantCollectionRef.document(resId), hashMapOf<String, Any>(
+                        "listFoods" to FieldValue.arrayUnion(newFood)
+                    )
+                )
+            }.await()
+            Result.success(newFood)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -78,5 +119,4 @@ class FoodRepositoryImpl : FoodRepository {
         val category = hashMap["category"] as List<String>
         return Food(id, name, description, price, category, image)
     }
-
 }

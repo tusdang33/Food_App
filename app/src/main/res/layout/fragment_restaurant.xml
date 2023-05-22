@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.restaurant.RestaurantFragment">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/parentBodyLayoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/footerContainer"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/toolBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:collapsedTitleGravity="center"
+                app:collapsedTitleTextColor="@color/black"
+                app:expandedTitleGravity="bottom|center"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:title="Manage">
+
+                <ImageView
+                    android:id="@+id/toolbarImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/banner1"
+                    app:layout_collapseMode="parallax" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:layout_gravity="top"
+                    android:background="@drawable/scrim_topdown" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/scrim" />
+
+                <androidx.appcompat.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"
+                    app:layout_collapseMode="pin">
+
+                    <ImageButton
+                        android:id="@+id/btnBackToolbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_arrow_back" />
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/bodyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:id="@+id/bodyLayoutContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/utm_avo_bold"
+                        android:text="Test"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tvItemTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Category"
+                        android:textColor="@color/body_text_color"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvFeature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/utm_avo"
+                        android:text="Featured Items"
+                        android:textColor="@color/main_text_color"
+                        android:textSize="20sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:overScrollMode="always" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/vLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/light_gray" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="always" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="always" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <ProgressBar
+        android:id="@+id/pgBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/footerContainer"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:animateLayoutChanges="true"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <View
+            android:id="@+id/vFooter"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.7" />
+
+        <ImageButton
+            android:id="@+id/btnOrder"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/main_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideLine" />
+
+        <TextView
+            android:id="@+id/tvOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/utm_avo_bold"
+            android:text="GIAO HÀNG"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/btnOrder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideLine"
+            app:layout_constraintTop_toTopOf="@id/btnOrder" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/utm_avo"
+            android:text="100.000đ"
+            android:textColor="@color/main_color"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btnOrder"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivCart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/ic_shopping_cart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-10dp"
+            android:background="@drawable/ic_cart_circle"
+            android:fontFamily="@font/utm_avo"
+            android:text="6"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            app:layout_constraintBottom_toTopOf="@id/ivCart"
+            app:layout_constraintStart_toEndOf="@id/ivCart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
