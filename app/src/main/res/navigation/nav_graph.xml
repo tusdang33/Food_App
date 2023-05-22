@@ -27,16 +27,13 @@
         android:id="@+id/profileFragment"
         android:name="com.kaizm.food_app.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile"  >
         <action
-            android:id="@+id/action_profileFragment_to_addFoodFragment"
-            app:destination="@id/addFoodFragment" />
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_addRestaurantFragment"
-            app:destination="@id/addRestaurantFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_manageFoodFragment"
-            app:destination="@id/manageFoodFragment" />
+            android:id="@+id/action_profileFragment_to_profileSettingsFragment"
+            app:destination="@id/profileSettingsFragment" />
         <action
             android:id="@+id/action_profileFragment_to_manageRestaurantFragment"
             app:destination="@id/manageRestaurantFragment" />

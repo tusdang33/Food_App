@@ -1,6 +1,7 @@
 package com.kaizm.food_app.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.kaizm.food_app.data.model.User
 import com.kaizm.food_app.domain.AuthRepository
 import kotlinx.coroutines.tasks.await
@@ -27,8 +28,14 @@ class AuthRepositoryImp : AuthRepository {
         }
     }
 
-    override suspend fun logout() {
-        firebaseAuth.signOut()
+    override suspend fun logout(): Result<Unit> {
+        return try {
+            firebaseAuth.signOut()
+            Result.success(Unit)
+        }catch (e: Exception) {
+            Result.failure(e)
+        }
+
     }
 
     override suspend fun register(email: String, pass: String): Result<User> {
@@ -40,9 +47,29 @@ class AuthRepositoryImp : AuthRepository {
         }
     }
 
+
+    override suspend fun updatePass(pass: String): Result<Unit> {
+        return try {
+            firebaseAuth.currentUser!!.updatePassword(pass).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun updateProfile(name: String, email: String): Result<Unit> {
+        return try {
+            val profileUpdates = userProfileChangeRequest {
+                displayName = name
+            }
+            firebaseAuth.currentUser!!.updateProfile(profileUpdates).await()
+            firebaseAuth.currentUser!!.updateEmail(email).await()
+            Result.success(Unit)
+
     override suspend fun getCurrentUid(): Result<String> {
         return try {
             Result.success(firebaseAuth.currentUser!!.uid)
+
         } catch (e: Exception) {
             Result.failure(e)
         }

@@ -17,6 +17,7 @@ class OrderFragment : Fragment() {
     private lateinit var pageAdapter: PageOrderAdapter
     private val viewModel: OrderViewModel by viewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,4 +59,5 @@ class OrderFragment : Fragment() {
     }
 
     fun getShareViewModel(): OrderViewModel = viewModel
+
 }
