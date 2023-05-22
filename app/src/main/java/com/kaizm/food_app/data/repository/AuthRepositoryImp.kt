@@ -1,6 +1,7 @@
 package com.kaizm.food_app.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.kaizm.food_app.data.model.User
 import com.kaizm.food_app.domain.AuthRepository
 import kotlinx.coroutines.tasks.await
@@ -51,14 +52,16 @@ class AuthRepositoryImp : AuthRepository {
         }
     }
 
-    override suspend fun loadUser(): Result<User> {
+    override suspend fun updateProfile(name: String, email: String): Result<Unit> {
         return try {
-            val user = firebaseAuth.currentUser.apply {  }
-            Result.success()
+            val profileUpdates = userProfileChangeRequest {
+                displayName = name
+            }
+            firebaseAuth.currentUser!!.updateProfile(profileUpdates).await()
+            firebaseAuth.currentUser!!.updateEmail(email).await()
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
-
-
 }

@@ -40,7 +40,7 @@ class ChangePasswordFragment : Fragment() {
                 when(event) {
                     is ChangePasswordViewModel.Event.UpdateSuccess -> findNavController().popBackStack()
                     is ChangePasswordViewModel.Event.UpdateFail -> Toast.makeText(
-                        requireContext(), "Fail", Toast.LENGTH_SHORT
+                        requireContext(), event.message, Toast.LENGTH_SHORT
                     ).show()
                 }
             }

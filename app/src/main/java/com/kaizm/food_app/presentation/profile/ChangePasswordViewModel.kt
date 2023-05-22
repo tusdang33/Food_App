@@ -20,7 +20,7 @@ class ChangePasswordViewModel @Inject constructor(
 
     sealed class Event() {
         object UpdateSuccess : Event()
-        object UpdateFail : Event()
+        data class UpdateFail(val message: String) : Event()
     }
 
     private var _event = Channel<Event>(Channel.UNLIMITED)
@@ -28,14 +28,14 @@ class ChangePasswordViewModel @Inject constructor(
 
     fun updatePassword(pass: String, newPass: String, confirmPass: String) {
         if (pass == newPass || newPass != confirmPass) {
-            _event.trySend(Event.UpdateFail)
+            _event.trySend(Event.UpdateFail("Fail on check valid"))
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 authRepository.updatePass(newPass).fold(onSuccess = {
                     _event.trySend(Event.UpdateSuccess)
                 }, onFailure = {
                     Log.e(TAG, "register: ${it.localizedMessage}")
-                    _event.trySend(Event.UpdateFail)
+                    _event.trySend(Event.UpdateFail("Update Fail on API"))
                 })
             }
         }

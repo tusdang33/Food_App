@@ -14,6 +14,7 @@ import com.kaizm.food_app.R
 import com.kaizm.food_app.databinding.FragmentProfileBinding
 import com.kaizm.food_app.presentation.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint
@@ -50,6 +51,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        
         binding.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_profileSettingsFragment)
         }
