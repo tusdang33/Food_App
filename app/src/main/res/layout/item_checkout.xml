@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/quantity_rect"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvQuantity"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="1"
+
+        android:textAlignment="center"
+        android:textColor="@color/main_color"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivQuantity"
+        app:layout_constraintEnd_toEndOf="@id/ivQuantity"
+        app:layout_constraintStart_toStartOf="@id/ivQuantity"
+        app:layout_constraintTop_toTopOf="@id/ivQuantity" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="Something"
+        android:textColor="@color/main_text_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivQuantity"
+        app:layout_constraintStart_toEndOf="@id/ivQuantity"
+        app:layout_constraintTop_toTopOf="@id/ivQuantity" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/utm_avo"
+        android:text="Hsoakscácnácnsạcnậcncc"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@id/line"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/utm_avo_bold"
+        android:text="16AUĐ"
+        android:textColor="@color/main_color"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/ivQuantity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivQuantity" />
+</androidx.constraintlayout.widget.ConstraintLayout>

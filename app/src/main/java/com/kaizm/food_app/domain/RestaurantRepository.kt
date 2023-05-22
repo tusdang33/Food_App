@@ -13,4 +13,5 @@ interface RestaurantRepository {
     suspend fun getCategory(): Result<List<String>>
     suspend fun deleteRestaurant(restaurant: Restaurant): Result<Unit>
     suspend fun updateRestaurant(restaurant: Restaurant): Result<Restaurant>
+    suspend fun getRestaurantById(listResId: List<String>): Result<List<Restaurant>>
 }

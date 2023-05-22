@@ -31,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class RestaurantFragment : Fragment() {
     private lateinit var binding: FragmentRestaurantBinding
     private val viewModel: RestaurantViewModel by viewModels()
-    private val argument: RestaurantFragmentArgs by navArgs()
+    private val args: RestaurantFragmentArgs by navArgs()
     private val restaurantBottomSheet = RestaurantBottomSheet()
 
     private val restaurantTopAdapter: RestaurantTopAdapter =
@@ -71,9 +71,9 @@ class RestaurantFragment : Fragment() {
     ): View {
         binding = FragmentRestaurantBinding.inflate(inflater, container, false)
         fillToolbarUI()
-        viewModel.currentResId = argument.data.id
-        viewModel.getFood(argument.data.id)
-        viewModel.getOrder(argument.data.id)
+        viewModel.currentResId = args.dataRes.id
+        viewModel.getFood(args.dataRes.id)
+        viewModel.getOrder(args.dataRes.id)
         return binding.root
     }
 
@@ -93,7 +93,8 @@ class RestaurantFragment : Fragment() {
                     UiState.listBody.forEach {
                         tempCategory.add(CategoryState(it.title, false))
                     }
-                    binding.tvPrice.text = UiState.totalPrice.toString().currencyFormat()
+                    binding.tvPrice.text = UiState.totalPrice.toString()
+                        .currencyFormat()
                     binding.tvQuantity.text = UiState.listFoodInOrder.size.toString()
                     restaurantTopAdapter.list = UiState.listTop
                     restaurantCategoryAdapter.updateList(tempCategory)
@@ -130,6 +131,14 @@ class RestaurantFragment : Fragment() {
                     else -> {}
                 }
             }
+        }
+
+        binding.btnOrder.setOnClickListener {
+            val action =
+                RestaurantFragmentDirections.actionRestaurantFragmentToCheckoutFragment(
+                    args.dataRes
+                )
+            findNavController().navigate(action)
         }
 
         binding.btnBackToolbar.setOnClickListener {
@@ -212,10 +221,12 @@ class RestaurantFragment : Fragment() {
     }
 
     private fun fillToolbarUI() {
-        Glide.with(requireContext()).load(argument.data.image).into(binding.toolbarImg)
-        binding.toolBarLayout.title = argument.data.name
-        binding.tvName.text = argument.data.name
-        binding.tvItemTitle.text = argument.data.listCategories[0]
+        Glide.with(requireContext())
+            .load(args.dataRes.image)
+            .into(binding.toolbarImg)
+        binding.toolBarLayout.title = args.dataRes.name
+        binding.tvName.text = args.dataRes.name
+        binding.tvItemTitle.text = args.dataRes.listCategories[0]
     }
 
     private fun showToast(message: String) {

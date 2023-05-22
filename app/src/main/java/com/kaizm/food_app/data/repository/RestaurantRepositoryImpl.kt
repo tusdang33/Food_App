@@ -95,4 +95,23 @@ class RestaurantRepositoryImpl : RestaurantRepository {
             Result.failure(e)
         }
     }
+
+    override suspend fun getRestaurantById(listResId: List<String>): Result<List<Restaurant>> {
+        return try {
+            val tempList = mutableListOf<Restaurant>()
+            Firebase.firestore.runTransaction { transaction ->
+                listResId.forEach {
+                    tempList.add(
+                        transaction.get(restaurantCollectionRef.document(it))
+                            .toObject<Restaurant>()!!
+                    )
+                }
+            }.await()
+
+            Result.success(tempList)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

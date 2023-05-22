@@ -19,11 +19,15 @@ class OrderRepositoryImpl : OrderRepository {
     override suspend fun postOrder(order: Order): Result<Order> {
         return try {
             if (order.id != "") {
-                orderCollectionRef.document(order.id).set(order, SetOptions.merge()).await()
+                orderCollectionRef.document(order.id)
+                    .set(order, SetOptions.merge())
+                    .await()
             } else {
                 val fireId = orderCollectionRef.document().id
                 order.id = fireId
-                orderCollectionRef.document(fireId).set(order).await()
+                orderCollectionRef.document(fireId)
+                    .set(order)
+                    .await()
             }
             Result.success(order)
         } catch (e: Exception) {
@@ -32,19 +36,35 @@ class OrderRepositoryImpl : OrderRepository {
     }
 
     override suspend fun getOrder(
-        uid: String?, resId: String?, orderState: Boolean
+        uid: String?,
+        resId: String?,
+        orderState: Boolean
     ): Flow<Result<List<Order>>> = callbackFlow {
         try {
             if (uid != null) {
-                // TODO: get order for user
-            } else {
-                orderCollectionRef.whereEqualTo("resId", resId)
-                    .whereEqualTo("tempOrder", orderState).get().addOnSuccessListener {
+                orderCollectionRef.whereEqualTo("uid", uid)
+                    .get()
+                    .addOnSuccessListener {
                         val listOrder = mutableListOf<Order>()
                         for (document in it.documents) {
-                            document.toObject<Order>()?.let { order ->
-                                listOrder.add(order)
-                            }
+                            document.toObject<Order>()
+                                ?.let { order ->
+                                    listOrder.add(order)
+                                }
+                        }
+                        trySend(Result.success(listOrder))
+                    }
+            } else {
+                orderCollectionRef.whereEqualTo("resId", resId)
+                    .whereEqualTo("tempOrder", orderState)
+                    .get()
+                    .addOnSuccessListener {
+                        val listOrder = mutableListOf<Order>()
+                        for (document in it.documents) {
+                            document.toObject<Order>()
+                                ?.let { order ->
+                                    listOrder.add(order)
+                                }
                         }
                         trySend(Result.success(listOrder))
                     }
@@ -56,14 +76,17 @@ class OrderRepositoryImpl : OrderRepository {
     }
 
     override suspend fun deleteFoodInOrder(
-        orderId: String, foodInOrder: FoodInOrder
+        orderId: String,
+        foodInOrder: FoodInOrder
     ): Result<FoodInOrder> {
         return try {
-            orderCollectionRef.document(orderId).update(
-                hashMapOf<String, Any>(
-                    "listFood" to FieldValue.arrayRemove(foodInOrder)
+            orderCollectionRef.document(orderId)
+                .update(
+                    hashMapOf<String, Any>(
+                        "listFood" to FieldValue.arrayRemove(foodInOrder)
+                    )
                 )
-            ).await()
+                .await()
             Result.success(foodInOrder)
         } catch (e: Exception) {
             Result.failure(e)
@@ -72,7 +95,9 @@ class OrderRepositoryImpl : OrderRepository {
 
     override suspend fun deleteOrder(orderId: String): Result<Unit> {
         return try {
-            orderCollectionRef.document(orderId).delete().await()
+            orderCollectionRef.document(orderId)
+                .delete()
+                .await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
