@@ -16,9 +16,13 @@
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
-        android:name="com.kaizm.food_app.presentation.order.Order"
+        android:name="com.kaizm.food_app.presentation.order.OrderFragment"
         android:label="fragment_order"
-        tools:layout="@layout/fragment_order" />
+        tools:layout="@layout/fragment_order" >
+        <action
+            android:id="@+id/action_orderFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.kaizm.food_app.presentation.profile.ProfileFragment"
@@ -89,8 +93,11 @@
         android:label="fragment_restaurant"
         tools:layout="@layout/fragment_restaurant" >
         <argument
-            android:name="data"
+            android:name="dataRes"
             app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
+        <action
+            android:id="@+id/action_restaurantFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
     </fragment>
     <fragment
         android:id="@+id/manageRestaurantFragment"
@@ -106,5 +113,48 @@
             app:exitAnim="@anim/anim_slide_out_left"
             app:popEnterAnim="@anim/anim_slide_in_right"
             app:popExitAnim="@anim/anim_slide_out_right"/>
+    </fragment>
+     <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.kaizm.food_app.presentation.checkout.CheckoutFragment"
+        android:label="fragment_checkout"
+        tools:layout="@layout/fragment_checkout" >
+        <argument
+            android:name="dataRes"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
+         <action
+             android:id="@+id/action_checkoutFragment_to_thanksFragment"
+             app:destination="@id/thanksFragment" />
+         <argument
+             android:name="dataOrder"
+             app:argType="com.kaizm.food_app.data.model.order_data.Order"
+             app:nullable="true"
+             android:defaultValue="@null" />
+     </fragment>
+    <fragment
+        android:id="@+id/thanksFragment"
+        android:name="com.kaizm.food_app.presentation.thank.ThanksFragment"
+        android:label="ThanksFragment" >
+        <action
+            android:id="@+id/action_thanksFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderedFragment"
+        android:name="com.kaizm.food_app.presentation.order.OrderedFragment"
+        android:label="fragment_ordered"
+        tools:layout="@layout/fragment_ordered" >
+        <action
+            android:id="@+id/action_orderedFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tempOrderFragment"
+        android:name="com.kaizm.food_app.presentation.order.TempOrderFragment"
+        android:label="fragment_temp_order"
+        tools:layout="@layout/fragment_temp_order" >
+        <action
+            android:id="@+id/action_tempOrderFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
     </fragment>
 </navigation>

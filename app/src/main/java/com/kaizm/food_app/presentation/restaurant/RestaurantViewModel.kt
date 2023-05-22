@@ -123,7 +123,7 @@ class RestaurantViewModel @Inject constructor(
                                 )
                             }
                             calPrice()
-                        }else{
+                        } else {
                             currentOrderId = ""
 
                         }
@@ -227,7 +227,7 @@ class RestaurantViewModel @Inject constructor(
                     )
                 )
                     .fold(onSuccess = {
-                        Log.e(TU, "postOrder: $it", )
+                        Log.e(TU, "postOrder: $it")
                         currentOrderId = it.id
                     }, onFailure = {
                         _event.send(Event.Error(it.localizedMessage as String))
