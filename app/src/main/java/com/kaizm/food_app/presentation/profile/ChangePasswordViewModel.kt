@@ -3,7 +3,7 @@ package com.kaizm.food_app.presentation.profile
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +34,7 @@ class ChangePasswordViewModel @Inject constructor(
                 authRepository.updatePass(newPass).fold(onSuccess = {
                     _event.trySend(Event.UpdateSuccess)
                 }, onFailure = {
-                    Log.e(TAG, "register: ${it.localizedMessage}")
+                    Log.e(TU, "register: ${it.localizedMessage}")
                     _event.trySend(Event.UpdateFail("Update Fail on API"))
                 })
             }

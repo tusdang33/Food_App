@@ -32,7 +32,7 @@ class AuthRepositoryImp : AuthRepository {
         return try {
             firebaseAuth.signOut()
             Result.success(Unit)
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Result.failure(e)
         }
 
@@ -65,6 +65,10 @@ class AuthRepositoryImp : AuthRepository {
             firebaseAuth.currentUser!!.updateProfile(profileUpdates).await()
             firebaseAuth.currentUser!!.updateEmail(email).await()
             Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
     override suspend fun getCurrentUid(): Result<String> {
         return try {

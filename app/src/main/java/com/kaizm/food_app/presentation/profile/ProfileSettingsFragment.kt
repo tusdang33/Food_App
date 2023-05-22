@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.kaizm.food_app.MainActivity
 import com.kaizm.food_app.R
-import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.databinding.FragmentProfileSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +39,6 @@ class ProfileSettingsFragment : Fragment() {
 
         lifecycleScope.launchWhenCreated {
             viewModel.userUiState.collect {
-                Log.e(TAG, "Im collecting")
                 binding.edtEmail.setText(it.userEmail)
                 binding.edtFullName.setText(it.userName)
             }

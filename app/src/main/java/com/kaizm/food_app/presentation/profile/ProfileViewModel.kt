@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kaizm.food_app.common.Const
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,7 @@ class ProfileViewModel @Inject constructor(
             authRepository.logout().fold(onSuccess = {
                 _event.trySend(Event.LogoutSuccess)
             }, onFailure = {
-                Log.e(Const.TAG, "register: ${it.localizedMessage}")
+                Log.e(TU, "register: ${it.localizedMessage}")
                 _event.trySend(Event.LogoutFail)
             })
         }

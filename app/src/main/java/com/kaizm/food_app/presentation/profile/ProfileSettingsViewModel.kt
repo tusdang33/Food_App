@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.kaizm.food_app.common.Const.TAG
 import com.kaizm.food_app.domain.AuthRepository
 import com.kaizm.food_app.domain.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,29 +48,32 @@ class ProfileSettingsViewModel @Inject constructor(
     }
 
     fun loadData() {
-        Log.e(TAG, "loadData: ")
         viewModelScope.launch(Dispatchers.IO) {
-            val fireUser = authRepository.checkCurrentUser<FirebaseUser>()
-            fireUser?.let { user ->
-                setLoading()
-                _userUiState.update {
-                    it.copy(
-                        isLoading = false,
-                        userEmail = user.email.toString(),
-                        userName = user.displayName.toString()
-                    )
+            authRepository.checkCurrentUser<FirebaseUser>().fold(
+                onSuccess = { fireUser ->
+                    fireUser?.let { user ->
+                        setLoading()
+                        _userUiState.update {
+                            it.copy(
+                                isLoading = false,
+                                userEmail = user.email.toString(),
+                                userName = user.displayName.toString()
+                            )
+                        }
+                    }
+                }, onFailure = {
+                    _event.trySend(Event.LoadFail("Get User"))
                 }
-            }
+            )
+
         }
     }
 
     fun updateUser(name: String, email: String) {
         viewModelScope.launch(Dispatchers.IO + NonCancellable) {
             authRepository.updateProfile(name, email).fold(onSuccess = {
-                Log.e(TAG, "updateUser: ")
                 _event.trySend(Event.LoadSuccess)
             }, onFailure = {
-                Log.e(TAG, "register: ${it.localizedMessage}")
                 _event.trySend(Event.LoadFail(it.message.toString()))
             })
         }
