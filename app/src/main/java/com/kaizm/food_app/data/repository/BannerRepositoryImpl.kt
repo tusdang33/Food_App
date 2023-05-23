@@ -3,13 +3,12 @@ package com.kaizm.food_app.data.repository
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.data.model.home_data.Banner
 import com.kaizm.food_app.domain.BannerRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
 
 
 class BannerRepositoryImpl : BannerRepository {
@@ -24,7 +23,6 @@ class BannerRepositoryImpl : BannerRepository {
                     mapToObject(map)
                 }
                 trySend(Result.success(bannerList))
-                Log.e(TAG, "getBanner: $bannerList", )
             }
         } catch (e: Exception) {
             send(Result.failure(e))

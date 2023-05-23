@@ -1,18 +1,13 @@
 package com.kaizm.food_app.data.repository
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.kaizm.food_app.common.Const.TAG
-import com.kaizm.food_app.data.model.Food
 import com.kaizm.food_app.domain.SearchRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.tasks.await
-import java.lang.reflect.Field
 
 class SearchRepositoryImpl : SearchRepository {
     private val searchCollectionRef = Firebase.firestore.collection("search")
@@ -21,12 +16,14 @@ class SearchRepositoryImpl : SearchRepository {
     override suspend fun postSearch(data: String, uId: String): Result<Unit> {
         return try {
             val data = searchCollectionRef.document(uId).get().addOnSuccessListener {
-                it.data?.let {map->
-                    if(map.isEmpty()){
-                        searchCollectionRef.document(uId).set(hashMapOf(
-                            "searches" to listOf(data)
-                        ))
-                    }else{
+                it.data?.let { map ->
+                    if (map.isEmpty()) {
+                        searchCollectionRef.document(uId).set(
+                            hashMapOf(
+                                "searches" to listOf(data)
+                            )
+                        )
+                    } else {
                         searchCollectionRef.document(uId).update(
                             hashMapOf(
                                 "searches" to FieldValue.arrayUnion(data)
@@ -51,11 +48,9 @@ class SearchRepositoryImpl : SearchRepository {
                 }
                 value?.let {
                     trySend(Result.success(it.get("searches") as List<String>?))
-                    Log.e(TAG, "getSearch: ${(it.get("searches") as List<String>?)?.javaClass}", )
                 }
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             send(Result.failure(e))
         }
         awaitClose()
@@ -68,8 +63,7 @@ class SearchRepositoryImpl : SearchRepository {
             )
             searchCollectionRef.document(uId).update(updates).addOnSuccessListener { }
             Result.success(Unit)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }

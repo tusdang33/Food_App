@@ -14,7 +14,7 @@ import com.google.android.flexbox.AlignItems
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.databinding.FragmentSearchResultsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,9 +27,9 @@ class SearchResultsFragment : Fragment() {
     private val searchResultAdapter: SearchResultAdapter by lazy {
         SearchResultAdapter(object : OnRecentClickListener {
             override fun onClick(model: Restaurant) {
-                val action =
-                    SearchResultsFragmentDirections.actionSearchResultsFragmentToBlankFragment(model)
-                findNavController().navigate(action)
+//                val action =
+//                    SearchResultsFragmentDirections.actionSearchResultsFragmentToBlankFragment(model)
+//                findNavController().navigate(action)
             }
 
         })

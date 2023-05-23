@@ -3,8 +3,7 @@ package com.kaizm.food_app.presentation.search
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const.TAG
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.domain.AuthRepository
 import com.kaizm.food_app.domain.RestaurantRepository
 import com.kaizm.food_app.domain.SearchRepository
@@ -74,7 +73,6 @@ class SearchViewModel @Inject constructor(
                 onSuccess = {
                     id = it
                 }, onFailure = {
-                    Log.e(TAG, "addSearch: fail")
                 }
             )
 
@@ -85,9 +83,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             searchRepository.postSearch(data, id).fold(onSuccess = {
                 _event.trySend(Event.LoadDone)
-                Log.e(TAG, "addSearch: suc")
             }, onFailure = { e ->
-                Log.e(TAG, "addSearch: ${e.localizedMessage}")
             })
         }
     }
@@ -99,10 +95,8 @@ class SearchViewModel @Inject constructor(
                     if (it != null) {
                         listTemp.addAll(it)
                     }
-                    Log.e(TAG, "loadSearch: $it")
                     _event.send(Event.LoadDone)
                 }, onFailure = {
-                    Log.e(TAG, "fetchSearch: ${it.localizedMessage}")
                 })
             }
         }
@@ -111,12 +105,10 @@ class SearchViewModel @Inject constructor(
     private fun loadRestaurant() {
         viewModelScope.launch {
             restaurantRepository.getRestaurant().collect { result ->
-                Log.e(TAG, "fetchRes: Run ?")
                 result.fold(onSuccess = {
                     _stateUI.value = it
                     _event.send(Event.LoadDone)
                 }, onFailure = {
-                    Log.e(TAG, "fetchRestaurant: ${it.localizedMessage}")
                 })
             }
         }
@@ -127,7 +119,6 @@ class SearchViewModel @Inject constructor(
             searchRepository.deleteSearch(id).fold(onSuccess = {
                 _search.value = listOf()
             }, onFailure = {
-                Log.e(TAG, "fetchSearch: ${it.localizedMessage}")
             })
         }
     }

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.kaizm.food_app.common.Const.TAG
+import com.kaizm.food_app.common.Const.TU
 import com.kaizm.food_app.domain.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,14 +30,18 @@ class SplashViewModel @Inject constructor(
 
     fun checkCurrentUser() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (authRepository.checkCurrentUser<FirebaseUser>() != null) {
-                _event.send(Event.LoginSuccess)
-                Log.e(TAG, "checkCurrentUser: Success")
-            } else {
-                _event.send(Event.LoginFail)
-                Log.e(TAG, "checkCurrentUser: Fail")
+            authRepository.checkCurrentUser<FirebaseUser>().fold(onSuccess = {
+                if (it != null) {
+                    _event.send(Event.LoginSuccess)
+                    Log.e(TU, "checkCurrentUser: Success")
+                } else {
+                    _event.send(Event.LoginFail)
+                    Log.e(TU, "checkCurrentUser: Fail")
+                }
+            }, onFailure = {
 
-            }
+            })
+
         }
     }
 }

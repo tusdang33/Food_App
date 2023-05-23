@@ -3,9 +3,7 @@ package com.kaizm.food_app.presentation.search_result
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaizm.food_app.common.Const
-import com.kaizm.food_app.common.Const.TAG
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.domain.RestaurantRepository
 import com.kaizm.food_app.presentation.search.SearchViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,12 +51,10 @@ class SearchResultViewModel @Inject constructor(private val restaurantRepository
     private fun loadRestaurant() {
         viewModelScope.launch {
             restaurantRepository.getRestaurant().collect { result ->
-                Log.e(Const.TAG, "fetchRes: Run ?")
                 result.fold(onSuccess = {
                     listTemp.addAll(it)
                     _event.send(Event.LoadDone)
                 }, onFailure = {
-                    Log.e(Const.TAG, "fetchRestaurant: ${it.localizedMessage}")
                 })
             }
         }

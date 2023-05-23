@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+ <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -9,23 +9,31 @@
         android:id="@+id/homeFragment"
         android:name="com.kaizm.food_app.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_restaurantFragment"
+            app:destination="@id/restaurantFragment" />
+    </fragment>
     <fragment
         android:id="@+id/orderFragment"
-        android:name="com.kaizm.food_app.presentation.order.Order"
+        android:name="com.kaizm.food_app.presentation.order.OrderFragment"
         android:label="fragment_order"
-        tools:layout="@layout/fragment_order" />
+        tools:layout="@layout/fragment_order" >
+        <action
+            android:id="@+id/action_orderFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.kaizm.food_app.presentation.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile"  >
         <action
-            android:id="@+id/action_profileFragment_to_addFoodFragment"
-            app:destination="@id/addFoodFragment" />
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
         <action
-            android:id="@+id/action_profileFragment_to_addRestaurantFragment"
-            app:destination="@id/addRestaurantFragment" />
+            android:id="@+id/action_profileFragment_to_profileSettingsFragment"
+            app:destination="@id/profileSettingsFragment" />
         <action
             android:id="@+id/action_profileFragment_to_manageRestaurantFragment"
             app:destination="@id/manageRestaurantFragment" />
@@ -35,9 +43,7 @@
         android:name="com.kaizm.food_app.presentation.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_searchFragment_to_blankFragment"
-            app:destination="@id/blankFragment" />
+
         <action
             android:id="@+id/action_searchFragment_to_searchResultsFragment"
             app:destination="@id/searchResultsFragment" />
@@ -46,12 +52,55 @@
         android:id="@+id/addFoodFragment"
         android:name="com.kaizm.food_app.presentation.add_food.AddFoodFragment"
         android:label="fragment_add_food"
-        tools:layout="@layout/fragment_add_food" />
+        tools:layout="@layout/fragment_add_food" >
+        <argument
+            android:name="dataRes"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
+        <argument
+            android:name="dataFood"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Food"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/addRestaurantFragment"
         android:name="com.kaizm.food_app.presentation.add_restaurant.AddRestaurantFragment"
         android:label="fragment_add_restaurant"
-        tools:layout="@layout/fragment_add_restaurant" />
+        tools:layout="@layout/fragment_add_restaurant" >
+        <argument
+            android:name="dataRes"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+     <fragment
+        android:id="@+id/manageFoodFragment"
+        android:name="com.kaizm.food_app.presentation.manage_food.ManageFoodFragment"
+        android:label="fragment_manage_food"
+        tools:layout="@layout/fragment_manage_food" >
+        <argument
+            android:name="dataRes"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
+         <action
+             android:id="@+id/action_manageFoodFragment_to_addFoodFragment"
+             app:destination="@id/addFoodFragment"
+             app:enterAnim="@anim/nav_default_enter_anim"
+             app:exitAnim="@anim/nav_default_exit_anim"
+             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+     </fragment>
+    <fragment
+        android:id="@+id/restaurantFragment"
+        android:name="com.kaizm.food_app.presentation.restaurant.RestaurantFragment"
+        android:label="fragment_restaurant"
+        tools:layout="@layout/fragment_restaurant" >
+        <argument
+            android:name="dataRes"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
+        <action
+            android:id="@+id/action_restaurantFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/manageRestaurantFragment"
         android:name="com.kaizm.food_app.presentation.manageRestaurant.ManageRestaurantFragment"
@@ -59,16 +108,58 @@
         <action
             android:id="@+id/action_manageRestaurantFragment_to_addRestaurantFragment"
             app:destination="@id/addRestaurantFragment" />
+        <action
+            android:id="@+id/action_manageRestaurantFragment_to_manageFoodFragment"
+            app:destination="@id/manageFoodFragment"
+            app:enterAnim="@anim/anim_slide_in_left"
+            app:exitAnim="@anim/anim_slide_out_left"
+            app:popEnterAnim="@anim/anim_slide_in_right"
+            app:popExitAnim="@anim/anim_slide_out_right"/>
+    </fragment>
+     <fragment
+        android:id="@+id/checkoutFragment"
+        android:name="com.kaizm.food_app.presentation.checkout.CheckoutFragment"
+        android:label="fragment_checkout"
+        tools:layout="@layout/fragment_checkout" >
+        <argument
+            android:name="dataRes"
+            app:argType="com.kaizm.food_app.data.model.restaurant_data.Restaurant" />
+         <action
+             android:id="@+id/action_checkoutFragment_to_thanksFragment"
+             app:destination="@id/thanksFragment" />
+         <argument
+             android:name="dataOrder"
+             app:argType="com.kaizm.food_app.data.model.order_data.Order"
+             app:nullable="true"
+             android:defaultValue="@null" />
+     </fragment>
+    <fragment
+        android:id="@+id/thanksFragment"
+        android:name="com.kaizm.food_app.presentation.thank.ThanksFragment"
+        android:label="ThanksFragment" >
+        <action
+            android:id="@+id/action_thanksFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
-        android:id="@+id/blankFragment"
-        android:name="com.kaizm.food_app.presentation.search.BlankFragment"
-        android:label="fragment_blank"
-        tools:layout="@layout/fragment_blank" >
-        <argument
-            android:name="Action"
-            app:argType="com.kaizm.food_app.data.model.Restaurant" />
+        android:id="@+id/orderedFragment"
+        android:name="com.kaizm.food_app.presentation.order.OrderedFragment"
+        android:label="fragment_ordered"
+        tools:layout="@layout/fragment_ordered" >
+        <action
+            android:id="@+id/action_orderedFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/tempOrderFragment"
+        android:name="com.kaizm.food_app.presentation.order.TempOrderFragment"
+        android:label="fragment_temp_order"
+        tools:layout="@layout/fragment_temp_order" >
+        <action
+            android:id="@+id/action_tempOrderFragment_to_checkoutFragment"
+            app:destination="@id/checkoutFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/searchResultsFragment"
         android:name="com.kaizm.food_app.presentation.search_result.SearchResultsFragment"
@@ -77,8 +168,16 @@
         <argument
             android:name="data"
             app:argType="string" />
-        <action
-            android:id="@+id/action_searchResultsFragment_to_blankFragment"
-            app:destination="@id/blankFragment" />
+
     </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.kaizm.food_app.presentation.profile.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/profileSettingsFragment"
+        android:name="com.kaizm.food_app.presentation.profile.ProfileSettingsFragment"
+        android:label="fragment_profile_settings"
+        tools:layout="@layout/fragment_profile_settings" />
 </navigation>

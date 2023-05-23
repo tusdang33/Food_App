@@ -4,7 +4,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id("androidx.navigation.safeargs")
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -76,6 +76,8 @@ dependencies {
     //
     implementation "com.github.skydoves:expandablelayout:1.0.7"
 
-    //
+    //FlexBoxLayout
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    //
+    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
 }

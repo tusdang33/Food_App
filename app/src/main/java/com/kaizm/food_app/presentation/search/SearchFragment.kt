@@ -16,8 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kaizm.food_app.common.Const.TAG
-import com.kaizm.food_app.data.model.Restaurant
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
 import com.kaizm.food_app.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,11 +27,11 @@ class SearchFragment : Fragment() {
     private val searchAdapter: SearchAdapter by lazy {
         SearchAdapter(object : OnSearchClickListener {
             override fun onClick(model: Restaurant) {
-                val action = SearchFragmentDirections.actionSearchFragmentToBlankFragment(model)
-                findNavController().navigate(action)
-                val bundle = Bundle().apply {
-                    putSerializable("model", model)
-                }
+//                val action = SearchFragmentDirections.actionSearchFragmentToBlankFragment(model)
+//                findNavController().navigate(action)
+//                val bundle = Bundle().apply {
+//                    putSerializable("model", model)
+//                }
             }
 
         })
@@ -71,7 +70,6 @@ class SearchFragment : Fragment() {
 
         lifecycleScope.launchWhenCreated {
             viewModel.search.collect { list ->
-                Log.e(TAG, "searrchhhh: $list")
                 recentSearchesAdapter.updateList(list)
             }
         }
@@ -91,14 +89,12 @@ class SearchFragment : Fragment() {
 
             if (binding.edtSearchBox.text.toString() != "")
                 viewModel.addSearch(binding.edtSearchBox.text.toString())
-            Log.e(TAG, "clicked ")
         }
 
         binding.edtSearchBox.addTextChangedListener {
             binding.rvSearch.visibility = View.GONE
             binding.layoutHistory.visibility = View.VISIBLE
             binding.tvCancel.visibility = View.VISIBLE
-            Log.e(TAG, "edt: $it")
             viewModel.filter(it.toString())
         }
 
