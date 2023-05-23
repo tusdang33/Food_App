@@ -67,7 +67,6 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launchWhenCreated {
             viewModel.stateUI.collect { list ->
-                Log.e(TU, "onViewCreated: ${list.javaClass}")
                 binding.rvHome.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     adapter = homeAdapter.apply {

@@ -52,7 +52,6 @@ class HomeViewModel @Inject constructor(
         _event.trySend(Event.Loading)
         viewModelScope.launch {
             dataFlag.collect { flag ->
-                Log.e(Const.TU, "out view model: $flag")
                 if (flag.banner && flag.restaurant) {
                     _event.send(Event.LoadDone)
                 }
