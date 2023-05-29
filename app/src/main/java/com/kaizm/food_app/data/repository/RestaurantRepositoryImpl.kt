@@ -60,6 +60,9 @@ class RestaurantRepositoryImpl : RestaurantRepository {
         val list = mutableListOf<String>()
 
         return try {
+            categoryCollectionRef.get().addOnSuccessListener {
+                    list.addAll(it.get("category") as List<String>)
+            }.await()
             categoryCollectionRef.get()
                 .addOnSuccessListener {
                     list.addAll(it.get("category") as List<String>)

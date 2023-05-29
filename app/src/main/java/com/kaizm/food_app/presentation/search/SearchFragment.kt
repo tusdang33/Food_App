@@ -1,60 +1,117 @@
 package com.kaizm.food_app.presentation.search
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
+
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.kaizm.food_app.R
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.kaizm.food_app.data.model.restaurant_data.Restaurant
+import com.kaizm.food_app.databinding.FragmentSearchBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentSearchBinding
+    private val searchAdapter: SearchAdapter by lazy {
+        SearchAdapter(object : OnSearchClickListener {
+            override fun onClick(model: Restaurant) {
+//                val action = SearchFragmentDirections.actionSearchFragmentToBlankFragment(model)
+//                findNavController().navigate(action)
+//                val bundle = Bundle().apply {
+//                    putSerializable("model", model)
+//                }
+            }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        })
     }
+    private val recentSearchesAdapter: RecentSearchesAdapter by lazy {
+        RecentSearchesAdapter(object : OnRecentClickListener {
+            override fun onClick(data: String) {
+                val recent =
+                    SearchFragmentDirections.actionSearchFragmentToSearchResultsFragment(data)
+                findNavController().navigate(recent)
+                val bundle = Bundle().apply {
+                    putSerializable("data", data)
+                }
+            }
+        })
+    }
+    private val viewModel: SearchViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.stateUI.collect { list ->
+                searchAdapter.updateList(list)
             }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.search.collect { list ->
+                recentSearchesAdapter.updateList(list)
+            }
+        }
+
+        binding.rvHistory.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = recentSearchesAdapter
+        }
+
+        binding.rvSearch.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = searchAdapter
+        }
+
+        binding.ivSearch.setOnClickListener {
+
+            if (binding.edtSearchBox.text.toString() != "")
+                viewModel.addSearch(binding.edtSearchBox.text.toString())
+        }
+
+        binding.edtSearchBox.addTextChangedListener {
+            binding.rvSearch.visibility = View.GONE
+            binding.layoutHistory.visibility = View.VISIBLE
+            binding.tvCancel.visibility = View.VISIBLE
+            viewModel.filter(it.toString())
+        }
+
+        binding.tvCancel.setOnClickListener {
+            binding.edtSearchBox.setText("")
+            binding.rvSearch.visibility = View.VISIBLE
+            binding.layoutHistory.visibility = View.GONE
+            binding.tvCancel.visibility = View.GONE
+            val inputMethodManager =
+                requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+
+            // on below line hiding our keyboard.
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+        binding.tvClearAll.setOnClickListener {
+            viewModel.deleteSearch()
+        }
     }
 }

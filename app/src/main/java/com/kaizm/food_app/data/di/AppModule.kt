@@ -1,5 +1,7 @@
 package com.kaizm.food_app.data.di
 
+import com.kaizm.food_app.data.repository.*
+import com.kaizm.food_app.domain.*
 import android.content.Context
 import com.kaizm.food_app.data.repository.*
 import com.kaizm.food_app.domain.*
@@ -57,4 +59,11 @@ object AppModule {
     fun provideBannerRepository(): BannerRepository {
         return BannerRepositoryImpl()
     }
+
+    @Singleton
+    @Provides
+    fun provideSearchRepository(): SearchRepository {
+        return SearchRepositoryImpl()
+    }
+
 }
