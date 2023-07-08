@@ -15,12 +15,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //Tu te.
-        //ha ha ha đáng đời
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         binding.bottomNav.setupWithNavController(navHostFragment.navController)
     }
+    //chưa có hết giận (ง︡'-'︠)ง
 
     fun visibleBottomNav() {
         binding.bottomNav.visibility = View.VISIBLE
