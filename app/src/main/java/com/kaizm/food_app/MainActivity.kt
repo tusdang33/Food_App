@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
         binding.bottomNav.setupWithNavController(navHostFragment.navController)
     }
+    //chưa có hết giận (ง︡'-'︠)ง
 
     fun visibleBottomNav() {
         binding.bottomNav.visibility = View.VISIBLE
