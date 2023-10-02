@@ -42,6 +42,7 @@ class SplashActivity : AppCompatActivity() {
             finishAffinity()
         }
     }
+    //fix duoc git roiii
 
 
 }
