@@ -47,8 +47,6 @@ class SearchAdapter(private val onClickListener: OnSearchClickListener) :
     }
 
     override fun getItemCount(): Int = list.size
-
-
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val data = list[position]
         holder.bind(data)
